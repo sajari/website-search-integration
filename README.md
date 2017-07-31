@@ -1,14 +1,16 @@
-# Website Search Interfaces
+# Sajari Website Search Integration
 
-This repository is used in the [Console](https://www.sajari.com/console/collections/install) to auto-generate search interfaces for website integrations.
+Our auto-generated search integrations are a quick and easy way to get [Sajari Website Search](https://www.sajari.com/website-search) running on your site.
 
-Our auto-generated search interfaces are a great starting point for getting Sajari website search running on your site.
+This repository is used in the [Console](https://www.sajari.com/console/collections/install) to generate search interfaces which can be copy-pasted directly into your website.
+
+This website search integration is built using the [Sajari React SDK](https://www.github.com/sajari/sajari-sdk-react).
 
 ## Instructions
 
-We're assuming you've already setup an account and have a website collection already indexing. If not then head over to [https://www.sajari.com/console/sign-up](https://www.sajari.com/console/sign-up) to sign up and create a website collection to get started.
+We're assuming you've already setup an account and have a website collection already indexing. If not then you need to  [Sign Up](https://www.sajari.com/console/sign-up) and create a website collection to get started.
 
-From the [Install tab](https://www.sajari.com/console/collections/install) you can generate a search interface which can be easily copy+pasted into your site.  It's easy to add further customisations using CSS (see [Styling](#styling)), or by changing the JSON config (see [Configuration](#configuration)).
+From the [Install tab](https://www.sajari.com/console/collections/install) in the Console you can generate a search interface which can be copy-pasted into your site.  It's easy to add further customisations using CSS (see [Styling](#styling)), or by changing the JSON config (see [Configuration](#configuration)).
 
 ![Search interface with tabs](https://cloud.githubusercontent.com/assets/2822/25603841/e50022d4-2f42-11e7-9ac0-3968714b9e1d.png)
 
@@ -46,30 +48,39 @@ The configuration required for this example is given below.  For more details, s
 
 The generated interface can be easily styled to fit your website's look and feel, it's also designed to be responsive by default.
 
-Here are a few examples of common css changes.
-
+Here are a few CSS examples which can be used to override the default layout.
 
 ### Brand colors
 
-Set the color of links and tabs and set a font. Source: [orange.css](./sample-styles/orange.css)
+* Override the link/tab colours and font.
+
+Source: [orange.css](./sample-styles/orange.css)
 
 ![Orange](./sample-styles/orange.png)
 
 ### Brand image and colors, hiding elements
 
-Set a brand image and color and fonts. Hide links. Source: [light.css](./sample-styles/light.css)
+* Override the link/tab colours and font.
+* Set a brand image.
+* Hide URL links in results.
+
+Source: [light.css](./sample-styles/light.css)
 
 ![Light](./sample-styles/light.png)
 
 ### Responsive layout with brand image.
 
-Set up a layout to work better on smaller screens. Source: [sajari.css](./sample-styles/sajari.css)
+* Override the link/tab colours and font.
+* Set a brand image.
+* Custom responsive layout for small screens.
+
+Source: [sajari.css](./sample-styles/sajari.css)
 
 ![Sajari](./sample-styles/sajari.png)
 
 ## Configuration
 
-The generated search interfaces are configured using a simple JSON object, which contains attributes to control:
+The generated search interfaces are configured using a simple JSON object which contains attributes that control:
 
 * [Project/Collection](#projectcollection)
 * [Pipeline](#pipeline)
@@ -149,7 +160,7 @@ Set the placeholder text in the search box.
 searchBoxPlaceHolder: "Search",
 ```
 
-### Algorithm Parameters
+### Algorithm parameters
 
 The standard website pipeline defines several algorithm parameters. For example, `resultsPerPage`.
 
