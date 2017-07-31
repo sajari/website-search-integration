@@ -1,18 +1,18 @@
-import { Client, Tracking } from "sajari";
+import {
+  Values,
+  valuesChangedEvent,
+  Pipeline,
+  ClickTracking
+} from "sajari-react/controllers";
 
-import { Values, valuesChangedEvent, Pipeline } from "sajari-react/controllers";
-
-let client;
 let pipeline;
 let values;
 let tracking;
 
 const initialiseResources = (project, collection, pipelineName) => {
   values = new Values();
-  client = new Client(project, collection);
-  tracking = new Tracking();
-  tracking.clickTokens("url");
-  pipeline = new Pipeline(client, pipelineName, values, tracking);
+  tracking = ClickTracking();
+  pipeline = new Pipeline(project, collection, pipelineName, values, tracking);
 
   values.listen(valuesChangedEvent, (changes, set) => {
     if (!changes.page && values.get().page !== "1") {
@@ -21,4 +21,4 @@ const initialiseResources = (project, collection, pipelineName) => {
   });
 };
 
-export { initialiseResources, client, pipeline, values, tracking };
+export { initialiseResources, pipeline, values, tracking };

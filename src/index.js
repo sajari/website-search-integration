@@ -14,13 +14,7 @@ import Overlay from "./Overlay";
 import InPage from "./InPage";
 import SearchResponse from "./SearchResponse";
 
-import {
-  initialiseResources,
-  pipeline,
-  values,
-  tracking,
-  client
-} from "./resources";
+import { initialiseResources, pipeline, values, tracking } from "./resources";
 
 import "sajari-react/ui/overlay/Overlay.css";
 import "sajari-react/ui/text/AutocompleteInput.css";
@@ -150,7 +144,6 @@ const initInterface = () => {
 
   window._sjui.controllers = {
     analytics,
-    client,
     values,
     pipeline,
     tracking,
