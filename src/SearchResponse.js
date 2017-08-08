@@ -10,17 +10,15 @@ import {
 import { TabsFacet } from "sajari-react/ui/facets";
 import { responseUpdatedEvent } from "sajari-react/controllers";
 
-import { values, pipeline, tracking } from "./resources";
-
 class SearchResponse extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { response: pipeline.getResponse() };
+    this.state = { response: props.pipeline.getResponse() };
   }
 
   componentDidMount() {
-    this.removeResponseListener = pipeline.listen(
+    this.removeResponseListener = this.props.pipeline.listen(
       responseUpdatedEvent,
       this.responseUpdated
     );
@@ -31,14 +29,14 @@ class SearchResponse extends React.Component {
   }
 
   responseUpdated = () => {
-    this.setState({ response: pipeline.getResponse() });
+    this.setState({ response: this.props.pipeline.getResponse() });
   };
 
   render() {
-    const { config, tabsFilter } = this.props;
+    const { config, tabsFilter, pipeline, values } = this.props;
     const { response } = this.state;
 
-    if (response.isEmpty() || !response.getQueryValues().q) {
+    if (response.isEmpty() || !response.getQueryValues().q || !values.get().q) {
       return null;
     }
 
@@ -48,6 +46,7 @@ class SearchResponse extends React.Component {
         name: t.title,
         displayText: t.title
       }));
+      console.log(tabsFacetMap);
       tabs = <TabsFacet tabs={tabsFacetMap} filter={tabsFilter} />;
     }
 
@@ -56,13 +55,13 @@ class SearchResponse extends React.Component {
     return (
       <div className="sj-pipeline-response">
         {tabs}
-        <Summary values={values} pipeline={pipeline} tracking={tracking} />
+        <Summary values={values} pipeline={pipeline} />
         <Results
           ResultRenderer={resultRenderer}
           values={values}
           pipeline={pipeline}
         />
-        <Paginator values={values} pipeline={pipeline} tracking={tracking} />
+        <Paginator values={values} pipeline={pipeline} />
       </div>
     );
   }
