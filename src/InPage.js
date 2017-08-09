@@ -6,7 +6,14 @@ import { values, pipeline } from "./resources";
 
 class InPage extends React.Component {
   render() {
-    return <AutocompleteInput values={values} pipeline={pipeline} />;
+    const { config } = this.props;
+    return (
+      <AutocompleteInput
+        values={values}
+        pipeline={pipeline}
+        placeholder={config.searchBoxPlaceHolder}
+      />
+    );
   }
 }
 
