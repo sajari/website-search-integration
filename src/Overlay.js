@@ -4,12 +4,12 @@ import { Overlay as OverlayFrame, Close } from "sajari-react/ui/overlay";
 import { AutocompleteInput } from "sajari-react/ui/text";
 
 import SearchResponse from "./SearchResponse";
-import { values, pipeline, tracking } from "./resources";
+import { values, pipeline } from "./resources";
 
 class Overlay extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { active: props.active };
+    this.state = { active: Boolean(props.active) };
 
     const controls = props.setOverlayControls({
       show: () => this.setState({ active: true }),
@@ -23,10 +23,9 @@ class Overlay extends React.Component {
       <OverlayFrame active={this.state.active}>
         <div className="sj-logo" onClick={this.hide} />
         <AutocompleteInput
-          focus
+          autoFocus
           pipeline={pipeline}
           values={values}
-          tracking={tracking}
           placeHolder={this.props.config.searchBoxPlaceHolder}
         />
         <Close onClick={this.hide} closeOverlay={this.hide} />

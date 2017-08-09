@@ -1,24 +1,23 @@
-import { Client, Tracking } from "sajari";
+import { Values, valuesUpdatedEvent, Pipeline } from "sajari-react/controllers";
 
-import { Values, valuesChangedEvent, Pipeline } from "sajari-react/controllers";
-
-let client;
 let pipeline;
 let values;
-let tracking;
 
-const initialiseResources = (project, collection, pipelineName) => {
+const initialiseResources = (project, collection, pipelineName, disableGA) => {
   values = new Values();
-  client = new Client(project, collection);
-  tracking = new Tracking();
-  tracking.clickTokens("url");
-  pipeline = new Pipeline(client, pipelineName, values, tracking);
+  pipeline = new Pipeline(
+    project,
+    collection,
+    pipelineName,
+    undefined,
+    disableGA ? [] : undefined
+  );
 
-  values.listen(valuesChangedEvent, (changes, set) => {
+  values.listen(valuesUpdatedEvent, (changes, set) => {
     if (!changes.page && values.get().page !== "1") {
       set({ page: "1" });
     }
   });
 };
 
-export { initialiseResources, client, pipeline, values, tracking };
+export { initialiseResources, pipeline, values };

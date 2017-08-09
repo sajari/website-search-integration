@@ -1,12 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { Analytics } from "sajari-react/analytics";
 import {
   Filter,
   CombineFilters,
-  valuesChangedEvent,
-  initWebsiteTracking
+  selectionUpdatedEvent,
+  valuesUpdatedEvent
 } from "sajari-react/controllers";
 
 import loaded from "./loaded";
@@ -14,13 +13,7 @@ import Overlay from "./Overlay";
 import InPage from "./InPage";
 import SearchResponse from "./SearchResponse";
 
-import {
-  initialiseResources,
-  pipeline,
-  values,
-  tracking,
-  client
-} from "./resources";
+import { initialiseResources, pipeline, values } from "./resources";
 
 import "sajari-react/ui/overlay/Overlay.css";
 import "sajari-react/ui/text/AutocompleteInput.css";
@@ -86,7 +79,7 @@ const initOverlay = config => {
     const hide = () => {
       document.getElementsByTagName("body")[0].style.overflow = "";
       values.set({ q: undefined, "q.override": undefined });
-      pipeline.clearResponse();
+      pipeline.clearResponse(values.get());
       if (config.tabFilters && config.tabFilters.defaultTab) {
         disableTabFacetSearch = true;
         tabsFilter.set(config.tabFilters.defaultTab);
@@ -139,21 +132,16 @@ const initInterface = () => {
   const noOverlay = () => error("no overlay exists");
   window._sjui.overlay = { show: noOverlay, hide: noOverlay };
 
-  initialiseResources(config.project, config.collection, config.pipeline);
-
-  let analytics;
-  if (!config.disableGA) {
-    analytics = new Analytics(pipeline, tracking);
-  }
-
-  initWebsiteTracking(values, tracking);
+  initialiseResources(
+    config.project,
+    config.collection,
+    config.pipeline,
+    config.disableGA
+  );
 
   window._sjui.controllers = {
-    analytics,
-    client,
     values,
     pipeline,
-    tracking,
     filter
   };
 
@@ -164,15 +152,14 @@ const initInterface = () => {
     });
     tabsFilter = new Filter(opts, [config.tabFilters.defaultTab]);
     tabsFilter.set(config.tabFilters.defaultTab, true);
-    tabsFilter.listen(() => {
+    tabsFilter.listen(selectionUpdatedEvent, () => {
       // Perform a search when the tabs change
       if (!disableTabFacetSearch) {
-        values.emitChange();
-        pipeline.search(values, tracking);
+        pipeline.search(values.get());
       }
     });
 
-    values.listen(valuesChangedEvent, changes => {
+    values.listen(valuesUpdatedEvent, changes => {
       // If the query is empty, reset the tab back to the default if it's not already
       if (
         !values.get().q &&
@@ -202,7 +189,7 @@ const initInterface = () => {
 
   const query = Boolean(queryValues.q);
   if (query) {
-    pipeline.search(values, tracking);
+    pipeline.search(values.get());
   }
 
   if (config.overlay) {
