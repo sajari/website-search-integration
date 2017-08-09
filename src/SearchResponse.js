@@ -10,7 +10,7 @@ import {
 import { TabsFacet } from "sajari-react/ui/facets";
 import { responseUpdatedEvent } from "sajari-react/controllers";
 
-import { values, pipeline, tracking } from "./resources";
+import { values, pipeline } from "./resources";
 
 class SearchResponse extends React.Component {
   constructor(props) {
@@ -56,13 +56,13 @@ class SearchResponse extends React.Component {
     return (
       <div className="sj-pipeline-response">
         {tabs}
-        <Summary values={values} pipeline={pipeline} tracking={tracking} />
+        <Summary values={values} pipeline={pipeline} />
         <Results
           ResultRenderer={resultRenderer}
           values={values}
           pipeline={pipeline}
         />
-        <Paginator values={values} pipeline={pipeline} tracking={tracking} />
+        <Paginator values={values} pipeline={pipeline} />
       </div>
     );
   }
