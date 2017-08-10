@@ -26,7 +26,7 @@ class Overlay extends React.Component {
           autoFocus
           pipeline={pipeline}
           values={values}
-          placeHolder={config.searchBoxPlaceHolder}
+          placeholder={config.searchBoxPlaceHolder}
         />
         <Close onClick={this.hide} closeOverlay={this.hide} />
         <SearchResponse
