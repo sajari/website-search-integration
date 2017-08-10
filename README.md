@@ -181,6 +181,110 @@ initialValues: {
 }
 ```
 
+### Events
+
+You can subscribe to events by calling your interface with the `"sub"` value followed by the event name and then a callback.
+
+```javascript
+myUI("sub", "<event>", function() {});
+```
+
+| Event | Data | Description |
+| :-- | :-: | :-- |
+| `"query-sent"` | value dictionary | Search request has been sent |
+| `"values-changed"` | value dictionary | Value map has changed |
+| `"response-updated"` | response object | Response has updated |
+| `"page-close"` | query string | Page is about to be closed |
+| `"query-reset"` | query string | Body has changed enough to be considered a new query |
+| `"result-clicked"` | query string | Result has been clicked |
+| `"search-session-end"` | query string | Search event |
+| `"overlay-show"` | none | Overlay is shown |
+| `"overlay-hide"` | none | Overlay is hidden |
+
+You can also publish events which the search interface will pick up.
+
+| Event | Data | Description |
+| :-- | :-: | :-- |
+| `"set-values"` | value dictionary | Values to set |
+| `"search"` | none | Perform a search |
+
+#### Search Sent
+
+```javascript
+myUI("sub", "search-sent", function(eventName, values) {
+  console.log("Search sent with ", values);
+});
+```
+
+#### Values Changed
+
+```javascript
+myUI("sub", "values-changed", function(eventName, values) {
+  console.log("New values are", values);
+});
+```
+
+#### Response Updated
+
+```javascript
+myUI("sub", "response-updated", function(eventName, response) {
+  if (response.isEmpty()) {
+    return;
+  }
+  if (response.isError()) {
+    console.log("Got error", response.getError());
+  } else {
+    console.log("Got results", response.getResults());
+  }
+});
+```
+
+#### Search Session End
+
+There are 3 events that signal the end of a search session. You can subscribe to this individually or all at once.
+
+**Individually:**
+
+```javascript
+function searchFinished(eventName, query) {
+  console.log("Search session finished, last query", query);
+}
+myUI("sub", "page-close", searchFinished);
+myUI("sub", "query-reset", searchFinished);
+myUI("sub", "result-clicked", searchFinished);
+```
+
+**At Once:**
+
+```javascript
+myUI("sub", "search-session-end", function (eventName, query) {
+  console.log("Search session finished, last query", query);
+});
+```
+
+#### Overlay Shown/Hidden
+
+```javascript
+myUI("sub", "overlay-show", function(eventName) {
+  console.log("The overlay has been shown");
+});
+myUI("sub", "overlay-hide", function(eventName) {
+  console.log("The overlay has been hidden");
+});
+```
+
+#### Set Values
+
+```javascript
+myUI("pub", "set-values", { q: "<search query>" });
+```
+
+#### Search
+
+```javascript
+myUI("pub", "search");
+```
+
 ### Tab filters
 
 Create tabs to filter search results.  Tabs are rendered in a UI component when search results are shown.  If a tab is clicked then the algorithm parameter `filter` is set to the tab's `filter` attribute.
