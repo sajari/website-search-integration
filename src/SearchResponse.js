@@ -28,8 +28,8 @@ class SearchResponse extends React.Component {
     this.removeResponseListener();
   }
 
-  responseUpdated = () => {
-    this.setState({ response: this.props.pipeline.getResponse() });
+  responseUpdated = response => {
+    this.setState({ response });
   };
 
   render() {
