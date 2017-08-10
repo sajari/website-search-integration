@@ -46,12 +46,12 @@ class SearchResponse extends React.Component {
         name: t.title,
         displayText: t.title
       }));
-      console.log(tabsFacetMap);
       tabs = <TabsFacet tabs={tabsFacetMap} filter={tabsFilter} />;
     }
 
     const resultsConfig = config.results || {};
     const resultRenderer = resultsConfig.showImages ? ImageResult : Result;
+
     return (
       <div className="sj-pipeline-response">
         {tabs}
