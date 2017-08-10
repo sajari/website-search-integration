@@ -224,9 +224,23 @@ const initialise = () => {
   window._sj.ui.forEach((s, i) => {
     s.array = s.s; // Temporary solution
 
-    const pub = (event, data) => PubSub.publish(`${i}-${event}`, data);
-    const sub = (event, fn) => PubSub.subscribe(`${i}-${event}`, fn);
-    const config = config => initInterface(config, pub, sub);
+    const pub = (event, data) => PubSub.publish(`${i}.${event}`, data);
+    const sub = (event, fn) => {
+      if (event === "*") {
+        PubSub.subscribe(`${i}`, fn);
+        return;
+      }
+      PubSub.subscribe(`${i}.${event}`, fn);
+    };
+
+    let configured = false;
+    const config = config => {
+      if (configured) {
+        throw new Error("website search interface can only be configured once");
+      }
+      configured = true;
+      return initInterface(config, pub, sub);
+    };
 
     const methods = { config, pub, sub };
 
