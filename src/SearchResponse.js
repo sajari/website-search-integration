@@ -36,7 +36,7 @@ class SearchResponse extends React.Component {
     const { config, tabsFilter, pipeline, values } = this.props;
     const { response } = this.state;
 
-    if (response.isEmpty() || !response.getQueryValues().q || !values.get().q) {
+    if (response.isEmpty() || !response.getQueryValues().q) {
       return null;
     }
 
