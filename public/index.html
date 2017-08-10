@@ -8,59 +8,36 @@
 </head>
 
 <body>
-  <h1>Sajari: Website Search Example UI</h1>
-  <h4>Project: <code>your-project</code> Collection: <code>your-collection</code></h4>
-  <p>This example injects a search interface into a page.</p>
-  <p>It includes a minimal set of styles, code and config to get you up and running:</p>
-  <ul>
-    <li>Use query param <code>?q=set+search+using+query+param</code> to set the default search. <a href="?q=set+search+using+query+param">Give it a try!</a></li>
-    <li>Search UI is injected into <code>&lt;div id="search-interface"&gt;&lt;/div&gt;</code></li>
-  </ul>
-  <p>Take a look at the <a href="?showSrc">page source</a> to start your own integration.</p>
 
-  <div class="dotted">
-    <h3>Here are two example points of integration.</h3>
-    <p>1. From a user filled text box</p>
-    <!-- This input box will launch the interface when the user presses enter -->
-    <input id="input-box" placeholder="Enter search query" onkeydown="inputKeyDown(event)">
-    <script>
-      function inputKeyDown(e) {
-        if (e.keyCode === 13 /* Enter key */) {
-          window._sjui.state.setValues({ q: e.target.value }, true);
-          window._sjui.overlay.show();
-        }
+  <h2>Overlay</h2>
+  <!-- This input box will launch the interface when the user presses enter -->
+  <input id="input-box" placeholder="Enter search query" onkeydown="inputKeyDown(event)">
+  <script>
+    function inputKeyDown(e) {
+      if (e.keyCode === 13 /* Enter key */) {
+        overlay("pub", "overlay-show");
+        overlay("pub", "set-values", { q: e.target.value });
+        overlay("pub", "search");
       }
-    </script>
-    <p>2. From a user focusing a text box or clicking a button</p>
-    <!-- This input box will launch the interface when the user clicks it -->
-    <input onfocus="window._sjui.overlay.show()" placeholder="Focus me to launch">
-    <!-- This button will launch the interface when the user clicks it -->
-    <button onclick="myA('pub', 'overlay-show')">Launch Interface</button>
+    }
+  </script>
+  <br>
 
-    <div id="search-box"></div>
-    <div id="search-response"></div>
-    <div id="search-box-2"></div>
-    <div id="search-response-2"></div>
-  </div>
+  <!-- This input box will launch the interface when the user clicks it -->
+  <input onfocus="overlay('pub', 'overlay-show');" placeholder="Focus me to launch">
+  <!-- This button will launch the interface when the user clicks it -->
+  <button onclick="overlay('pub', 'overlay-show');">Launch Interface</button>
+
+  <h2>In Page</h2>
+  <div id="search-box"></div>
+  <div id="search-response"></div>
+
+  <h2>Recommendation</h2>
+  <div id="recommendation-search-response"></div>
+
   <!-- This script sets up the config for the search interface -->
   <script>
     var getUrlParam = function (e) { var t = new RegExp("[?&]" + e.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)"), a = t.exec(window.location.href); return a && a[2] ? decodeURIComponent(a[2].replace(/\+/g, " ")) : "" };
-    var config = (search, response) => ({
-      project: "<your-project>",       // Set this to your project.
-      collection: "<your-collection>", // Set this to your collection.
-      values: { resultsPerPage: "10" },
-      initialValues: { "q": getUrlParam("q") },
-      attachSearchBox: document.getElementById(search),
-      attachSearchResponse: document.getElementById(response),
-      overlay: search === "search-box",
-      pipeline: "website", // Run the website pipeline.
-      searchBoxPlaceHolder: "Type to search", // Placeholder text in search box.
-      showImages: false, // Show images in results.
-      tabFilters: { // Tabs configuration.
-        defaultTab: 'All', // Title of the default tab.
-        tabs: [{ title: 'All', filter: '' }, { title: 'Blog', filter: "dir1='blog'" }, { title: 'Other', filter: "dir1!='blog'" }], // Ordered list of tabs to show.
-      },
-    });
 
     const setup = function (w, d, x, a, e, s, c, r) {
       s = [];
@@ -71,22 +48,87 @@
       w[a] = w[a] || [];
       w[a][q] = w[a][q] || [];
       w[a][q].push(b);
-      c = d.createElement(x);
-      c.async = 1;
-      c.src = e;
-      r = d.getElementsByTagName(x)[0];
-      // r.parentNode.insertBefore(c, r);
+      // c = d.createElement(x);
+      // c.async = 1;
+      // c.src = e;
+      // r = d.getElementsByTagName(x)[0];
+      // // r.parentNode.insertBefore(c, r);
       return b;
     }
 
-    myA = setup(window, document, "script", "_sj");
-    myA("config", config("search-box", "search-response"))
+    inPage = setup(window, document, "script", "_sj");
 
-    myB = setup(window, document, "script", "_sj");
-    myB("config", config("search-box-2", "search-response-2"))
+    // inPage("sub", "*", (eventName) => console.log(eventName))
 
-    // my("sub", "load", (...x) => console.log(x))
-    // my("pub", "load", {})
+    // inPage("sub", "response-updated", function (eventName, response) {
+    //   if (response.isEmpty()) {
+    //     return;
+    //   }
+    //   if (response.isError()) {
+    //     console.log("Error", response.getError());
+    //   } else {
+    //     console.log("Results", response.getResults());
+    //   }
+    // });
+
+    // inPage("sub", "search-end", function (eventName, lastQuery) {
+    //   console.log("Search session finished", lastQuery);
+    // })
+
+    // inPage("sub", "values-changed", function (eventName, newValues) {
+    //   console.log("New values", newValues)
+    // })
+
+    // inPage("sub", "search-sent", function (eventName, values) {
+    //   console.log("Request with values", values)
+    // })
+
+    inPage("config", {
+      project: "etstestest",       // Set this to your project.
+      collection: "trent-kiwi", // Set this to your collection.
+      values: { resultsPerPage: "10" },
+      initialValues: { "q": getUrlParam("q") },
+      attachSearchBox: document.getElementById("search-box"),
+      attachSearchResponse: document.getElementById("search-response"),
+      pipeline: "website", // Run the website pipeline.
+      searchBoxPlaceHolder: "Type to search", // Placeholder text in search box.
+      showImages: false, // Show images in results.
+      tabFilters: { // Tabs configuration.
+        defaultTab: 'All', // Title of the default tab.
+        tabs: [{ title: 'All', filter: '' }, { title: 'Blog', filter: "dir1='blog'" }, { title: 'Other', filter: "dir1!='blog'" }], // Ordered list of tabs to show.
+      },
+    });
+
+    // inPage("pub", "set-values", { q: "rg" })
+    // inPage("pub", "search")
+
+    overlay = setup(window, document, "script", "_sj");
+    overlay("config", {
+      project: "etstestest",       // Set this to your project.
+      collection: "trent-kiwi", // Set this to your collection.
+      values: { resultsPerPage: "10" },
+      initialValues: { "q": getUrlParam("q") },
+      overlay: true,
+      pipeline: "website", // Run the website pipeline.
+      searchBoxPlaceHolder: "Type to search", // Placeholder text in search box.
+      showImages: false, // Show images in results.
+      tabFilters: { // Tabs configuration.
+        defaultTab: 'All', // Title of the default tab.
+        tabs: [{ title: 'All', filter: '' }, { title: 'Blog', filter: "dir1='blog'" }, { title: 'Other', filter: "dir1!='blog'" }], // Ordered list of tabs to show.
+      },
+    });
+    // overlay("pub", "search")
+
+    recommendation = setup(window, document, "script", "_sj");
+    recommendation("config", {
+      project: "etstestest",       // Set this to your project.
+      collection: "trent-kiwi", // Set this to your collection.
+      values: {},
+      attachRecommendation: document.getElementById("recommendation-search-response"),
+      pipeline: "recent", // Run the website pipeline.
+      showImages: true // Show images in results.
+    });
+    recommendation("pub", "search");
   </script>
 
   <style>
@@ -118,10 +160,15 @@
       padding: 10px
     }
 
+    input,
+    button {
+      font-size: 16px;
+    }
+
     div#search-box,
     div#search-response,
-    div#search-box-2,
-    div#search-response-2 {
+    div#recommendation-search-box,
+    div#recommendation-search-response {
       border: 2px dashed #ddd;
       padding: 20px;
       border-radius: 4px;
