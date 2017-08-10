@@ -11,7 +11,12 @@ import {
   CombineFilters,
   Values,
   valuesUpdatedEvent,
-  Pipeline
+  Pipeline,
+  responseUpdatedEvent,
+  searchSentEvent,
+  pageClosedAnalyticsEvent,
+  bodyResetAnalyticsEvent,
+  resultClickedAnalyticsEvent
 } from "sajari-react/controllers";
 
 import loaded from "./loaded";
@@ -27,6 +32,21 @@ import "sajari-react/ui/results/Results.css";
 import "sajari-react/ui/results/Paginator.css";
 
 const ESCAPE_KEY_CODE = 27;
+
+const integrationEvents = {
+  searchSent: "search-sent",
+  valuesChanged: "values-changed",
+  responseUpdated: "response-updated",
+  pageClose: "page-close",
+  queryReset: "query-reset",
+  resultClicked: "result-clicked",
+  searchSessionEnd: "search-session-end",
+  overlayShow: "overlay-show",
+  overlayHide: "overlay-hide",
+
+  setValues: "set-values",
+  search: "search"
+};
 
 let disableTabFacetSearch = false;
 
@@ -91,8 +111,8 @@ const initOverlay = (config, pipeline, values, pub, sub) => {
       }
       controls.hide();
     };
-    sub("overlay-show", show);
-    sub("overlay-hide", hide);
+    sub(integrationEvents.overlayShow, show);
+    sub(integrationEvents.overlayHide, hide);
     return { show, hide };
   };
 
@@ -104,7 +124,7 @@ const initOverlay = (config, pipeline, values, pub, sub) => {
   // Set up global overlay values
   document.addEventListener("keydown", e => {
     if (e.keyCode === ESCAPE_KEY_CODE) {
-      pub("overlay-hide");
+      pub(integrationEvents.overlayHide);
     }
   });
 
@@ -161,11 +181,44 @@ const initInterface = (config, pub, sub) => {
     config.disableGA ? [] : undefined
   );
 
+  pipeline.listen(searchSentEvent, values => {
+    pub(integrationEvents.searchSent, values);
+  });
+  pipeline.listen(responseUpdatedEvent, response => {
+    pub(integrationEvents.responseUpdated, response);
+  });
+
   const values = new Values();
   values.listen(valuesUpdatedEvent, (changes, set) => {
     if (!changes.page && values.get().page !== "1") {
       set({ page: "1" });
     }
+  });
+
+  values.listen(valuesUpdatedEvent, (changes, set) => {
+    pub(integrationEvents.valuesChanged, changes, set);
+  });
+
+  sub(integrationEvents.setValues, (_, newValues) => {
+    values.set(newValues);
+  });
+
+  sub(integrationEvents.search, () => {
+    pipeline.search(values.get());
+  });
+
+  const analytics = pipeline.getAnalytics();
+  analytics.listen(pageClosedAnalyticsEvent, body => {
+    pub(integrationEvents.pageClose, body);
+    pub(integrationEvents.searchSessionEnd, body);
+  });
+  analytics.listen(bodyResetAnalyticsEvent, body => {
+    pub(integrationEvents.queryReset, body);
+    pub(integrationEvents.searchSessionEnd, body);
+  });
+  analytics.listen(resultClickedAnalyticsEvent, body => {
+    pub(integrationEvents.resultClicked, body);
+    pub(integrationEvents.searchSessionEnd, body);
   });
 
   if (config.tabFilters && config.tabFilters.defaultTab) {
@@ -220,7 +273,7 @@ const initInterface = (config, pub, sub) => {
   if (config.overlay) {
     initOverlay(config, pipeline, values, pub, sub);
     if (query) {
-      window._sjui.overlay.show();
+      pub(integrationEvents.overlayShow);
     }
     return;
   }
