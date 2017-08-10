@@ -227,7 +227,6 @@ const initInterface = (config, pub, sub) => {
       opts[t.title] = t.filter;
     });
     tabsFilter = new Filter(opts, [config.tabFilters.defaultTab]);
-    tabsFilter.set(config.tabFilters.defaultTab, true);
     tabsFilter.listen(selectionUpdatedEvent, () => {
       // Perform a search when the tabs change
       if (!disableTabFacetSearch) {
@@ -242,7 +241,6 @@ const initInterface = (config, pub, sub) => {
         !values.get().q &&
         tabsFilter.get() !== config.tabFilters.defaultTab
       ) {
-        console.log();
         disableTabFacetSearch = true;
         tabsFilter.set(config.tabFilters.defaultTab);
         disableTabFacetSearch = false;
