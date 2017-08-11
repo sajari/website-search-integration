@@ -50,10 +50,6 @@ const integrationEvents = {
 
 let disableTabFacetSearch = false;
 
-let filter;
-let tabsFilter;
-let initialFilter;
-
 const error = message => {
   if (console && console.error) {
     console.error(message);
@@ -94,7 +90,7 @@ const combinedValues = (config, firstTime) => {
   return combinedValues;
 };
 
-const initOverlay = (config, pipeline, values, pub, sub) => {
+const initOverlay = (config, pipeline, values, pub, sub, tabsFilter) => {
   const setOverlayControls = controls => {
     const show = () => {
       document.getElementsByTagName("body")[0].style.overflow = "hidden";
@@ -140,7 +136,7 @@ const initOverlay = (config, pipeline, values, pub, sub) => {
   );
 };
 
-const initInPage = (config, pipeline, values) => {
+const initInPage = (config, pipeline, values, tabsFilter) => {
   ReactDOM.render(
     <InPage config={config} pipeline={pipeline} values={values} />,
     config.attachSearchBox
@@ -156,7 +152,7 @@ const initInPage = (config, pipeline, values) => {
   );
 };
 
-const initRecommendation = (config, pipeline, values) => {
+const initRecommendation = (config, pipeline, values, tabsFilter) => {
   ReactDOM.render(
     <RecommendationResponse
       config={config}
@@ -221,6 +217,7 @@ const initInterface = (config, pub, sub) => {
     pub(integrationEvents.searchSessionEnd, body);
   });
 
+  let tabsFilter;
   if (config.tabFilters && config.tabFilters.defaultTab) {
     const opts = {};
     config.tabFilters.tabs.forEach(t => {
@@ -249,6 +246,7 @@ const initInterface = (config, pub, sub) => {
   }
 
   const queryValues = combinedValues(config, true);
+  let initialFilter;
   if (queryValues.filter) {
     initialFilter = new Filter(
       {
@@ -260,7 +258,9 @@ const initInterface = (config, pub, sub) => {
   }
   values.set(queryValues);
 
-  filter = new CombineFilters([tabsFilter, initialFilter].filter(Boolean));
+  const filter = new CombineFilters(
+    [tabsFilter, initialFilter].filter(Boolean)
+  );
   values.set({ filter: () => filter.filter() });
 
   const query = Boolean(queryValues.q);
@@ -269,18 +269,18 @@ const initInterface = (config, pub, sub) => {
   }
 
   if (config.overlay) {
-    initOverlay(config, pipeline, values, pub, sub);
+    initOverlay(config, pipeline, values, pub, sub, tabsFilter);
     if (query) {
       pub(integrationEvents.overlayShow);
     }
     return;
   }
   if (config.attachSearchBox && config.attachSearchResponse) {
-    initInPage(config, pipeline, values);
+    initInPage(config, pipeline, values, tabsFilter);
     return;
   }
   if (config.attachRecommendation) {
-    initRecommendation(config, pipeline, values);
+    initRecommendation(config, pipeline, values, tabsFilter);
     return;
   }
   error(
