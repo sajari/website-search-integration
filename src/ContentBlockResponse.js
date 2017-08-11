@@ -1,9 +1,25 @@
 import React from "react";
 
-import { Results, ImageResult, Result } from "sajari-react/ui/results";
+import { Results, Result, TokenLink } from "sajari-react/ui/results";
 import { responseUpdatedEvent } from "sajari-react/controllers";
 
-class RecommendationResponse extends React.Component {
+class ContentBlockResult extends React.Component {
+  render() {
+    const { values, token } = this.props;
+    return (
+      <div className="sj-content-block-result">
+        <TokenLink token={token} url={values.url}>
+          <img className="sj-image" src={values.image} alt={values.title} />
+          <p className="sj-image-text">
+            {values.title}
+          </p>
+        </TokenLink>
+      </div>
+    );
+  }
+}
+
+class ContentBlockResponse extends React.Component {
   constructor(props) {
     super(props);
 
@@ -34,7 +50,9 @@ class RecommendationResponse extends React.Component {
     }
 
     const resultsConfig = config.results || {};
-    const resultRenderer = resultsConfig.showImages ? ImageResult : Result;
+    const resultRenderer = resultsConfig.showImages
+      ? ContentBlockResult
+      : Result;
     return (
       <div className="sj-pipeline-response">
         <Results
@@ -42,9 +60,10 @@ class RecommendationResponse extends React.Component {
           values={values}
           pipeline={pipeline}
         />
+        <div style={{ clear: "both" }} />
       </div>
     );
   }
 }
 
-export default RecommendationResponse;
+export default ContentBlockResponse;

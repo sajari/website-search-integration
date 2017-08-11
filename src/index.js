@@ -23,7 +23,7 @@ import loaded from "./loaded";
 import Overlay from "./Overlay";
 import InPage from "./InPage";
 import SearchResponse from "./SearchResponse";
-import RecommendationResponse from "./RecommendationResponse";
+import ContentBlockResponse from "./ContentBlockResponse";
 
 import "sajari-react/ui/overlay/Overlay.css";
 import "sajari-react/ui/text/AutocompleteInput.css";
@@ -152,15 +152,15 @@ const initInPage = (config, pipeline, values, tabsFilter) => {
   );
 };
 
-const initRecommendation = (config, pipeline, values, tabsFilter) => {
+const initContentBlock = (config, pipeline, values, tabsFilter) => {
   ReactDOM.render(
-    <RecommendationResponse
+    <ContentBlockResponse
       config={config}
       tabsFilter={tabsFilter}
       pipeline={pipeline}
       values={values}
     />,
-    config.attachRecommendation
+    config.attachContentBlock
   );
 };
 
@@ -279,8 +279,8 @@ const initInterface = (config, pub, sub) => {
     initInPage(config, pipeline, values, tabsFilter);
     return;
   }
-  if (config.attachRecommendation) {
-    initRecommendation(config, pipeline, values, tabsFilter);
+  if (config.attachContentBlock) {
+    initContentBlock(config, pipeline, values, tabsFilter);
     return;
   }
   error(

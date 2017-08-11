@@ -32,8 +32,8 @@
   <div id="search-box"></div>
   <div id="search-response"></div>
 
-  <h2>Recommendation</h2>
-  <div id="recommendation-search-response"></div>
+  <h2>Content Block</h2>
+  <div id="content-block-response"></div>
 
   <!-- This script sets up the config for the search interface -->
   <script>
@@ -119,16 +119,16 @@
     });
     // overlay("pub", "search")
 
-    recommendation = setup(window, document, "script", "_sj");
-    recommendation("config", {
       project: "etstestest",       // Set this to your project.
       collection: "trent-kiwi", // Set this to your collection.
+    contentBlock = setup(window, document, "script", "_sj");
+    contentBlock("config", {
       values: {},
-      attachRecommendation: document.getElementById("recommendation-search-response"),
+      attachContentBlock: document.getElementById("content-block-response"),
       pipeline: "recent", // Run the website pipeline.
       showImages: true // Show images in results.
     });
-    recommendation("pub", "search");
+    contentBlock("pub", "search");
   </script>
 
   <style>
@@ -167,8 +167,7 @@
 
     div#search-box,
     div#search-response,
-    div#recommendation-search-box,
-    div#recommendation-search-response {
+    div#content-block-response {
       border: 2px dashed #ddd;
       padding: 20px;
       border-radius: 4px;
