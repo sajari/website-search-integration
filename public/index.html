@@ -39,7 +39,7 @@
   <script>
     var getUrlParam = function (e) { var t = new RegExp("[?&]" + e.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)"), a = t.exec(window.location.href); return a && a[2] ? decodeURIComponent(a[2].replace(/\+/g, " ")) : "" };
 
-    const setup = function (w, d, x, a, e, s, c, r) {
+    const setup = function (w, d, x, a, e, s) {
       s = [];
       var b = function () {
         s.push(arguments);
@@ -48,41 +48,10 @@
       w[a] = w[a] || [];
       w[a][q] = w[a][q] || [];
       w[a][q].push(b);
-      // c = d.createElement(x);
-      // c.async = 1;
-      // c.src = e;
-      // r = d.getElementsByTagName(x)[0];
-      // // r.parentNode.insertBefore(c, r);
       return b;
     }
 
-    inPage = setup(window, document, "script", "_sj");
-
-    // inPage("sub", "*", (eventName) => console.log(eventName))
-
-    // inPage("sub", "response-updated", function (eventName, response) {
-    //   if (response.isEmpty()) {
-    //     return;
-    //   }
-    //   if (response.isError()) {
-    //     console.log("Error", response.getError());
-    //   } else {
-    //     console.log("Results", response.getResults());
-    //   }
-    // });
-
-    // inPage("sub", "search-event", function (eventName, lastQuery) {
-    //   console.log("Search session finished", lastQuery);
-    // })
-
-    // inPage("sub", "values-changed", function (eventName, newValues) {
-    //   console.log("New values", newValues)
-    // })
-
-    // inPage("sub", "search-sent", function (eventName, values) {
-    //   console.log("Request with values", values)
-    // })
-
+    inPage = setup(window, document, "script", "_sj", "//address.js");
     inPage("config", {
       project: "etstestest",       // Set this to your project.
       collection: "trent-kiwi", // Set this to your collection.
@@ -98,9 +67,6 @@
       },
     });
 
-    // inPage("pub", "set-values", { q: "rg" })
-    // inPage("pub", "search")
-
     overlay = setup(window, document, "script", "_sj");
     overlay("config", {
       project: "etstestest",       // Set this to your project.
@@ -115,16 +81,15 @@
         tabs: [{ title: 'All', filter: '' }, { title: 'Blog', filter: "dir1='blog'" }, { title: 'Other', filter: "dir1!='blog'" }], // Ordered list of tabs to show.
       },
     });
-    // overlay("pub", "search")
 
-      project: "etstestest",       // Set this to your project.
-      collection: "trent-kiwi", // Set this to your collection.
     contentBlock = setup(window, document, "script", "_sj");
     contentBlock("config", {
+      project: "etstestest",       // Set this to your project.
+      collection: "trent-kiwi", // Set this to your collection.
       values: {},
       attachContentBlock: document.getElementById("content-block-response"),
       pipeline: "recent", // Run the website pipeline.
-      results: { showImages: true } // Show images in results.
+      results: { showImages: false } // Show images in results.
     });
     contentBlock("pub", "search-send");
   </script>
