@@ -36,6 +36,7 @@ import "./styles.css";
 const ESCAPE_KEY_CODE = 27;
 
 const integrationEvents = {
+  // Events to publish
   searchSent: "search-sent",
   valuesChanged: "values-changed",
   responseUpdated: "response-updated",
@@ -43,9 +44,12 @@ const integrationEvents = {
   queryReset: "query-reset",
   resultClicked: "result-clicked",
   searchEvent: "search-event",
+
+  // Events to both publish and subscribe
   overlayShow: "overlay-show",
   overlayHide: "overlay-hide",
 
+  // Events to subscribe
   valuesSet: "values-set",
   searchSend: "search-send"
 };
