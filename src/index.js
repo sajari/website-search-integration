@@ -42,12 +42,12 @@ const integrationEvents = {
   pageClose: "page-close",
   queryReset: "query-reset",
   resultClicked: "result-clicked",
-  searchSessionEnd: "search-session-end",
+  searchEvent: "search-event",
   overlayShow: "overlay-show",
   overlayHide: "overlay-hide",
 
-  setValues: "set-values",
-  search: "search"
+  valuesSet: "values-set",
+  searchSend: "search-send"
 };
 
 let disableTabFacetSearch = false;
@@ -197,26 +197,26 @@ const initInterface = (config, pub, sub) => {
     pub(integrationEvents.valuesChanged, changes, set);
   });
 
-  sub(integrationEvents.setValues, (_, newValues) => {
+  sub(integrationEvents.valuesSet, (_, newValues) => {
     values.set(newValues);
   });
 
-  sub(integrationEvents.search, () => {
+  sub(integrationEvents.searchSend, () => {
     pipeline.search(values.get());
   });
 
   const analytics = pipeline.getAnalytics();
   analytics.listen(pageClosedAnalyticsEvent, body => {
     pub(integrationEvents.pageClose, body);
-    pub(integrationEvents.searchSessionEnd, body);
+    pub(integrationEvents.searchEvent, body);
   });
   analytics.listen(bodyResetAnalyticsEvent, body => {
     pub(integrationEvents.queryReset, body);
-    pub(integrationEvents.searchSessionEnd, body);
+    pub(integrationEvents.searchEvent, body);
   });
   analytics.listen(resultClickedAnalyticsEvent, body => {
     pub(integrationEvents.resultClicked, body);
-    pub(integrationEvents.searchSessionEnd, body);
+    pub(integrationEvents.searchEvent, body);
   });
 
   let tabsFilter;

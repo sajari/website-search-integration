@@ -16,8 +16,8 @@
     function inputKeyDown(e) {
       if (e.keyCode === 13 /* Enter key */) {
         overlay("pub", "overlay-show");
-        overlay("pub", "set-values", { q: e.target.value });
-        overlay("pub", "search");
+        overlay("pub", "values-set", { q: e.target.value });
+        overlay("pub", "search-send");
       }
     }
   </script>
@@ -71,7 +71,7 @@
     //   }
     // });
 
-    // inPage("sub", "search-end", function (eventName, lastQuery) {
+    // inPage("sub", "search-event", function (eventName, lastQuery) {
     //   console.log("Search session finished", lastQuery);
     // })
 
@@ -128,7 +128,7 @@
       pipeline: "recent", // Run the website pipeline.
       results: { showImages: true } // Show images in results.
     });
-    contentBlock("pub", "search");
+    contentBlock("pub", "search-send");
   </script>
 
   <style>

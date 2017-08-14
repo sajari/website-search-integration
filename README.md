@@ -191,13 +191,13 @@ myUI("sub", "<event>", function() {});
 
 | Event | Data | Description |
 | :-- | :-: | :-- |
-| `"query-sent"` | value dictionary | Search request has been sent |
+| `"search-sent"` | value dictionary | Search request has been sent |
 | `"values-changed"` | value dictionary | Value map has changed |
 | `"response-updated"` | response object | Response has updated |
 | `"page-close"` | query string | Page is about to be closed |
 | `"query-reset"` | query string | Body has changed enough to be considered a new query |
 | `"result-clicked"` | query string | Result has been clicked |
-| `"search-session-end"` | query string | Search event |
+| `"search-event"` | query string | Search event |
 | `"overlay-show"` | none | Overlay is shown |
 | `"overlay-hide"` | none | Overlay is hidden |
 
@@ -257,7 +257,7 @@ myUI("sub", "result-clicked", searchFinished);
 **At Once:**
 
 ```javascript
-myUI("sub", "search-session-end", function (eventName, query) {
+myUI("sub", "search-event", function (eventName, query) {
   console.log("Search session finished, last query", query);
 });
 ```
