@@ -35,9 +35,7 @@ The configuration required for this example is given below.  For more details, s
     "showImages": false
   },
   "values": {
-    "resultsPerPage": "10"
-  },
-  "initialValues": {
+    "resultsPerPage": "10",
     "q": getUrlParam("q")
   },
   "overlay": false
@@ -88,7 +86,6 @@ The generated search interfaces are configured using a simple JSON object which 
 * [Result Config](#result-config)
 * [Search box place holder text](#search-box-placeholder-text)
 * [Algorithm parameters](#algorithm-parameters)
-* [Initial Values](#initial-values)
 * [Tab filters](#tab-filters)
 
 You'll find the configuration object in the snippet generated from the [install page](https://www.sajari.com/console/collections/install).
@@ -162,23 +159,13 @@ searchBoxPlaceHolder: "Search",
 
 ### Algorithm parameters
 
-The standard website pipeline defines several algorithm parameters. For example, `resultsPerPage`.
+The standard website pipeline defines several algorithm parameters. For example, `q` or `resultsPerPage`.
 
 ```javascript
 values: {
-   resultsPerPage: "10", // Show 10 results per page.
-},
-```
-
-### Initial Values
-
-These values described in this section are only added to the value map when the app starts.
-If the overlay is closed or the query is cleared, these values will be removed.
-
-```javascript
-initialValues: {
   q: getUrlParam("q") // The initial search query will be the value of the query param "q".
-}
+  resultsPerPage: "10", // Show 10 results per page.
+},
 ```
 
 ### Events
@@ -205,8 +192,10 @@ You can also publish events which the search interface will pick up.
 
 | Event | Data | Description |
 | :-- | :-: | :-- |
-| `"set-values"` | value dictionary | Values to set |
-| `"search"` | none | Perform a search |
+| `"values-set"` | value dictionary | Values to set |
+| `"search-send"` | none | Perform a search |
+| `"overlay-show"` | none | Show the overlay |
+| `"overlay-hide"` | none | Hide the overlay |
 
 #### Search Sent
 
@@ -281,8 +270,19 @@ myUI("pub", "set-values", { q: "<search query>" });
 
 #### Search
 
+Search will perform a search request using the values in the value map.
+
 ```javascript
-myUI("pub", "search");
+myUI("pub", "search-send");
+```
+
+#### Overlay Show/Hide
+
+Publish these events to show or hide the overlay.
+
+```javascript
+myUI("pub", "overlay-show");
+myUI("pub", "overlay-hide");
 ```
 
 ### Tab filters
