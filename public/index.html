@@ -39,17 +39,7 @@
   <script>
     var getUrlParam = function (e) { var t = new RegExp("[?&]" + e.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)"), a = t.exec(window.location.href); return a && a[2] ? decodeURIComponent(a[2].replace(/\+/g, " ")) : "" };
 
-    var setup = function (w, d, x, a, e, s) {
-      s = [];
-      var b = function () {
-        s.push(arguments);
-      }, q = "ui";
-      b.arr = s;
-      w[a] = w[a] || [];
-      w[a][q] = w[a][q] || [];
-      w[a][q].push(b);
-      return b;
-    }
+    var setup = function (u, r, n, t, a, s) { s = []; var e = function () { s.push(arguments) }, i = "ui"; return e.arr = s, u[t] = u[t] || [], u[t][i] = u[t][i] || [], u[t][i].push(e), e };
 
     inPage = setup(window, document, "script", "_sj", "//address.js");
     inPage("config", {
