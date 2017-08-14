@@ -8,7 +8,7 @@ This website search integration is built using the [Sajari React SDK](https://ww
 
 ## Instructions
 
-We're assuming you've already setup an account and have a website collection already indexing. If not then you need to  [Sign Up](https://www.sajari.com/console/sign-up) and create a website collection to get started.
+We're assuming you've setup an account and have a website collection indexing. If not then you need to  [Sign Up](https://www.sajari.com/console/sign-up) and create a website collection to get started.
 
 From the [Install tab](https://www.sajari.com/console/collections/install) in the Console you can generate a search interface which can be copy-pasted into your site.  It's easy to add further customisations using CSS (see [Styling](#styling)), or by changing the JSON config (see [Configuration](#configuration)).
 
@@ -228,9 +228,9 @@ myUI("sub", "response-updated", function(eventName, response) {
 });
 ```
 
-#### Search Session End
+#### Search Event
 
-There are 3 events that signal the end of a search session. You can subscribe to this individually or all at once.
+There are 3 situations that can trigger a search event. You can subscribe to them individually or all together. Determining what constitutes a search in  Search events indicate the end of a search session.
 
 **Individually:**
 
@@ -243,7 +243,7 @@ myUI("sub", "query-reset", searchFinished);
 myUI("sub", "result-clicked", searchFinished);
 ```
 
-**At Once:**
+**Together:**
 
 ```javascript
 myUI("sub", "search-event", function (eventName, query) {
@@ -263,6 +263,8 @@ myUI("sub", "overlay-hide", function(eventName) {
 ```
 
 #### Set Values
+
+Merge new values into the values dictionary. Setting a value to undefined will remove it from the values dictionary.
 
 ```javascript
 myUI("pub", "set-values", { q: "<search query>" });
