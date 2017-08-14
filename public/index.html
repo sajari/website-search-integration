@@ -39,7 +39,7 @@
   <script>
     var getUrlParam = function (e) { var t = new RegExp("[?&]" + e.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)"), a = t.exec(window.location.href); return a && a[2] ? decodeURIComponent(a[2].replace(/\+/g, " ")) : "" };
 
-    const setup = function (w, d, x, a, e, s) {
+    var setup = function (w, d, x, a, e, s) {
       s = [];
       var b = function () {
         s.push(arguments);
