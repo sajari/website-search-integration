@@ -82,20 +82,6 @@ const checkConfig = config => {
   return true;
 };
 
-const combinedValues = (config, firstTime) => {
-  let initialValues = {};
-  // Only include initial values the first time App is initialised
-  if (config.initialValues && firstTime) {
-    initialValues = config.initialValues;
-  }
-
-  const combinedValues = {
-    ...initialValues,
-    ...config.values
-  };
-  return combinedValues;
-};
-
 const initOverlay = (config, pipeline, values, pub, sub, tabsFilter) => {
   const setOverlayControls = controls => {
     const show = () => {
@@ -251,25 +237,24 @@ const initInterface = (config, pub, sub) => {
     });
   }
 
-  const queryValues = combinedValues(config, true);
   let initialFilter;
-  if (queryValues.filter) {
+  if (config.values.filter) {
     initialFilter = new Filter(
       {
-        initialFilter: queryValues.filter
+        initialFilter: config.values.filter
       },
       "initialFilter"
     );
-    delete queryValues.filter;
+    delete config.values.filter;
   }
-  values.set(queryValues);
+  values.set(config.values);
 
   const filter = new CombineFilters(
     [tabsFilter, initialFilter].filter(Boolean)
   );
   values.set({ filter: () => filter.filter() });
 
-  const query = Boolean(queryValues.q);
+  const query = Boolean(config.values.q);
   if (query) {
     pipeline.search(values.get());
   }
