@@ -292,8 +292,6 @@ const initInterface = (config, pub, sub) => {
 
 const initialise = () => {
   window._sj.ui.forEach((s, i) => {
-    s.array = s.s; // Temporary solution
-
     const pub = (event, data) => PubSub.publish(`${i}.${event}`, data);
     const sub = (event, fn) => {
       if (event === "*") {
