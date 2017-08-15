@@ -38,9 +38,9 @@ const ESCAPE_KEY_CODE = 27;
 const integrationEvents = {
   // Events to publish
   searchSent: "search-sent",
-  valuesChanged: "values-changed",
+  valuesUpdated: "values-updated",
   responseUpdated: "response-updated",
-  pageClose: "page-close",
+  pageClosed: "page-closed",
   queryReset: "query-reset",
   resultClicked: "result-clicked",
   searchEvent: "search-event",
@@ -184,7 +184,7 @@ const initInterface = (config, pub, sub) => {
   });
 
   values.listen(valuesUpdatedEvent, (changes, set) => {
-    pub(integrationEvents.valuesChanged, changes, set);
+    pub(integrationEvents.valuesUpdated, changes, set);
   });
 
   sub(integrationEvents.valuesSet, (_, newValues) => {
@@ -197,7 +197,7 @@ const initInterface = (config, pub, sub) => {
 
   const analytics = pipeline.getAnalytics();
   analytics.listen(pageClosedAnalyticsEvent, body => {
-    pub(integrationEvents.pageClose, body);
+    pub(integrationEvents.pageClosed, body);
     pub(integrationEvents.searchEvent, body);
   });
   analytics.listen(bodyResetAnalyticsEvent, body => {
