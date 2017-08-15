@@ -179,9 +179,9 @@ myUI("sub", "<event>", function() {});
 | Event | Data | Description |
 | :-- | :-: | :-- |
 | `"search-sent"` | value dictionary | Search request has been sent |
-| `"values-changed"` | value dictionary | Value map has changed |
+| `"values-updated"` | value dictionary | Value map has updated |
 | `"response-updated"` | response object | Response has updated |
-| `"page-close"` | query string | Page is about to be closed |
+| `"page-closed"` | query string | Page is about to be closed |
 | `"query-reset"` | query string | Body has changed enough to be considered a new query |
 | `"result-clicked"` | query string | Result has been clicked |
 | `"search-event"` | query string | Search event |
@@ -192,12 +192,14 @@ You can also publish events which the search interface will pick up.
 
 | Event | Data | Description |
 | :-- | :-: | :-- |
-| `"values-set"` | value dictionary | Values to set |
+| `"values-set"` | value dictionary | Values to merge in |
 | `"search-send"` | none | Perform a search |
 | `"overlay-show"` | none | Show the overlay |
 | `"overlay-hide"` | none | Hide the overlay |
 
 #### Search Sent
+
+A search has sent and we are now waiting for results. The values used in the search are given to the subscribed function.
 
 ```javascript
 myUI("sub", "search-sent", function(eventName, values) {
@@ -205,15 +207,21 @@ myUI("sub", "search-sent", function(eventName, values) {
 });
 ```
 
-#### Values Changed
+#### Values Updated
+
+Values in the interface have been updated. A function is given as the 3rd argument that can be used to merge new values into the value dictionary, it behaves like `pub("values-set", {})` except that it doesn't trigger an event.
 
 ```javascript
-myUI("sub", "values-changed", function(eventName, values) {
+myUI("sub", "values-updated", function(eventName, values, set) {
   console.log("New values are", values);
 });
 ```
 
 #### Response Updated
+
+The search response has been updated. Caused by a network response being received or results being cleared (usually because the input box has become empty).
+
+You can see more info about the `response` object [here](https://github.com/sajari/sajari-sdk-react#listening-for-responses).
 
 ```javascript
 myUI("sub", "response-updated", function(eventName, response) {
@@ -230,20 +238,7 @@ myUI("sub", "response-updated", function(eventName, response) {
 
 #### Search Event
 
-There are 3 situations that can trigger a search event. You can subscribe to them individually or all together. Determining what constitutes a search in  Search events indicate the end of a search session.
-
-**Individually:**
-
-```javascript
-function searchFinished(eventName, query) {
-  console.log("Search session finished, last query", query);
-}
-myUI("sub", "page-close", searchFinished);
-myUI("sub", "query-reset", searchFinished);
-myUI("sub", "result-clicked", searchFinished);
-```
-
-**Together:**
+A search event signals the end of a search session. A common use case of subscribing to them is for reporting.
 
 ```javascript
 myUI("sub", "search-event", function (eventName, query) {
@@ -251,7 +246,27 @@ myUI("sub", "search-event", function (eventName, query) {
 });
 ```
 
+If you'd like more granular events you can also subscribe to these events.
+
+```javascript
+function searchFinished(eventName, query) {
+  console.log("Search session finished, last query", query);
+}
+myUI("sub", "page-closed", searchFinished);
+myUI("sub", "query-reset", searchFinished);
+myUI("sub", "result-clicked", searchFinished);
+```
+
 #### Overlay Shown/Hidden
+
+Opening and closing the overlay can be done by publishing either the show or hide event.
+
+```javascript
+myUI("pub", "overlay-show");
+myUI("pub", "overlay-hide");
+```
+
+You can also subscribe to these events
 
 ```javascript
 myUI("sub", "overlay-show", function(eventName) {
@@ -267,7 +282,7 @@ myUI("sub", "overlay-hide", function(eventName) {
 Merge new values into the values dictionary. Setting a value to undefined will remove it from the values dictionary.
 
 ```javascript
-myUI("pub", "set-values", { q: "<search query>" });
+myUI("pub", "values-set", { q: "<search query>" });
 ```
 
 #### Search
@@ -276,15 +291,6 @@ Search will perform a search request using the values in the value map.
 
 ```javascript
 myUI("pub", "search-send");
-```
-
-#### Overlay Show/Hide
-
-Publish these events to show or hide the overlay.
-
-```javascript
-myUI("pub", "overlay-show");
-myUI("pub", "overlay-hide");
 ```
 
 ### Tab filters
