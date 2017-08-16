@@ -125,16 +125,12 @@ To display as an overlay, set the `overlay` value.
 overlay: true
 ```
 
-To open the overlay, call the show method from javascript.
-
-```javascript
-window._sjui.overlay.show();
-```
+To open the overlay, [publish the show event](#overlay-show-hide) from javascript.
 
 For example, launching the overlay when a button is clicked
 
 ```html
-<button onclick="window._sjui.overlay.show()">Search</button>
+<button onclick="myUI('pub', 'overlay-show');">Search</button>
 ```
 
 ### Result Config
@@ -257,7 +253,7 @@ myUI("sub", "query-reset", searchFinished);
 myUI("sub", "result-clicked", searchFinished);
 ```
 
-#### Overlay Shown/Hidden
+#### Overlay Show/Hide
 
 Opening and closing the overlay can be done by publishing either the show or hide event.
 
