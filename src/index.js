@@ -280,6 +280,13 @@ const initInterface = (config, pub, sub) => {
 };
 
 const initialise = () => {
+  if (!window.sajari) {
+    throw new Error("window.sajari not found, needed for website-search");
+  }
+  if (!window.sajari.ui) {
+    throw new Error("window.sajari.ui not found, needed for website-search");
+  }
+
   window.sajari.ui.forEach((s, i) => {
     const pub = (event, data) => PubSub.publish(`${i}.${event}`, data);
     const sub = (event, fn) => {
