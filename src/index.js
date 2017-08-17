@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 import PubSub from "pubsub-js";
 
-import * as stack from "stack";
+import { flush } from "stackqueue";
 
 import {
   selectionUpdatedEvent,
@@ -308,7 +308,7 @@ const initialise = () => {
 
     const methods = { config, pub, sub };
 
-    const errors = stack.flush(s, methods);
+    const errors = flush(s, methods);
     if (errors.length > 0) {
       errors.forEach(error);
     }
