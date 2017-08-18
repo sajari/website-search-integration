@@ -63,10 +63,6 @@ const error = message => {
 };
 
 const checkConfig = config => {
-  if (!config) {
-    error('global value "window._sjui.config" not found');
-    return false;
-  }
   if (!config.project) {
     error("'project' not set in config");
     return false;
@@ -301,6 +297,9 @@ const initialise = () => {
     const config = config => {
       if (configured) {
         throw new Error("website search interface can only be configured once");
+      }
+      if (!config) {
+        throw new Error("no config provided");
       }
       configured = true;
       return initInterface(config, pub, sub);
