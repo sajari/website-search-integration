@@ -1,26 +1,29 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { Analytics } from "sajari-react/analytics";
+import PubSub from "pubsub-js";
+
+import { flush } from "stackqueue";
+
 import {
+  selectionUpdatedEvent,
   Filter,
   CombineFilters,
-  valuesChangedEvent,
-  initWebsiteTracking
+  Values,
+  valuesUpdatedEvent,
+  Pipeline,
+  responseUpdatedEvent,
+  searchSentEvent,
+  pageClosedAnalyticsEvent,
+  bodyResetAnalyticsEvent,
+  resultClickedAnalyticsEvent
 } from "sajari-react/controllers";
 
 import loaded from "./loaded";
 import Overlay from "./Overlay";
 import InPage from "./InPage";
 import SearchResponse from "./SearchResponse";
-
-import {
-  initialiseResources,
-  pipeline,
-  values,
-  tracking,
-  client
-} from "./resources";
+import ContentBlockResponse from "./ContentBlockResponse";
 
 import "sajari-react/ui/overlay/Overlay.css";
 import "sajari-react/ui/text/AutocompleteInput.css";
@@ -28,13 +31,30 @@ import "sajari-react/ui/facets/Tabs.css";
 import "sajari-react/ui/results/Results.css";
 import "sajari-react/ui/results/Paginator.css";
 
+import "./styles.css";
+
 const ESCAPE_KEY_CODE = 27;
 
-let disableTabFacetSearch = false;
+const integrationEvents = {
+  // Events to publish
+  searchSent: "search-sent",
+  valuesUpdated: "values-updated",
+  responseUpdated: "response-updated",
+  pageClosed: "page-closed",
+  queryReset: "query-reset",
+  resultClicked: "result-clicked",
+  searchEvent: "search-event",
 
-let filter;
-let tabsFilter;
-let initialFilter;
+  // Events to both publish and subscribe
+  overlayShow: "overlay-show",
+  overlayHide: "overlay-hide",
+
+  // Events to subscribe
+  valuesSet: "values-set",
+  searchSend: "search-send"
+};
+
+let disableTabFacetSearch = false;
 
 const error = message => {
   if (console && console.error) {
@@ -42,12 +62,7 @@ const error = message => {
   }
 };
 
-const checkConfig = () => {
-  const config = window._sjui.config;
-  if (!config) {
-    error('global value "window._sjui.config" not found');
-    return false;
-  }
+const checkConfig = config => {
   if (!config.project) {
     error("'project' not set in config");
     return false;
@@ -63,21 +78,7 @@ const checkConfig = () => {
   return true;
 };
 
-const combinedValues = (config, firstTime) => {
-  let initialValues = {};
-  // Only include initial values the first time App is initialised
-  if (config.initialValues && firstTime) {
-    initialValues = config.initialValues;
-  }
-
-  const combinedValues = {
-    ...initialValues,
-    ...config.values
-  };
-  return combinedValues;
-};
-
-const initOverlay = config => {
+const initOverlay = (config, pipeline, values, pub, sub, tabsFilter) => {
   const setOverlayControls = controls => {
     const show = () => {
       document.getElementsByTagName("body")[0].style.overflow = "hidden";
@@ -86,7 +87,7 @@ const initOverlay = config => {
     const hide = () => {
       document.getElementsByTagName("body")[0].style.overflow = "";
       values.set({ q: undefined, "q.override": undefined });
-      pipeline.clearResponse();
+      pipeline.clearResponse(values.get());
       if (config.tabFilters && config.tabFilters.defaultTab) {
         disableTabFacetSearch = true;
         tabsFilter.set(config.tabFilters.defaultTab);
@@ -94,8 +95,8 @@ const initOverlay = config => {
       }
       controls.hide();
     };
-    window._sjui.overlay.show = show;
-    window._sjui.overlay.hide = hide;
+    sub(integrationEvents.overlayShow, show);
+    sub(integrationEvents.overlayHide, hide);
     return { show, hide };
   };
 
@@ -107,7 +108,7 @@ const initOverlay = config => {
   // Set up global overlay values
   document.addEventListener("keydown", e => {
     if (e.keyCode === ESCAPE_KEY_CODE) {
-      window._sjui.overlay.hide();
+      pub(integrationEvents.overlayHide);
     }
   });
 
@@ -116,63 +117,110 @@ const initOverlay = config => {
       config={config}
       setOverlayControls={setOverlayControls}
       tabsFilter={tabsFilter}
+      pipeline={pipeline}
+      values={values}
     />,
     overlayContainer
   );
 };
 
-const initInPage = config => {
-  ReactDOM.render(<InPage config={config} />, config.attachSearchBox);
+const initInPage = (config, pipeline, values, tabsFilter) => {
   ReactDOM.render(
-    <SearchResponse config={config} tabsFilter={tabsFilter} />,
+    <InPage config={config} pipeline={pipeline} values={values} />,
+    config.attachSearchBox
+  );
+  ReactDOM.render(
+    <SearchResponse
+      config={config}
+      tabsFilter={tabsFilter}
+      pipeline={pipeline}
+      values={values}
+    />,
     config.attachSearchResponse
   );
 };
 
-const initInterface = () => {
-  if (!checkConfig()) {
+const initContentBlock = (config, pipeline, values, tabsFilter) => {
+  ReactDOM.render(
+    <ContentBlockResponse
+      config={config}
+      tabsFilter={tabsFilter}
+      pipeline={pipeline}
+      values={values}
+    />,
+    config.attachContentBlock
+  );
+};
+
+const initInterface = (config, pub, sub) => {
+  if (!checkConfig(config)) {
     return;
   }
 
-  const config = window._sjui.config;
+  const pipeline = new Pipeline(
+    config.project,
+    config.collection,
+    config.pipeline,
+    undefined,
+    config.disableGA ? [] : undefined
+  );
 
-  const noOverlay = () => error("no overlay exists");
-  window._sjui.overlay = { show: noOverlay, hide: noOverlay };
+  pipeline.listen(searchSentEvent, values => {
+    pub(integrationEvents.searchSent, values);
+  });
+  pipeline.listen(responseUpdatedEvent, response => {
+    pub(integrationEvents.responseUpdated, response);
+  });
 
-  initialiseResources(config.project, config.collection, config.pipeline);
+  const values = new Values();
+  values.listen(valuesUpdatedEvent, (changes, set) => {
+    if (!changes.page && values.get().page !== "1") {
+      set({ page: "1" });
+    }
+  });
 
-  let analytics;
-  if (!config.disableGA) {
-    analytics = new Analytics(pipeline, tracking);
-  }
+  values.listen(valuesUpdatedEvent, (changes, set) => {
+    pub(integrationEvents.valuesUpdated, changes, set);
+  });
 
-  initWebsiteTracking(values, tracking);
+  sub(integrationEvents.valuesSet, (_, newValues) => {
+    values.set(newValues);
+  });
 
-  window._sjui.controllers = {
-    analytics,
-    client,
-    values,
-    pipeline,
-    tracking,
-    filter
-  };
+  sub(integrationEvents.searchSend, () => {
+    pipeline.search(values.get());
+  });
 
+  const analytics = pipeline.getAnalytics();
+  analytics.listen(pageClosedAnalyticsEvent, body => {
+    pub(integrationEvents.pageClosed, body);
+    pub(integrationEvents.searchEvent, body);
+  });
+  analytics.listen(bodyResetAnalyticsEvent, body => {
+    pub(integrationEvents.queryReset, body);
+    pub(integrationEvents.searchEvent, body);
+  });
+  analytics.listen(resultClickedAnalyticsEvent, body => {
+    pub(integrationEvents.resultClicked, body);
+    pub(integrationEvents.searchEvent, body);
+  });
+
+  let tabsFilter;
   if (config.tabFilters && config.tabFilters.defaultTab) {
     const opts = {};
     config.tabFilters.tabs.forEach(t => {
       opts[t.title] = t.filter;
     });
     tabsFilter = new Filter(opts, [config.tabFilters.defaultTab]);
-    tabsFilter.set(config.tabFilters.defaultTab, true);
-    tabsFilter.listen(() => {
+    tabsFilter.listen(selectionUpdatedEvent, () => {
       // Perform a search when the tabs change
       if (!disableTabFacetSearch) {
-        values.emitChange();
-        pipeline.search(values, tracking);
+        values.emitUpdated();
+        pipeline.search(values.get());
       }
     });
 
-    values.listen(valuesChangedEvent, changes => {
+    values.listen(valuesUpdatedEvent, changes => {
       // If the query is empty, reset the tab back to the default if it's not already
       if (
         !values.get().q &&
@@ -185,35 +233,41 @@ const initInterface = () => {
     });
   }
 
-  const queryValues = combinedValues(config, true);
-  if (queryValues.filter) {
+  let initialFilter;
+  if (config.values.filter) {
     initialFilter = new Filter(
       {
-        initialFilter: queryValues.filter
+        initialFilter: config.values.filter
       },
       "initialFilter"
     );
-    delete queryValues.filter;
+    delete config.values.filter;
   }
-  values.set(queryValues);
+  values.set(config.values);
 
-  filter = new CombineFilters([tabsFilter, initialFilter].filter(Boolean));
+  const filter = new CombineFilters(
+    [tabsFilter, initialFilter].filter(Boolean)
+  );
   values.set({ filter: () => filter.filter() });
 
-  const query = Boolean(queryValues.q);
+  const query = Boolean(config.values.q);
   if (query) {
-    pipeline.search(values, tracking);
+    pipeline.search(values.get());
   }
 
   if (config.overlay) {
-    initOverlay(config);
+    initOverlay(config, pipeline, values, pub, sub, tabsFilter);
     if (query) {
-      window._sjui.overlay.show();
+      pub(integrationEvents.overlayShow);
     }
     return;
   }
   if (config.attachSearchBox && config.attachSearchResponse) {
-    initInPage(config);
+    initInPage(config, pipeline, values, tabsFilter);
+    return;
+  }
+  if (config.attachContentBlock) {
+    initContentBlock(config, pipeline, values, tabsFilter);
     return;
   }
   error(
@@ -221,4 +275,43 @@ const initInterface = () => {
   );
 };
 
-loaded(window, initInterface);
+const initialise = () => {
+  if (!window.sajari) {
+    throw new Error("window.sajari not found, needed for website-search");
+  }
+  if (!window.sajari.ui) {
+    throw new Error("window.sajari.ui not found, needed for website-search");
+  }
+
+  window.sajari.ui.forEach((s, i) => {
+    const pub = (event, data) => PubSub.publish(`${i}.${event}`, data);
+    const sub = (event, fn) => {
+      if (event === "*") {
+        PubSub.subscribe(`${i}`, fn);
+        return;
+      }
+      PubSub.subscribe(`${i}.${event}`, fn);
+    };
+
+    let configured = false;
+    const config = config => {
+      if (configured) {
+        throw new Error("website search interface can only be configured once");
+      }
+      if (!config) {
+        throw new Error("no config provided");
+      }
+      configured = true;
+      return initInterface(config, pub, sub);
+    };
+
+    const methods = { config, pub, sub };
+
+    const errors = flush(s, methods);
+    if (errors.length > 0) {
+      errors.forEach(error);
+    }
+  });
+};
+
+loaded(window, initialise);

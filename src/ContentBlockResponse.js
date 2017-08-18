@@ -1,16 +1,25 @@
 import React from "react";
 
-import {
-  Summary,
-  Results,
-  Paginator,
-  ImageResult,
-  Result
-} from "sajari-react/ui/results";
-import { TabsFacet } from "sajari-react/ui/facets";
+import { Results, Result, TokenLink } from "sajari-react/ui/results";
 import { responseUpdatedEvent } from "sajari-react/controllers";
 
-class SearchResponse extends React.Component {
+class ContentBlockResult extends React.Component {
+  render() {
+    const { values, token } = this.props;
+    return (
+      <div className="sj-content-block-result">
+        <TokenLink token={token} url={values.url}>
+          <img className="sj-image" src={values.image} alt={values.title} />
+          <p className="sj-image-text">
+            {values.title}
+          </p>
+        </TokenLink>
+      </div>
+    );
+  }
+}
+
+class ContentBlockResponse extends React.Component {
   constructor(props) {
     super(props);
 
@@ -33,38 +42,28 @@ class SearchResponse extends React.Component {
   };
 
   render() {
-    const { config, tabsFilter, pipeline, values } = this.props;
+    const { config, pipeline, values } = this.props;
     const { response } = this.state;
 
-    if (response.isEmpty() || !response.getQueryValues().q) {
+    if (response.isEmpty()) {
       return null;
     }
 
-    let tabs = null;
-    if (config.tabFilters) {
-      const tabsFacetMap = config.tabFilters.tabs.map(t => ({
-        name: t.title,
-        displayText: t.title
-      }));
-      tabs = <TabsFacet tabs={tabsFacetMap} filter={tabsFilter} />;
-    }
-
     const resultsConfig = config.results || {};
-    const resultRenderer = resultsConfig.showImages ? ImageResult : Result;
-
+    const resultRenderer = resultsConfig.showImages
+      ? ContentBlockResult
+      : Result;
     return (
       <div className="sj-pipeline-response">
-        {tabs}
-        <Summary values={values} pipeline={pipeline} />
         <Results
           ResultRenderer={resultRenderer}
           values={values}
           pipeline={pipeline}
         />
-        <Paginator values={values} pipeline={pipeline} />
+        <div style={{ clear: "both" }} />
       </div>
     );
   }
 }
 
-export default SearchResponse;
+export default ContentBlockResponse;

@@ -1,16 +1,16 @@
-#sj-overlay-search-modal {
+.sj-overlay-search {
   padding-left: 0;
   padding-right: 0;
 }
 
-#sj-search-modal-input-holder-outer {
+.sj-search-input-holder-outer {
   background-color: #2b3137;
-  height: 46px;
+  height: 66px;
   padding: 14px 0px 10px 126px;
 }
 
 .sj-logo {
-  background-image: url(https://www.sajari.com/img/sajari-100x100-flat.png);
+  background-image: url(/img/logo-flat.svg);
   background-repeat: no-repeat;
   width: 60px;
   height: 55px;
@@ -35,11 +35,13 @@
   font-size: 14px;
 }
 
-.sj-tabs-container,
-.sj-result-summary,
-.sj-result-list,
-.sj-result-error {
-  padding-left: 126px;
+@media (min-width: 846px) {
+  .sj-tabs-container,
+  .sj-result-summary,
+  .sj-result-list,
+  .sj-result-error {
+    padding-left: 126px;
+  }
 }
 
 .sj-result-list {
@@ -50,7 +52,7 @@
   font-size: 14px;
 }
 
-.sj-result-title>a {
+.sj-result-title > a {
   font-size: 18px;
   text-decoration: none;
   color: #1a0dab;
@@ -71,28 +73,21 @@
 }
 
 @media (max-width: 845px) {
-  #sj-overlay-close {
-    right: 3%;
+  .sj-overlay .sj-pipeline-response {
+    padding: 0px 10px;
   }
 
-  #sj-search-modal-input-holder-outer {
-    padding: 69px 0 10px;
-  }
-
-  .sj-logo {
-    margin-left: calc(50vw - 34px);
-  }
-
-  .sj-search-bar-input-common {
+  .sj-overlay .sj-search-bar-input-common {
     width: calc(95vw - 18px);
     margin-left: 2.5vw;
   }
 
-  .sj-tabs-container,
-  .sj-result-summary,
-  .sj-result-list,
-  .sj-result-error {
-    padding-left: 2.5vw;
-    padding-right: 2.5vw;
+  .sj-search-input-holder-outer {
+    padding: 69px 0 10px;
+    height: 120px;
+  }
+
+  .sj-logo {
+    margin-left: calc(50vw - 34px);
   }
 }

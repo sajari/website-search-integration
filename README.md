@@ -8,7 +8,7 @@ This website search integration is built using the [Sajari React SDK](https://ww
 
 ## Instructions
 
-We're assuming you've already setup an account and have a website collection already indexing. If not then you need to  [Sign Up](https://www.sajari.com/console/sign-up) and create a website collection to get started.
+We're assuming you've setup an account and have a website collection indexing. If not then you need to  [Sign Up](https://www.sajari.com/console/sign-up) and create a website collection to get started.
 
 From the [Install tab](https://www.sajari.com/console/collections/install) in the Console you can generate a search interface which can be copy-pasted into your site.  It's easy to add further customisations using CSS (see [Styling](#styling)), or by changing the JSON config (see [Configuration](#configuration)).
 
@@ -35,9 +35,7 @@ The configuration required for this example is given below.  For more details, s
     "showImages": false
   },
   "values": {
-    "resultsPerPage": "10"
-  },
-  "initialValues": {
+    "resultsPerPage": "10",
     "q": getUrlParam("q")
   },
   "overlay": false
@@ -88,7 +86,6 @@ The generated search interfaces are configured using a simple JSON object which 
 * [Result Config](#result-config)
 * [Search box place holder text](#search-box-placeholder-text)
 * [Algorithm parameters](#algorithm-parameters)
-* [Initial Values](#initial-values)
 * [Tab filters](#tab-filters)
 
 You'll find the configuration object in the snippet generated from the [install page](https://www.sajari.com/console/collections/install).
@@ -128,16 +125,12 @@ To display as an overlay, set the `overlay` value.
 overlay: true
 ```
 
-To open the overlay, call the show method from javascript.
-
-```javascript
-window._sjui.overlay.show();
-```
+To open the overlay, [publish the show event](#overlay-show-hide) from javascript.
 
 For example, launching the overlay when a button is clicked
 
 ```html
-<button onclick="window._sjui.overlay.show()">Search</button>
+<button onclick="myUI('pub', 'overlay-show');">Search</button>
 ```
 
 ### Result Config
@@ -162,23 +155,138 @@ searchBoxPlaceHolder: "Search",
 
 ### Algorithm parameters
 
-The standard website pipeline defines several algorithm parameters. For example, `resultsPerPage`.
+The standard website pipeline defines several algorithm parameters. For example, `q` or `resultsPerPage`.
 
 ```javascript
 values: {
-   resultsPerPage: "10", // Show 10 results per page.
+  q: getUrlParam("q") // The initial search query will be the value of the query param "q".
+  resultsPerPage: "10", // Show 10 results per page.
 },
 ```
 
-### Initial Values
+### Events
 
-These values described in this section are only added to the value map when the app starts.
-If the overlay is closed or the query is cleared, these values will be removed.
+You can subscribe to events by calling your interface with the `"sub"` value followed by the event name and then a callback.
 
 ```javascript
-initialValues: {
-  q: getUrlParam("q") // The initial search query will be the value of the query param "q".
+myUI("sub", "<event>", function() {});
+```
+
+| Event | Data | Description |
+| :-- | :-: | :-- |
+| `"search-sent"` | value dictionary | Search request has been sent |
+| `"values-updated"` | value dictionary | Value map has updated |
+| `"response-updated"` | response object | Response has updated |
+| `"page-closed"` | query string | Page is about to be closed |
+| `"query-reset"` | query string | Body has changed enough to be considered a new query |
+| `"result-clicked"` | query string | Result has been clicked |
+| `"search-event"` | query string | Search event |
+| `"overlay-show"` | none | Overlay is shown |
+| `"overlay-hide"` | none | Overlay is hidden |
+
+You can also publish events which the search interface will pick up.
+
+| Event | Data | Description |
+| :-- | :-: | :-- |
+| `"values-set"` | value dictionary | Values to merge in |
+| `"search-send"` | none | Perform a search |
+| `"overlay-show"` | none | Show the overlay |
+| `"overlay-hide"` | none | Hide the overlay |
+
+#### Search Sent
+
+A search has sent and we are now waiting for results. The values used in the search are given to the subscribed function.
+
+```javascript
+myUI("sub", "search-sent", function(eventName, values) {
+  console.log("Search sent with ", values);
+});
+```
+
+#### Values Updated
+
+Values in the interface have been updated. A function is given as the 3rd argument that can be used to merge new values into the value dictionary, it behaves like `pub("values-set", {})` except that it doesn't trigger an event.
+
+```javascript
+myUI("sub", "values-updated", function(eventName, values, set) {
+  console.log("New values are", values);
+});
+```
+
+#### Response Updated
+
+The search response has been updated. Caused by a network response being received or results being cleared (usually because the input box has become empty).
+
+You can see more info about the `response` object [here](https://github.com/sajari/sajari-sdk-react#listening-for-responses).
+
+```javascript
+myUI("sub", "response-updated", function(eventName, response) {
+  if (response.isEmpty()) {
+    return;
+  }
+  if (response.isError()) {
+    console.log("Got error", response.getError());
+  } else {
+    console.log("Got results", response.getResults());
+  }
+});
+```
+
+#### Search Event
+
+A search event signals the end of a search session. A common use case of subscribing to them is for reporting.
+
+```javascript
+myUI("sub", "search-event", function (eventName, query) {
+  console.log("Search session finished, last query", query);
+});
+```
+
+If you'd like more granular events you can also subscribe to these events.
+
+```javascript
+function searchFinished(eventName, query) {
+  console.log("Search session finished, last query", query);
 }
+myUI("sub", "page-closed", searchFinished);
+myUI("sub", "query-reset", searchFinished);
+myUI("sub", "result-clicked", searchFinished);
+```
+
+#### Overlay Show/Hide
+
+Opening and closing the overlay can be done by publishing either the show or hide event.
+
+```javascript
+myUI("pub", "overlay-show");
+myUI("pub", "overlay-hide");
+```
+
+You can also subscribe to these events
+
+```javascript
+myUI("sub", "overlay-show", function(eventName) {
+  console.log("The overlay has been shown");
+});
+myUI("sub", "overlay-hide", function(eventName) {
+  console.log("The overlay has been hidden");
+});
+```
+
+#### Set Values
+
+Merge new values into the values dictionary. Setting a value to undefined will remove it from the values dictionary.
+
+```javascript
+myUI("pub", "values-set", { q: "<search query>" });
+```
+
+#### Search
+
+Search will perform a search request using the values in the value map.
+
+```javascript
+myUI("pub", "search-send");
 ```
 
 ### Tab filters
