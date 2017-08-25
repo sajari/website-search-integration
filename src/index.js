@@ -295,8 +295,8 @@ const initialise = () => {
       if (!config) {
         throw new Error("no config provided");
       }
+      initInterface(config, pub, sub);
       configured = true;
-      return initInterface(config, pub, sub);
     };
 
     const methods = { config, pub, sub };
