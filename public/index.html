@@ -43,8 +43,8 @@
 
     inPage = setup(window, document, "script", "sajari", "//address.js");
     inPage("config", {
-      project: "etstestest",       // Set this to your project.
-      collection: "trent-kiwi", // Set this to your collection.
+      project: "sajariptyltd",       // Set this to your project.
+      collection: "sajari-com", // Set this to your collection.
       values: { resultsPerPage: "10", "q": getUrlParam("q") },
       attachSearchBox: document.getElementById("search-box"),
       attachSearchResponse: document.getElementById("search-response"),
@@ -59,8 +59,8 @@
 
     overlay = setup(window, document, "script", "sajari");
     overlay("config", {
-      project: "etstestest",       // Set this to your project.
-      collection: "trent-kiwi", // Set this to your collection.
+      project: "sajariptyltd",       // Set this to your project.
+      collection: "sajari-com", // Set this to your collection.
       values: { resultsPerPage: "10", "q": getUrlParam("q") },
       overlay: true,
       pipeline: "website", // Run the website pipeline.
@@ -74,9 +74,9 @@
 
     contentBlock = setup(window, document, "script", "sajari");
     contentBlock("config", {
-      project: "etstestest",       // Set this to your project.
-      collection: "trent-kiwi", // Set this to your collection.
       values: {},
+      project: "sajariptyltd",       // Set this to your project.
+      collection: "sajari-com", // Set this to your collection.
       attachContentBlock: document.getElementById("content-block-response"),
       pipeline: "recent", // Run the website pipeline.
       results: { showImages: false } // Show images in results.
