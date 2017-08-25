@@ -25,12 +25,6 @@ import InPage from "./InPage";
 import SearchResponse from "./SearchResponse";
 import ContentBlockResponse from "./ContentBlockResponse";
 
-import "sajari-react/ui/overlay/Overlay.css";
-import "sajari-react/ui/text/AutocompleteInput.css";
-import "sajari-react/ui/facets/Tabs.css";
-import "sajari-react/ui/results/Results.css";
-import "sajari-react/ui/results/Paginator.css";
-
 import "./styles.css";
 
 const ESCAPE_KEY_CODE = 27;

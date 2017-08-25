@@ -1,33 +1,293 @@
-.sj-content-block-result {
-  margin-top: 0px;
-  width: 32%;
-  padding: 0.5%;
-  float: left;
-  margin: 0 auto;
+/**
+     * Search box
+     */
+
+.sj-search-holder-outer {
+  padding: 0.9em 0px;
+  position: relative;
+  min-height: 72px;
+  box-sizing: border-box;
 }
 
-.sj-image {
+.sj-overlay .sj-search-holder-outer {
+  margin-right: 34px;
+}
+
+.sj-search-holder-inner {
+  position: absolute;
+  width: 100%;
+}
+
+.sj-search-bar-input-common {
+  font-size: 20px;
+  padding: 0.4em;
+  outline: none;
+  letter-spacing: 0.6px;
+  line-height: 28px;
+  text-rendering: optimizeLegibility;
+  width: 100%;
+  box-shadow: 0 0 0 1px #ddd;
+  border-radius: 3px;
+  border: 0;
+  box-sizing: inherit;
+}
+
+.sj-search-bar-completion {
+  color: #bebebe;
+}
+
+.sj-search-bar-input {
+  position: absolute;
+  background: transparent;
+  color: #666;
+  top: 0px;
+  left: 0px;
+}
+
+.sj-search-icon {
+  display: none;
+}
+
+/**
+     * Autocomplete override
+     */
+
+.sj-result-summary-autocomplete-override {
   display: block;
-  margin: 0 auto;
-  width: auto;
-  max-width: 100%;
-  height: 100px;
+  padding-top: 16px;
+  font-size: 1.2em;
 }
 
-.sj-image-text {
-  text-overflow: ellipsis;
+.sj-result-summary-autocomplete-override > a {
+  color: #1a0dab;
+}
+
+/**
+     * Suggestions
+     */
+
+.sj-autocomplete-dropdown {
+  position: relative;
+}
+
+.sj-suggestions {
+  border: 1px solid #ddd;
+}
+
+.sj-suggestion {
+  font-size: 18px;
+  padding: 8px 8px;
+  background-color: #fff;
+  color: #666;
+}
+
+.sj-suggestion strong {
+  font-weight: 600;
+  color: #333;
+}
+
+.sj-suggestion.sj-suggestion-selected,
+.sj-suggestion:hover {
+  background-color: #ddd;
+}
+
+/**
+     * Results
+     */
+
+.sj-result-summary {
+  padding-bottom: 1.5em;
+  font-size: 16px;
+  color: #aaa;
+}
+
+.sj-result {
+  clear: both;
+}
+
+.sj-result-list > * {
+  margin-top: 1.5em;
+}
+
+.sj-result-list > :first-child {
+  margin-top: 0;
+}
+
+.sj-result-title {
+  margin-bottom: 0;
+  margin-top: 0;
+  font-size: 16px;
+  line-height: 24px;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sj-result-title a {
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 20px;
+  color: #333;
+  line-height: 21.6px;
+}
+
+.sj-result-title a:hover {
+  text-decoration: underline;
+}
+
+.sj-result-description {
+  color: #545454;
+  font-size: 15px;
+  line-height: 22px;
+  overflow-wrap: break-word;
+  margin-top: 2px;
+  margin-bottom: 4px;
+}
+
+.sj-result-url {
+  font-size: 13px;
+  line-height: 18.2px;
+  margin: 0;
+  color: #a2a2a2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sj-result-url a {
+  text-decoration: none;
+  color: #a2a2a2;
+}
+
+.sj-result-image-container {
+  float: left;
+  width: 100px;
+}
+
+.sj-result-image-container img {
+  max-height: 90px;
+  max-width: 90px;
+}
+
+/**
+     * Paginator
+     */
+
+.sj-paginator {
+  margin: 1em 0;
+  text-align: center;
+}
+
+.sj-paginator > div {
+  display: inline;
+  padding: 10px;
+  color: #777;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sj-paginator > div.current {
+  color: #333;
+}
+
+.sj-paginator > div.disabled {
+  color: #aaa;
+}
+
+/**
+     * Tabs
+     */
+
+.sj-tabs-container {
+  border-bottom: 1px solid #ebebeb;
+  color: #777;
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+.sj-tabs {
+  overflow: auto;
   white-space: nowrap;
 }
 
-@media (max-width: 768px) {
-  .sj-content-block-result {
-    width: 49%;
+.sj-tab {
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 0;
+  padding: .9em;
+  user-select: none;
+}
+
+.sj-tab-active {
+  color: #333;
+  border-bottom: 3px solid #333;
+}
+
+/**
+     * Overlay
+     */
+@keyframes sj-overlay-rolldown {
+  0% {
+    opacity: 0;
+    height: 20%;
+  }
+  100% {
+    opacity: 1;
+    height: 100%;
   }
 }
 
-@media (max-width: 480px) {
-  .sj-content-block-result {
-    width: 99%;
+.sj-overlay {
+  background-color: white;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  z-index: 1000000;
+  animation-name: sj-overlay-rolldown;
+  animation-duration: 0.4s;
+}
+
+.sj-overlay-search {
+  padding: 0px 30px;
+}
+
+.sj-overlay-close {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  z-index: 1;
+  color: #aaa;
+  text-align: center;
+  cursor: pointer;
+}
+
+.sj-overlay-close:hover {
+  color: #000;
+}
+
+.sj-overlay-close .sj-close {
+  font-size: 40px;
+  line-height: 30px;
+  padding-top: 10px;
+}
+
+.sj-overlay-close .sj-esc {
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  .sj-overlay-search {
+    padding: 0px 10px;
+  }
+
+  .sj-overlay .sj-search-holder-outer {
+    margin-right: 54px;
   }
 }
