@@ -1,8 +1,8 @@
 import React from "react";
 
 import { Overlay as OverlayFrame, Close } from "sajari-react/ui/overlay";
-import { AutocompleteInput } from "sajari-react/ui/text";
 
+import AutocompleteInput from "./AutocompleteInput";
 import SearchResponse from "./SearchResponse";
 
 class Overlay extends React.Component {
@@ -26,7 +26,7 @@ class Overlay extends React.Component {
           autoFocus
           pipeline={pipeline}
           values={values}
-          placeholder={config.searchBoxPlaceHolder}
+          config={config}
         />
         <Close onClick={this.hide} closeOverlay={this.hide} />
         <SearchResponse
