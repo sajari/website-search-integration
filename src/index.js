@@ -24,6 +24,7 @@ import Overlay from "./Overlay";
 import InPage from "./InPage";
 import SearchResponse from "./SearchResponse";
 import ContentBlockResponse from "./ContentBlockResponse";
+import AutocompleteInput from "./AutocompleteInput";
 
 import "./styles.css";
 
@@ -146,6 +147,13 @@ const initContentBlock = (config, pipeline, values, tabsFilter) => {
   );
 };
 
+const initAutocompleteInput = (config, pipeline, values) => {
+  ReactDOM.render(
+    <AutocompleteInput config={config} pipeline={pipeline} values={values} />,
+    config.attachAutocompleteInput
+  );
+};
+
 const initInterface = (config, pub, sub) => {
   if (!checkConfig(config)) {
     return;
@@ -264,9 +272,11 @@ const initInterface = (config, pub, sub) => {
     initContentBlock(config, pipeline, values, tabsFilter);
     return;
   }
-  error(
-    "no render mode found, need to specify either overlay or attachSearchBox and attachSearchResponse in config"
-  );
+  if (config.attachAutocompleteInput) {
+    initAutocompleteInput(config, pipeline, values);
+    return;
+  }
+  error("no render mode found, need to specify an attachment style");
 };
 
 const initialise = () => {
