@@ -9,6 +9,9 @@
 
 <body>
 
+  <h2>Autocomplete Input</h2>
+  <div id="autocomplete-input"></div>
+
   <h2>Overlay</h2>
   <!-- This input box will launch the interface when the user presses enter -->
   <input id="input-box" placeholder="Enter search query" onkeydown="inputKeyDown(event)">
@@ -82,6 +85,25 @@
       results: { showImages: false } // Show images in results.
     });
     contentBlock("pub", "search-send");
+
+    autocompleteInput = setup(window, document, "script", "sajari");
+    autocompleteInput("config", {
+      project: "sajariptyltd", // "etstestest",       // Set this to your project.
+      collection: "sajari-com", // "trent-kiwi", // Set this to your collection.
+      values: {},
+      input: {
+        instant: false,
+        autocomplete: true,
+        autoFocus: true, // Whether to focus the element on load
+        placeholder: "Search", // Placeholder text in the input element
+        amount: 5, // Maximum number of entries to show
+        submit: function (query) { // Function to call when an entry is chosen
+          window.location = "/search?q=" + query;
+        }
+      },
+      attachAutocompleteInput: document.getElementById("autocomplete-input"),
+      pipeline: "autocomplete" // Run the autocomplete pipeline.
+    });
   </script>
 
   <style>
