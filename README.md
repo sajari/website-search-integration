@@ -20,7 +20,6 @@ The configuration required for this example is given below.  For more details, s
 {
   "project": "your-project",
   "collection": "your-collection",
-  "searchBoxPlaceHolder": "Search",
   "attachSearchBox": document.getElementById("search-box"),
   "attachSearchResponse": document.getElementById("search-response"),
   "pipeline": "website",
@@ -84,7 +83,6 @@ The generated search interfaces are configured using a simple JSON object which 
 * [Pipeline](#pipeline)
 * [Attaching to the DOM](#attaching-to-the-dom)
 * [Result Config](#result-config)
-* [Search box place holder text](#search-box-placeholder-text)
 * [Algorithm parameters](#algorithm-parameters)
 * [Tab filters](#tab-filters)
 
@@ -143,14 +141,6 @@ Show images next to search results.
 results: {
   showImages: false
 },
-```
-
-### Search box placeholder text
-
-Set the placeholder text in the search box.
-
-```javascript
-searchBoxPlaceHolder: "Search",
 ```
 
 ### Algorithm parameters
