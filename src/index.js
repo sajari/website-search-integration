@@ -151,9 +151,16 @@ const initAutocompleteInput = (config, pipeline, values) => {
 };
 
 const initInterface = (config, pub, sub) => {
-  if (!checkConfig(config)) {
+  if (config.attachAutocompleteInput) {
+    checkConfig(config, false);
+    const pubAutocompleteSelected = query => {
+      pub(integrationEvents.autocompleteSelected, query);
+    };
+    initAutocompleteInput(config, pubAutocompleteSelected);
     return;
   }
+
+  checkConfig(config);
 
   const pipeline = new Pipeline(
     config.project,
@@ -266,10 +273,6 @@ const initInterface = (config, pub, sub) => {
   }
   if (config.attachContentBlock) {
     initContentBlock(config, pipeline, values, tabsFilter);
-    return;
-  }
-  if (config.attachAutocompleteInput) {
-    initAutocompleteInput(config, pipeline, values);
     return;
   }
   error("no render mode found, need to specify an attachment style");
