@@ -57,20 +57,16 @@ const error = message => {
   }
 };
 
-const checkConfig = config => {
+const checkConfig = (config, checkPipeline = true) => {
   if (!config.project) {
-    error("'project' not set in config");
-    return false;
+    throw new Error("'project' not set in config");
   }
   if (!config.collection) {
-    error("'collection' not set in config");
-    return false;
+    throw new Error("'collection' not set in config");
   }
-  if (!config.pipeline) {
-    error("'pipeline' not set in config");
-    return false;
+  if (checkPipeline && !config.pipeline) {
+    throw new Error("'pipeline' not set in config");
   }
-  return true;
 };
 
 const initOverlay = (config, pipeline, values, pub, sub, tabsFilter) => {
