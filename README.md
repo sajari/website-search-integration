@@ -37,6 +37,14 @@ The configuration required for this example is given below.  For more details, s
     "resultsPerPage": "10",
     "q": getUrlParam("q")
   },
+  "autocompleteInput": {
+    "instantSearch": false,
+    "showAutocompleteSuggestions": true,
+    "autoFocus": true,
+    "placeholder": "Search",
+    "numSuggestions": 5,
+    "pipeline": "autocomplete"
+  },
   "overlay": false
 }
 ```
@@ -82,6 +90,7 @@ The generated search interfaces are configured using a simple JSON object which 
 * [Project/Collection](#projectcollection)
 * [Pipeline](#pipeline)
 * [Attaching to the DOM](#attaching-to-the-dom)
+* [Autocomplete input box](#autocomplete-input-box)
 * [Result Config](#result-config)
 * [Algorithm parameters](#algorithm-parameters)
 * [Tab filters](#tab-filters)
@@ -131,6 +140,32 @@ For example, launching the overlay when a button is clicked
 <button onclick="myUI('pub', 'overlay-show');">Search</button>
 ```
 
+### Autocomplete input box
+
+Autocomplete input config allows you to modify the behaviour of the input component.
+
+| Option | Data | Description |
+| :-- | :-: | :-- |
+| `"instantSearch"` | boolean | Whether to search the non-autocompleteInput pipeline as the user types |
+| `"showAutocompleteSuggestions"` | boolean | Whether to show a dropdown of autocomplete suggestions |
+| `"numSuggestions"` | number | Maximum number of autocomplete suggestions to show |
+| `"autoFocus"` | boolean | Whether to focus the html input element on load |
+| `"placeholder"` | string | Placeholder text used in html input element |
+| `"pipeline"` | string | Pipeline to use for autocomplete |
+
+Sample options:
+
+```javascript
+autocompleteInput: {
+  instantSearch: false,
+  showAutocompleteSuggestions: true,
+  numSuggestions: 5,
+  autoFocus: true,
+  placeholder: "Search",
+  pipeline: "autocomplete"
+}
+```
+
 ### Result Config
 
 Result config allows you to modify the result rendering.
@@ -173,6 +208,7 @@ myUI("sub", "<event>", function() {});
 | `"search-event"` | query string | Search event |
 | `"overlay-show"` | none | Overlay is shown |
 | `"overlay-hide"` | none | Overlay is hidden |
+| `"autocomplete-selected"` | query string | Autocomplete option chosen by the user |
 
 You can also publish events which the search interface will pick up.
 
@@ -260,6 +296,16 @@ myUI("sub", "overlay-show", function(eventName) {
 });
 myUI("sub", "overlay-hide", function(eventName) {
   console.log("The overlay has been hidden");
+});
+```
+
+#### Autocomplete Selected
+
+An autocomplete selected event is triggered when a user presses enter while highlighting an autocomplete suggestion or clicks on an autocomplete suggestion.
+
+```javascript
+myUI("sub", "autocomplete-selected", function(eventName, query) {
+  console.log("Autocomplete selected", query);
 });
 ```
 
