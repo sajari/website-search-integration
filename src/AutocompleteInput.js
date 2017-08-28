@@ -49,20 +49,18 @@ class App extends React.Component {
     const {
       autoFocus,
       placeholder,
-      autocomplete,
-      instant,
-      amount,
-      submit
-    } = config.input;
+      showAutocompleteSuggestions,
+      instantSearch,
+      numSuggestions
+    } = config.autocompleteInput;
 
-    const valuesForAutocomplete = instant ? values : autocompleteValues;
-    const pipelineForAutocomplete = instant ? pipeline : autocompletePipeline;
-
-    const suggestionAmount = autocomplete ? amount : 0;
+    const valuesForAutocomplete = instantSearch ? values : autocompleteValues;
+    const pipelineForAutocomplete = instantSearch
+      ? pipeline
+      : autocompletePipeline;
     const searchAutocomplete =
-      (autocomplete || instant) && !(instant && !autocomplete);
-    const showCompletion = instant;
-    const submitAction = submit || this.submit;
+      (showAutocompleteSuggestions || instantSearch) &&
+      !(instantSearch && !showAutocompleteSuggestions);
 
     return (
       <AutocompleteDropdown
@@ -70,11 +68,11 @@ class App extends React.Component {
         placeholder={placeholder}
         values={valuesForAutocomplete}
         pipeline={pipelineForAutocomplete}
-        suggestionAmount={suggestionAmount}
-        handleUpdate={this.update}
-        handleSubmit={submitAction}
-        search={searchAutocomplete}
-        showCompletion={showCompletion}
+        numSuggestions={showAutocompleteSuggestions ? numSuggestions : 0}
+        handleQueryChanged={this.update}
+        handleForceSearch={this.submit}
+        autocompleteOnQueryChanged={searchAutocomplete}
+        showInlineCompletion={instantSearch}
       />
     );
   }

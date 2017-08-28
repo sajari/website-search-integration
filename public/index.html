@@ -54,12 +54,13 @@
       pipeline: "website", // Run the website pipeline.
       searchBoxPlaceHolder: "Type to search", // Placeholder text in search box.
       results: { showImages: false }, // Show images in results.
-      input: {
-        instant: false,
-        autocomplete: true,
-        autoFocus: true, // Whether to focus the element on load
+      autocompleteInput: { // Configuration options for the input element
+        instantSearch: false, // Whether to search the non-autocompleteInput pipeline as the user types
+        showAutocompleteSuggestions: true, // Whether to show a dropdown of autocomplete suggestions
+        autoFocus: false, // Whether to focus the element on load
         placeholder: "Search", // Placeholder text in the input element
-        amount: 5
+        numSuggestions: 5, // Maximum number of entries to show
+        pipeline: "autocomplete" // Pipeline to use for autocomplete
       },
       tabFilters: { // Tabs configuration.
         defaultTab: 'All', // Title of the default tab.
@@ -76,12 +77,13 @@
       pipeline: "website", // Run the website pipeline.
       searchBoxPlaceHolder: "Type to search", // Placeholder text in search box.
       results: { showImages: false }, // Show images in results.
-      input: {
-        instant: false,
-        autocomplete: true,
+      autocompleteInput: { // Configuration options for the input element
+        instantSearch: false, // Whether to search the non-autocompleteInput pipeline as the user types
+        showAutocompleteSuggestions: true, // Whether to show a dropdown of autocomplete suggestions
         autoFocus: true, // Whether to focus the element on load
         placeholder: "Search", // Placeholder text in the input element
-        amount: 5
+        numSuggestions: 5, // Maximum number of entries to show
+        pipeline: "autocomplete" // Pipeline to use for autocomplete
       },
       tabFilters: { // Tabs configuration.
         defaultTab: 'All', // Title of the default tab.
@@ -105,15 +107,13 @@
       project: "sajariptyltd", // "etstestest",       // Set this to your project.
       collection: "sajari-com", // "trent-kiwi", // Set this to your collection.
       values: {},
-      input: {
-        instant: false,
-        autocomplete: true,
-        autoFocus: true, // Whether to focus the element on load
+      autocompleteInput: { // Configuration options for the input element
+        instantSearch: false, // Whether to search the non-autocompleteInput pipeline as the user types
+        showAutocompleteSuggestions: true, // Whether to show a dropdown of autocomplete suggestions
+        autoFocus: false, // Whether to focus the element on load
         placeholder: "Search", // Placeholder text in the input element
-        amount: 5, // Maximum number of entries to show
-        submit: function (query) { // Function to call when an entry is chosen
-          window.location = "/search?q=" + query;
-        }
+        numSuggestions: 5, // Maximum number of entries to show
+        pipeline: "autocomplete" // Pipeline to use for autocomplete
       },
       attachAutocompleteInput: document.getElementById("autocomplete-input"),
       pipeline: "autocomplete" // Run the autocomplete pipeline.
