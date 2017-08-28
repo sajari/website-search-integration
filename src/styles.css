@@ -1,6 +1,6 @@
 /**
-     * Search box
-     */
+  * Search box
+  */
 
 .sj-search-holder-outer {
   padding: 0.9em 0px;
@@ -49,8 +49,8 @@
 }
 
 /**
-     * Autocomplete override
-     */
+  * Autocomplete override
+  */
 
 .sj-result-summary-autocomplete-override {
   display: block;
@@ -63,8 +63,8 @@
 }
 
 /**
-     * Suggestions
-     */
+  * Suggestions
+  */
 
 .sj-autocomplete-dropdown {
   position: relative;
@@ -92,8 +92,8 @@
 }
 
 /**
-     * Results
-     */
+  * Results
+  */
 
 .sj-result-summary {
   padding-bottom: 1.5em;
@@ -170,8 +170,8 @@
 }
 
 /**
-     * Paginator
-     */
+  * Paginator
+  */
 
 .sj-paginator {
   margin: 1em 0;
@@ -196,8 +196,8 @@
 }
 
 /**
-     * Tabs
-     */
+  * Tabs
+  */
 
 .sj-tabs-container {
   border-bottom: 1px solid #ebebeb;
@@ -226,8 +226,8 @@
 }
 
 /**
-     * Overlay
-     */
+  * Overlay
+  */
 @keyframes sj-overlay-rolldown {
   0% {
     opacity: 0;
