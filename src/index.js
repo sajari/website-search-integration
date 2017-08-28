@@ -39,6 +39,7 @@ const integrationEvents = {
   queryReset: "query-reset",
   resultClicked: "result-clicked",
   searchEvent: "search-event",
+  autocompleteSelected: "autocomplete-selected",
 
   // Events to both publish and subscribe
   overlayShow: "overlay-show",
@@ -143,9 +144,12 @@ const initContentBlock = (config, pipeline, values, tabsFilter) => {
   );
 };
 
-const initAutocompleteInput = (config, pipeline, values) => {
+const initAutocompleteInput = (config, pubAutocompleteSelected) => {
   ReactDOM.render(
-    <AutocompleteInput config={config} pipeline={pipeline} values={values} />,
+    <AutocompleteInput
+      config={config}
+      pubAutocompleteSelected={pubAutocompleteSelected}
+    />,
     config.attachAutocompleteInput
   );
 };

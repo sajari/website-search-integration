@@ -31,7 +31,10 @@ class App extends React.Component {
   };
 
   submit = query => {
-    const { pipeline, values } = this.props;
+    const { pipeline, values, pubAutocompleteSelected } = this.props;
+    if (query && pubAutocompleteSelected) {
+      pubAutocompleteSelected(query);
+    }
     if (query) {
       values.set({ q: query, "q.override": true });
       pipeline.search(values.get());
