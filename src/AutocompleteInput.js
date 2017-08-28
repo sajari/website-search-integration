@@ -40,7 +40,7 @@ class App extends React.Component {
       pipeline.search(values.get());
       return;
     }
-    pipeline.clearResponse();
+    pipeline.clearResponse(values.get());
   };
 
   render() {
