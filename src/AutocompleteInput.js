@@ -19,6 +19,9 @@ class App extends React.Component {
 
   update = query => {
     const { config, pipeline, values } = this.props;
+    if (!pipeline || !values) {
+      return;
+    }
     if (config.instant && !config.autocomplete) {
       values.set({ q: query, "q.override": undefined });
       if (query) {
@@ -34,6 +37,9 @@ class App extends React.Component {
     const { pipeline, values, pubAutocompleteSelected } = this.props;
     if (query && pubAutocompleteSelected) {
       pubAutocompleteSelected(query);
+    }
+    if (!pipeline || !values) {
+      return;
     }
     if (query) {
       values.set({ q: query, "q.override": true });
