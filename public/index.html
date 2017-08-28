@@ -115,6 +115,9 @@
       },
       attachAutocompleteInput: document.getElementById("autocomplete-input")
     });
+    autocompleteInput("sub", "autocomplete-selected", function (_, query) {
+      window.location = "?q=" + query;
+    });
   </script>
 
   <style>
