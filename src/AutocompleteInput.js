@@ -11,7 +11,7 @@ class App extends React.Component {
       autocompletePipeline: new Pipeline(
         props.config.project,
         props.config.collection,
-        "autocomplete"
+        props.config.autocompleteInput.pipeline || "autocomplete"
       ),
       autocompleteValues: new Values()
     };
