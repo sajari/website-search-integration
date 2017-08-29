@@ -42,7 +42,7 @@ class App extends React.Component {
       return;
     }
     if (query) {
-      values.set({ q: query, "q.override": true });
+      values.set({ q: query, "q.override": "true" });
       pipeline.search(values.get());
       return;
     }
