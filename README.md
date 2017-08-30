@@ -37,7 +37,7 @@ The configuration required for this example is given below.  For more details, s
     "resultsPerPage": "10",
     "q": getUrlParam("q")
   },
-  "autocompleteInput": {
+  "searchInput": {
     "instantSearch": false,
     "showAutocompleteSuggestions": true,
     "autoFocus": true,
@@ -156,7 +156,7 @@ Autocomplete input config allows you to modify the behaviour of the input compon
 Sample options:
 
 ```javascript
-autocompleteInput: {
+searchInput: {
   instantSearch: false,
   showAutocompleteSuggestions: true,
   numSuggestions: 5,

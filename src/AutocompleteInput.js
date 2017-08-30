@@ -11,7 +11,7 @@ class App extends React.Component {
       autocompletePipeline: new Pipeline(
         props.config.project,
         props.config.collection,
-        props.config.autocompleteInput.pipeline || "autocomplete"
+        props.config.searchInput.pipeline || "autocomplete"
       ),
       autocompleteValues: new Values()
     };
@@ -58,7 +58,7 @@ class App extends React.Component {
       showAutocompleteSuggestions,
       instantSearch,
       numSuggestions
-    } = config.autocompleteInput;
+    } = config.searchInput;
 
     const valuesForAutocomplete = instantSearch ? values : autocompleteValues;
     const pipelineForAutocomplete = instantSearch
