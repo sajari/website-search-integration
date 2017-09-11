@@ -90,10 +90,11 @@ The generated search interfaces are configured using a simple JSON object which 
 * [Project/Collection](#projectcollection)
 * [Pipeline](#pipeline)
 * [Attaching to the DOM](#attaching-to-the-dom)
-* [Autocomplete input box](#autocomplete-input-box)
+* [Input box](#input-box)
 * [Result Config](#result-config)
 * [Algorithm parameters](#algorithm-parameters)
 * [Tab filters](#tab-filters)
+* [Analytics](#analytics)
 
 You'll find the configuration object in the snippet generated from the [install page](https://www.sajari.com/console/collections/install).
 
@@ -140,14 +141,13 @@ For example, launching the overlay when a button is clicked
 <button onclick="myUI('pub', 'overlay-show');">Search</button>
 ```
 
-### Autocomplete input box
+### Input box
 
-Autocomplete input config allows you to modify the behaviour of the input component.
+Search input config allows you to modify the behaviour of the input component.
 
 | Option | Data | Description |
 | :-- | :-: | :-- |
-| `"instantSearch"` | boolean | Whether to search the non-autocompleteInput pipeline as the user types |
-| `"showAutocompleteSuggestions"` | boolean | Whether to show a dropdown of autocomplete suggestions |
+| `"mode"` | string | Mode of operation for the input element, can be `standard` or `instant` |
 | `"numSuggestions"` | number | Maximum number of autocomplete suggestions to show |
 | `"autoFocus"` | boolean | Whether to focus the html input element on load |
 | `"placeholder"` | string | Placeholder text used in html input element |
@@ -157,8 +157,7 @@ Sample options:
 
 ```javascript
 searchInput: {
-  instantSearch: false,
-  showAutocompleteSuggestions: true,
+  mode: "standard",
   numSuggestions: 5,
   autoFocus: true,
   placeholder: "Search",

@@ -2,7 +2,7 @@ import React from "react";
 
 import { Pipeline, Values } from "sajari-react/controllers";
 
-import { AutocompleteDropdown } from "sajari-react/ui/text";
+import { AutocompleteDropdown, AutocompleteInput } from "sajari-react/ui/text";
 
 class App extends React.Component {
   constructor(props) {
@@ -52,33 +52,27 @@ class App extends React.Component {
   render() {
     const { autocompletePipeline, autocompleteValues } = this.state;
     const { config, pipeline, values } = this.props;
-    const {
-      autoFocus,
-      placeholder,
-      showAutocompleteSuggestions,
-      instantSearch,
-      numSuggestions
-    } = config.searchInput;
+    const { autoFocus, placeholder, mode } = config.searchInput;
 
-    const valuesForAutocomplete = instantSearch ? values : autocompleteValues;
-    const pipelineForAutocomplete = instantSearch
-      ? pipeline
-      : autocompletePipeline;
-    const searchAutocomplete =
-      (showAutocompleteSuggestions || instantSearch) &&
-      !(instantSearch && !showAutocompleteSuggestions);
+    if (mode === "instant") {
+      return (
+        <AutocompleteInput
+          autoFocus={autoFocus}
+          placeholder={placeholder}
+          pipeline={pipeline}
+          values={values}
+        />
+      );
+    }
 
     return (
       <AutocompleteDropdown
         autoFocus={autoFocus}
         placeholder={placeholder}
-        values={valuesForAutocomplete}
-        pipeline={pipelineForAutocomplete}
-        numSuggestions={showAutocompleteSuggestions ? numSuggestions : 0}
-        handleQueryChanged={this.update}
-        handleForceSearch={this.submit}
-        autocompleteOnQueryChanged={searchAutocomplete}
-        showInlineCompletion={instantSearch}
+        values={autocompleteValues}
+        pipeline={autocompletePipeline}
+        forceSearchValues={values}
+        forceSearchPipeline={pipeline}
       />
     );
   }
