@@ -15,6 +15,9 @@ class App extends React.Component {
       ),
       autocompleteValues: new Values()
     };
+    if (props.mode !== "instant" && props.values.get().q) {
+      this.state.autocompleteValues.set({ q: props.values.get().q });
+    }
   }
 
   update = query => {
