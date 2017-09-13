@@ -2,9 +2,12 @@ import React from "react";
 
 import { Pipeline, Values } from "sajari-react/controllers";
 
-import { AutocompleteDropdown, AutocompleteInput } from "sajari-react/ui/text";
+import {
+  AutocompleteDropdown,
+  AutocompleteInput as SDKAutocompleteInput
+} from "sajari-react/ui/text";
 
-class App extends React.Component {
+class AutocompleteInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -59,7 +62,7 @@ class App extends React.Component {
 
     if (mode === "instant") {
       return (
-        <AutocompleteInput
+        <SDKAutocompleteInput
           autoFocus={autoFocus}
           placeholder={placeholder}
           pipeline={pipeline}
@@ -81,4 +84,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default AutocompleteInput;
