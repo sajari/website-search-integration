@@ -98,8 +98,8 @@
     });
     contentBlock("pub", "search-send");
 
-    autocompleteInput = setup(window, document, "script", "sajari");
-    autocompleteInput("config", {
+    standaloneInput = setup(window, document, "script", "sajari");
+    standaloneInput("config", {
       project: "sajariptyltd", // Set this to your project.
       collection: "sajari-com", // Set this to your collection.
       values: {},
@@ -109,9 +109,9 @@
         numSuggestions: 5, // Maximum number of entries to show
         pipeline: "autocomplete" // Pipeline to use for autocomplete
       },
-      attachAutocompleteInput: document.getElementById("autocomplete-input")
+      attachStandaloneInput: document.getElementById("autocomplete-input")
     });
-    autocompleteInput("sub", "autocomplete-selected", function (_, query) {
+    standaloneInput("sub", "autocomplete-selected", function (_, query) {
       window.location = "?q=" + query;
     });
   </script>
