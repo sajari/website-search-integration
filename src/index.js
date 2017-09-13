@@ -24,7 +24,7 @@ import Overlay from "./Overlay";
 import InPage from "./InPage";
 import SearchResponse from "./SearchResponse";
 import ContentBlockResponse from "./ContentBlockResponse";
-import AutocompleteInput from "./AutocompleteInput";
+import StandaloneInput from "./StandaloneInput";
 
 import "./styles.css";
 
@@ -144,23 +144,23 @@ const initContentBlock = (config, pipeline, values, tabsFilter) => {
   );
 };
 
-const initAutocompleteInput = (config, pubAutocompleteSelected) => {
+const initStandaloneInput = (config, pubAutocompleteSelected) => {
   ReactDOM.render(
-    <AutocompleteInput
+    <StandaloneInput
       config={config}
       pubAutocompleteSelected={pubAutocompleteSelected}
     />,
-    config.attachAutocompleteInput
+    config.attachStandaloneInput
   );
 };
 
 const initInterface = (config, pub, sub) => {
-  if (config.attachAutocompleteInput) {
+  if (config.attachStandaloneInput) {
     checkConfig(config, false);
     const pubAutocompleteSelected = query => {
       pub(integrationEvents.autocompleteSelected, query);
     };
-    initAutocompleteInput(config, pubAutocompleteSelected);
+    initStandaloneInput(config, pubAutocompleteSelected);
     return;
   }
 
