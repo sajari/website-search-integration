@@ -24,7 +24,7 @@ import Overlay from "./Overlay";
 import InPage from "./InPage";
 import SearchResponse from "./SearchResponse";
 import ContentBlockResponse from "./ContentBlockResponse";
-import StandaloneInput from "./StandaloneInput";
+import Input from "./Input";
 
 import "./styles.css";
 
@@ -39,7 +39,7 @@ const integrationEvents = {
   queryReset: "query-reset",
   resultClicked: "result-clicked",
   searchEvent: "search-event",
-  autocompleteSelected: "autocomplete-selected",
+  suggestionChosen: "suggestion-chosen",
 
   // Events to both publish and subscribe
   overlayShow: "overlay-show",
@@ -70,7 +70,15 @@ const checkConfig = (config, checkPipeline = true) => {
   }
 };
 
-const initOverlay = (config, pipeline, values, pub, sub, tabsFilter) => {
+const initOverlay = (
+  config,
+  pipeline,
+  values,
+  pub,
+  sub,
+  tabsFilter,
+  pubSuggestionChosen
+) => {
   const setOverlayControls = controls => {
     const show = () => {
       document.getElementsByTagName("body")[0].style.overflow = "hidden";
@@ -111,14 +119,26 @@ const initOverlay = (config, pipeline, values, pub, sub, tabsFilter) => {
       tabsFilter={tabsFilter}
       pipeline={pipeline}
       values={values}
+      pubSuggestionChosen={pubSuggestionChosen}
     />,
     overlayContainer
   );
 };
 
-const initInPage = (config, pipeline, values, tabsFilter) => {
+const initInPage = (
+  config,
+  pipeline,
+  values,
+  tabsFilter,
+  pubSuggestionChosen
+) => {
   ReactDOM.render(
-    <InPage config={config} pipeline={pipeline} values={values} />,
+    <InPage
+      config={config}
+      pipeline={pipeline}
+      values={values}
+      pubSuggestionChosen={pubSuggestionChosen}
+    />,
     config.attachSearchBox
   );
   ReactDOM.render(
@@ -144,23 +164,20 @@ const initContentBlock = (config, pipeline, values, tabsFilter) => {
   );
 };
 
-const initStandaloneInput = (config, pubAutocompleteSelected) => {
+const initInput = (config, pubSuggestionChosen) => {
   ReactDOM.render(
-    <StandaloneInput
-      config={config}
-      pubAutocompleteSelected={pubAutocompleteSelected}
-    />,
-    config.attachStandaloneInput
+    <Input config={config} pubSuggestionChosen={pubSuggestionChosen} />,
+    config.attachSearchBox
   );
 };
 
 const initInterface = (config, pub, sub) => {
-  if (config.attachStandaloneInput) {
+  const pubSuggestionChosen = query => {
+    pub(integrationEvents.suggestionChosen, query);
+  };
+  if (config.attachSearchBox && !config.attachSearchResponse) {
     checkConfig(config, false);
-    const pubAutocompleteSelected = query => {
-      pub(integrationEvents.autocompleteSelected, query);
-    };
-    initStandaloneInput(config, pubAutocompleteSelected);
+    initInput(config, pubSuggestionChosen);
     return;
   }
 
@@ -265,14 +282,22 @@ const initInterface = (config, pub, sub) => {
   }
 
   if (config.overlay) {
-    initOverlay(config, pipeline, values, pub, sub, tabsFilter);
+    initOverlay(
+      config,
+      pipeline,
+      values,
+      pub,
+      sub,
+      tabsFilter,
+      pubSuggestionChosen
+    );
     if (query) {
       pub(integrationEvents.overlayShow);
     }
     return;
   }
   if (config.attachSearchBox && config.attachSearchResponse) {
-    initInPage(config, pipeline, values, tabsFilter);
+    initInPage(config, pipeline, values, tabsFilter, pubSuggestionChosen);
     return;
   }
   if (config.attachContentBlock) {

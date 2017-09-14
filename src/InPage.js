@@ -1,6 +1,6 @@
 import React from "react";
 
-import AutocompleteInput from "./AutocompleteInput";
+import Input from "./Input";
 
 class InPage extends React.Component {
   render() {
@@ -8,11 +8,7 @@ class InPage extends React.Component {
     return (
       <div className="sj-inpage">
         <div className="sj-logo" />
-        <AutocompleteInput
-          values={values}
-          pipeline={pipeline}
-          config={config}
-        />
+        <Input values={values} pipeline={pipeline} config={config} />
       </div>
     );
   }

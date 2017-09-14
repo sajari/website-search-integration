@@ -2,7 +2,7 @@ import React from "react";
 
 import { Overlay as OverlayFrame, Close } from "sajari-react/ui/overlay";
 
-import AutocompleteInput from "./AutocompleteInput";
+import Input from "./Input";
 import SearchResponse from "./SearchResponse";
 
 class Overlay extends React.Component {
@@ -18,15 +18,22 @@ class Overlay extends React.Component {
   }
 
   render() {
-    const { pipeline, values, config, tabsFilter } = this.props;
+    const {
+      pipeline,
+      values,
+      config,
+      tabsFilter,
+      pubSuggestionChosen
+    } = this.props;
     return (
       <OverlayFrame active={Boolean(this.state.active)}>
         <div className="sj-logo" onClick={this.hide} />
-        <AutocompleteInput
+        <Input
           autoFocus
           pipeline={pipeline}
           values={values}
           config={config}
+          pubSuggestionChosen={pubSuggestionChosen}
         />
         <Close onClick={this.hide} closeOverlay={this.hide} />
         <SearchResponse
