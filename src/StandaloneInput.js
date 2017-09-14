@@ -2,7 +2,7 @@ import React from "react";
 
 import { Pipeline, Values } from "sajari-react/controllers";
 
-import { AutocompleteDropdownStandalone } from "sajari-react/ui/text";
+import { AutocompleteDropdownBase } from "sajari-react/ui/text";
 
 class StandaloneInput extends React.Component {
   constructor(props) {
@@ -17,9 +17,10 @@ class StandaloneInput extends React.Component {
     };
   }
 
-  onUserForce = query => {
-    const { pubAutocompleteSelected } = this.props;
+  onUserForceSearch = query => {
+    const { pubAutocompleteSelected, values, pipeline } = this.props;
     pubAutocompleteSelected(query);
+    return { values, pipeline };
   };
 
   render() {
@@ -28,12 +29,12 @@ class StandaloneInput extends React.Component {
     const { autoFocus, placeholder } = config.searchInput;
 
     return (
-      <AutocompleteDropdownStandalone
+      <AutocompleteDropdownBase
         autoFocus={autoFocus}
         placeholder={placeholder}
         values={autocompleteValues}
         pipeline={autocompletePipeline}
-        onUserForce={this.onUserForce}
+        onForceSearch={this.onUserForceSearch}
       />
     );
   }
