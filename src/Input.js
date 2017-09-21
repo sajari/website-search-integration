@@ -36,7 +36,7 @@ class Input extends React.Component {
     };
   }
 
-  onUserForceSearch = query => {
+  handleUserForceSearch = query => {
     const { pubSuggestionChosen } = this.props;
     const { valuesToSearch, pipelineToSearch } = this.state;
     if (query) {
@@ -67,7 +67,7 @@ class Input extends React.Component {
         placeholder={placeholder}
         values={autocompleteValues}
         pipeline={autocompletePipeline}
-        onForceSearch={this.onUserForceSearch}
+        onForceSearch={this.handleUserForceSearch}
       />
     );
   }
