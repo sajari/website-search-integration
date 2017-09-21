@@ -38,8 +38,7 @@ The configuration required for this example is given below.  For more details, s
     "q": getUrlParam("q")
   },
   "searchInput": {
-    "instantSearch": false,
-    "showAutocompleteSuggestions": true,
+    "mode": "standard",
     "autoFocus": true,
     "placeholder": "Search",
     "maxSuggestions": 5,
@@ -93,6 +92,7 @@ The generated search interfaces are configured using a simple JSON object which 
 * [Input box](#input-box)
 * [Result Config](#result-config)
 * [Algorithm parameters](#algorithm-parameters)
+* [Events](#events)
 * [Tab filters](#tab-filters)
 * [Analytics](#analytics)
 
@@ -300,9 +300,9 @@ myUI("sub", "overlay-hide", function(eventName) {
 
 #### Suggestion Chosen
 
-An autocomplete selected event is triggered when a user presses enter while highlighting an autocomplete suggestion or clicks on an autocomplete suggestion.
+A suggestion chosen event is triggered when a user presses enter while highlighting an autocomplete suggestion or clicks on an autocomplete suggestion to trigger a search.
 
-This event is useful for standalone autocomplete boxes, you can redirect to your search page once the user chooses a query.
+This event is useful for autocomplete boxes used in headers or navigation sections for redirecting to your search page once the user chooses a query.
 
 ```javascript
 myUI("sub", "suggestion-chosen", function(eventName, query) {
