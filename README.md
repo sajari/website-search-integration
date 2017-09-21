@@ -207,7 +207,7 @@ myUI("sub", "<event>", function() {});
 | `"search-event"` | query string | Search event |
 | `"overlay-show"` | none | Overlay is shown |
 | `"overlay-hide"` | none | Overlay is hidden |
-| `"autocomplete-selected"` | query string | Autocomplete option chosen by the user |
+| `"suggestion-chosen"` | query string | Autocomplete suggestion chosen by the user |
 
 You can also publish events which the search interface will pick up.
 
@@ -298,14 +298,14 @@ myUI("sub", "overlay-hide", function(eventName) {
 });
 ```
 
-#### Autocomplete Selected
+#### Suggestion Chosen
 
 An autocomplete selected event is triggered when a user presses enter while highlighting an autocomplete suggestion or clicks on an autocomplete suggestion.
 
 This event is useful for standalone autocomplete boxes, you can redirect to your search page once the user chooses a query.
 
 ```javascript
-myUI("sub", "autocomplete-selected", function(eventName, query) {
+myUI("sub", "suggestion-chosen", function(eventName, query) {
   window.location = "/search?q=" + query;
 });
 ```
