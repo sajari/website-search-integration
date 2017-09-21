@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Pipeline, Values } from "sajari-react/controllers";
+import { Pipeline, Values, NoTracking } from "sajari-react/controllers";
 
 import {
   AutocompleteDropdownBase,
@@ -15,7 +15,8 @@ class Input extends React.Component {
     const autocompletePipeline = new Pipeline(
       props.config.project,
       props.config.collection,
-      props.config.searchInput.pipeline || "autocomplete"
+      props.config.searchInput.pipeline || "autocomplete",
+      new NoTracking()
     );
     const autocompleteValues = new Values();
     // mirror the autocomplete starting query with the other values object
