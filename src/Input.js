@@ -25,7 +25,7 @@ class Input extends React.Component {
     }
     let pipelineToSearch = autocompletePipeline;
     let valuesToSearch = autocompleteValues;
-    if (props.config.attachSearchResponse || props.config.attachOverlay) {
+    if (props.config.attachSearchResponse || props.config.overlay) {
       pipelineToSearch = props.pipeline;
       valuesToSearch = props.values;
     }
