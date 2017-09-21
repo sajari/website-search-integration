@@ -42,7 +42,7 @@ The configuration required for this example is given below.  For more details, s
     "showAutocompleteSuggestions": true,
     "autoFocus": true,
     "placeholder": "Search",
-    "numSuggestions": 5,
+    "maxSuggestions": 5,
     "pipeline": "autocomplete"
   },
   "overlay": false
@@ -148,7 +148,7 @@ Search input config allows you to modify the behaviour of the input component.
 | Option | Data | Description |
 | :-- | :-: | :-- |
 | `"mode"` | string | Mode of operation for the input element, can be `standard` or `instant` |
-| `"numSuggestions"` | number | Maximum number of autocomplete suggestions to show |
+| `"maxSuggestions"` | number | Maximum number of autocomplete suggestions to show |
 | `"autoFocus"` | boolean | Whether to focus the html input element on load |
 | `"placeholder"` | string | Placeholder text used in html input element |
 | `"pipeline"` | string | Pipeline to use for autocomplete |
@@ -158,7 +158,7 @@ Sample options:
 ```javascript
 searchInput: {
   mode: "standard",
-  numSuggestions: 5,
+  maxSuggestions: 5,
   autoFocus: true,
   placeholder: "Search",
   pipeline: "autocomplete"

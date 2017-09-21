@@ -49,7 +49,7 @@ class Input extends React.Component {
   render() {
     const { autocompletePipeline, autocompleteValues } = this.state;
     const { config, values, pipeline } = this.props;
-    const { autoFocus, placeholder, mode } = config.searchInput;
+    const { autoFocus, placeholder, mode, maxSuggestions } = config.searchInput;
 
     if (mode === instant) {
       return (
@@ -69,6 +69,7 @@ class Input extends React.Component {
         values={autocompleteValues}
         pipeline={autocompletePipeline}
         onForceSearch={this.handleUserForceSearch}
+        maxSuggestions={maxSuggestions}
       />
     );
   }
