@@ -1,5 +1,6 @@
 const fs = require("fs-extra");
 const spawn = require("child_process").spawnSync;
+const inquirer = require("inquirer");
 
 // copy a source file into index.html
 const copy = source => {
@@ -11,22 +12,38 @@ const copy = source => {
   }
 };
 
+const run = () => {
+  spawn("react-scripts", ["start"], { stdio: "inherit" });
+  process.exit(0);
+};
+
+// if the user has supplied an action run it without prompting
 switch (process.argv[2]) {
   case "inpage":
     copy("inpage");
+    run();
     break;
   case "overlay":
     copy("overlay");
+    run();
     break;
   case "input":
     copy("input");
+    run();
     break;
-  default:
-    console.log(
-      "Invalid command. Valid commands are 'inpage', 'overlay', or 'input'."
-    );
-    process.exit(1);
 }
 
-// run react-scripts as usual
-spawn("react-scripts", ["start"], { stdio: "inherit" });
+// prompt the user for which action to run
+inquirer
+  .prompt([
+    {
+      type: "list",
+      name: "choice",
+      message: "Which integration would you like to run?",
+      choices: ["inpage", "input", "overlay"]
+    }
+  ])
+  .then(answers => {
+    copy(answers.choice);
+    run();
+  });

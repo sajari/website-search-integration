@@ -4,6 +4,7 @@
   "private": true,
   "devDependencies": {
     "fs-extra": "^4.0.2",
+    "inquirer": "^3.3.0",
     "react-scripts": "1.0.10"
   },
   "dependencies": {
