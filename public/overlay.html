@@ -16,8 +16,9 @@
     function inputKeyDown(e) {
       if (e.keyCode === 13 /* Enter key */) {
         overlay("pub", "overlay-show");
-        overlay("pub", "values-set", { q: e.target.value });
-        overlay("pub", "search-send");
+        overlay("pub", "pipeline.values-set", { q: e.target.value });
+        overlay("pub", "instantPipeline.values-set", { q: e.target.value });
+        overlay("pub", "pipeline.search-send");
       }
     }
   </script>
