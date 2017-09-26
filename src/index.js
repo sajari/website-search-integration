@@ -195,7 +195,13 @@ const initInput = (config, pub, sub) => {
     );
   }
 
-  const dummyPipeline = new Pipeline(config.project, config.collection, "");
+  const dummyPipeline = new Pipeline(
+    config.project,
+    config.collection,
+    "",
+    new NoTracking(),
+    []
+  );
   dummyPipeline.search = values => {
     pub(`pipeline.${integrationEvents.searchSent}`, values);
   };
