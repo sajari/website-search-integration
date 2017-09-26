@@ -14,40 +14,6 @@ From the [Install tab](https://www.sajari.com/console/collections/install) in th
 
 ![Search interface with tabs](https://cloud.githubusercontent.com/assets/2822/25603841/e50022d4-2f42-11e7-9ac0-3968714b9e1d.png)
 
-The configuration required for this example is given below.  For more details, see [Configuration](#configuration).
-
-```javascript
-{
-  "project": "your-project",
-  "collection": "your-collection",
-  "attachSearchBox": document.getElementById("search-box"),
-  "attachSearchResponse": document.getElementById("search-response"),
-  "pipeline": "website",
-  "tabFilters": {
-    "defaultTab": "All",
-    "tabs": [
-      {"title": "All", "filter": ""},
-      {"title": "Blog", "filter": "dir1='blog'"}
-    ]
-  },
-  "results": {
-    "showImages": false
-  },
-  "values": {
-    "resultsPerPage": "10",
-    "q": getUrlParam("q")
-  },
-  "searchInput": {
-    "mode": "standard",
-    "autoFocus": true,
-    "placeholder": "Search",
-    "maxSuggestions": 5,
-    "pipeline": "autocomplete"
-  },
-  "overlay": false
-}
-```
-
 ## Styling
 
 The generated interface can be easily styled to fit your website's look and feel, it's also designed to be responsive by default.
@@ -82,14 +48,75 @@ Source: [sajari.css](./sample-styles/sajari.css)
 
 ![Sajari](./sample-styles/sajari.png)
 
+
+## Integrations
+
+There are 3 types of integration currently. In-page search, overlay search, and input only.
+
+### In Page
+
+The inpage search integration is for rendering inside a page or pages on your site. The most common use case is having a dedicated "search" page which has search functionality.
+
+```javascript
+myUI("create-inpage", {
+  project: "<your project>",
+  collection: "<your collection>",
+  values: { resultsPerPage: "10", "q": getUrlParam("q") },
+  attachSearchBox: document.getElementById("search-box"),
+  attachSearchResponse: document.getElementById("search-response"),
+  results: { showImages: false },
+  pipeline: "website",
+  instantPipeline: "autocomplete",
+  searchInputPlaceholder: "Search",
+  maxSuggestions: 5,
+  tabFilters: {},
+});
+```
+
+## Overlay
+
+The overlay search integration is for rendering a search interface on top of the current page.
+
+```javascript
+myUI("create-overlay", {
+  project: "<your project>",
+  collection: "<your collection>",
+  values: { resultsPerPage: "10", "q": getUrlParam("q") },
+  results: { showImages: false },
+  pipeline: "website",
+  instantPipeline: "autocomplete",
+  searchInputPlaceholder: "Search",
+  autocompleteMaxSuggestions: 5,
+  searchInputAutoFocus: true,
+  tabFilters: {},
+});
+```
+
+### Input Only
+
+The input only integration is for embedding into your sites header or menu bar. It performs autocomplete on the users query and can redirect to your search results page once the user confirms their choice.
+
+```javascript
+myUI("create-input", {
+  project: "<your project>",
+  collection: "<your collection>",
+  instantPipeline: "autocomplete",
+  searchInputPlaceholder: "Search",
+  maxSuggestions: 5,
+  attachSearchBox: document.getElementById("autocomplete-input")
+});
+```
+
 ## Configuration
 
 The generated search interfaces are configured using a simple JSON object which contains attributes that control:
 
 * [Project/Collection](#projectcollection)
-* [Pipeline](#pipeline)
+* [Pipelines](#pipelines)
 * [Attaching to the DOM](#attaching-to-the-dom)
-* [Input box](#input-box)
+* [Maximum Suggestions](#maximum-suggestions)
+* [Search Input Placeholder](#search-input-placeholder)
+* [Search Input Auto Focus](#search-input-auto-focus)
 * [Result Config](#result-config)
 * [Algorithm parameters](#algorithm-parameters)
 * [Events](#events)
@@ -107,62 +134,49 @@ project: "your-project",
 collection: "your-collection",
 ```
 
-### Pipeline
+### Pipelines
 
-Pipeline sets the query pipeline to use for the search interface.  The default pipeline for website search is `website`.
+Pipelines determine how your collection is searched. `pipeline` sets the pipeline used to perform searches, by default this is the `website` pipeline. `autocompletePipeline` sets the pipeline used to perform autocomplete, by default this is the `autocomplete` pipeline.
 
 ```javascript
 pipeline: "website",
+autocompletePipeline: "autocomplete",
 ```
 
-### Attaching to the DOM
-
-The interface can be displayed in two ways, in page or as an overlay.
-
-To display in page, set the `attachSearchBox` and `attachSearchResponse` values.
-These two attributes control which DOM elements the search box and results components will be rendered in.
+If you'd like instant search, set `autocompletePipeline` to a pipeline that does perform searches, typically `website`:
 
 ```javascript
-attachSearchBox: document.getElementById("search-box"),
-attachSearchResponse: document.getElementById("search-response"),
+autocompletePipeline: "website"
 ```
 
-To display as an overlay, set the `overlay` value.
+If you'd like nothing to happen until the user presses enter, only set `pipeline`, not `autocompletePipeline`:
 
 ```javascript
-overlay: true
+pipeline: "website"
 ```
 
-To open the overlay, [publish the show event](#overlay-show-hide) from javascript.
+### Maximum Suggestions
 
-For example, launching the overlay when a button is clicked
-
-```html
-<button onclick="myUI('pub', 'overlay-show');">Search</button>
-```
-
-### Input box
-
-Search input config allows you to modify the behaviour of the input component.
-
-| Option | Data | Description |
-| :-- | :-: | :-- |
-| `"mode"` | string | Mode of operation for the input element, can be `standard` or `instant` |
-| `"maxSuggestions"` | number | Maximum number of autocomplete suggestions to show |
-| `"autoFocus"` | boolean | Whether to focus the html input element on load |
-| `"placeholder"` | string | Placeholder text used in html input element |
-| `"pipeline"` | string | Pipeline to use for autocomplete |
-
-Sample options:
+Setting `maxSuggestions` will limit how many suggestions are shown in the dropbox box below the search input.
 
 ```javascript
-searchInput: {
-  mode: "standard",
-  maxSuggestions: 5,
-  autoFocus: true,
-  placeholder: "Search",
-  pipeline: "autocomplete"
-}
+maxSuggestions: 5
+```
+
+### Search Input Placeholder
+
+Setting `searchInputPlaceholder` will set the placeholder text in the search input box.
+
+```javascript
+searchInputPlaceholder: "Search"
+```
+
+### Search Input Auto Focus
+
+Setting `searchInputAutoFocus` will set the autoFocus attribute on the search input box.
+
+```javascript
+searchInputAutoFocus: false
 ```
 
 ### Result Config
@@ -190,11 +204,21 @@ values: {
 
 ### Events
 
-You can subscribe to events by calling your interface with the `"sub"` value followed by the event name and then a callback.
+You can subscribe to events by calling your interface with the `"sub"` value followed by the pipeline (either `pipeline` or `instantPipeline`) and event name, then a callback. It takes the form
 
 ```javascript
-myUI("sub", "<event>", function() {});
+myUI("sub", "<pipeline>.<event>", callback);
 ```
+
+For example, if you are using the default in-page interface and want to listen to the `search-sent` event, you'd write:
+
+```javascript
+myUI("sub", "pipeline.search-sent", function(event, values) {
+  console.log("Search sent with values: ", values);
+});
+```
+
+Here is a table of events you can subscribe to.
 
 | Event | Data | Description |
 | :-- | :-: | :-- |
@@ -207,7 +231,6 @@ myUI("sub", "<event>", function() {});
 | `"search-event"` | query string | Search event |
 | `"overlay-show"` | none | Overlay is shown |
 | `"overlay-hide"` | none | Overlay is hidden |
-| `"suggestion-chosen"` | query string | Autocomplete suggestion chosen by the user |
 
 You can also publish events which the search interface will pick up.
 
@@ -223,7 +246,7 @@ You can also publish events which the search interface will pick up.
 A search has sent and we are now waiting for results. The values used in the search are given to the subscribed function.
 
 ```javascript
-myUI("sub", "search-sent", function(eventName, values) {
+myUI("sub", "pipeline.search-sent", function(eventName, values) {
   console.log("Search sent with ", values);
 });
 ```
@@ -233,7 +256,7 @@ myUI("sub", "search-sent", function(eventName, values) {
 Values in the interface have been updated. A function is given as the 3rd argument that can be used to merge new values into the value dictionary, it behaves like `pub("values-set", {})` except that it doesn't trigger an event.
 
 ```javascript
-myUI("sub", "values-updated", function(eventName, values, set) {
+myUI("sub", "pipeline.values-updated", function(eventName, values, set) {
   console.log("New values are", values);
 });
 ```
@@ -245,7 +268,7 @@ The search response has been updated. Caused by a network response being receive
 You can see more info about the `response` object [here](https://github.com/sajari/sajari-sdk-react#listening-for-responses).
 
 ```javascript
-myUI("sub", "response-updated", function(eventName, response) {
+myUI("sub", "pipeline.response-updated", function(eventName, response) {
   if (response.isEmpty()) {
     return;
   }
@@ -262,7 +285,7 @@ myUI("sub", "response-updated", function(eventName, response) {
 A search event signals the end of a search session. A common use case of subscribing to them is for reporting.
 
 ```javascript
-myUI("sub", "search-event", function (eventName, query) {
+myUI("sub", "pipeline.search-event", function (eventName, query) {
   console.log("Search session finished, last query", query);
 });
 ```
@@ -273,14 +296,16 @@ If you'd like more granular events you can also subscribe to these events.
 function searchFinished(eventName, query) {
   console.log("Search session finished, last query", query);
 }
-myUI("sub", "page-closed", searchFinished);
-myUI("sub", "query-reset", searchFinished);
-myUI("sub", "result-clicked", searchFinished);
+myUI("sub", "pipeline.page-closed", searchFinished);
+myUI("sub", "pipeline.query-reset", searchFinished);
+myUI("sub", "pipeline.result-clicked", searchFinished);
 ```
 
 #### Overlay Show/Hide
 
 Opening and closing the overlay can be done by publishing either the show or hide event.
+
+**Note: The show and hide events do not have a pipeline prefixing the event name!**
 
 ```javascript
 myUI("pub", "overlay-show");
@@ -298,24 +323,12 @@ myUI("sub", "overlay-hide", function(eventName) {
 });
 ```
 
-#### Suggestion Chosen
-
-A suggestion chosen event is triggered when a user presses enter while highlighting an autocomplete suggestion or clicks on an autocomplete suggestion to trigger a search.
-
-This event is useful for autocomplete boxes used in headers or navigation sections for redirecting to your search page once the user chooses a query.
-
-```javascript
-myUI("sub", "suggestion-chosen", function(eventName, query) {
-  window.location = "/search?q=" + query;
-});
-```
-
 #### Set Values
 
 Merge new values into the values dictionary. Setting a value to undefined will remove it from the values dictionary.
 
 ```javascript
-myUI("pub", "values-set", { q: "<search query>" });
+myUI("pub", "pipeline.values-set", { q: "<search query>" });
 ```
 
 #### Search
@@ -323,7 +336,7 @@ myUI("pub", "values-set", { q: "<search query>" });
 Search will perform a search request using the values in the value map.
 
 ```javascript
-myUI("pub", "search-send");
+myUI("pub", "pipeline.search-send");
 ```
 
 ### Tab filters
