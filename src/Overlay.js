@@ -19,28 +19,30 @@ class Overlay extends React.Component {
 
   render() {
     const {
+      instantPipeline,
+      instantValues,
       pipeline,
       values,
       config,
-      tabsFilter,
-      pubSuggestionChosen
+      tabsFilter
     } = this.props;
     return (
       <OverlayFrame active={Boolean(this.state.active)}>
         <div className="sj-logo" onClick={this.hide} />
         <Input
           autoFocus
+          instantPipeline={instantPipeline}
+          instantValues={instantValues}
           pipeline={pipeline}
           values={values}
           config={config}
-          pubSuggestionChosen={pubSuggestionChosen}
         />
         <Close onClick={this.hide} closeOverlay={this.hide} />
         <SearchResponse
           config={config}
           tabsFilter={tabsFilter}
-          pipeline={pipeline}
-          values={values}
+          pipeline={pipeline || instantPipeline}
+          values={values || instantValues}
         />
       </OverlayFrame>
     );

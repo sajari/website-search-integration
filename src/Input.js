@@ -1,73 +1,54 @@
 import React from "react";
 
-import { Pipeline, Values, NoTracking } from "sajari-react/controllers";
-
 import {
   AutocompleteDropdownBase,
-  AutocompleteInput
+  Input as SDKInput
 } from "sajari-react/ui/text";
 
-const instant = "instant";
-
 class Input extends React.Component {
-  constructor(props) {
-    super(props);
-    const autocompletePipeline = new Pipeline(
-      props.config.project,
-      props.config.collection,
-      props.config.searchInput.pipeline || "autocomplete",
-      new NoTracking()
-    );
-    const autocompleteValues = new Values();
-    // mirror the autocomplete starting query with the other values object
-    if (props.mode !== instant && props.values && props.values.get().q) {
-      autocompleteValues.set({ q: props.values.get().q });
-    }
-    let pipelineToSearch = autocompletePipeline;
-    let valuesToSearch = autocompleteValues;
-    if (props.config.attachSearchResponse || props.config.overlay) {
-      pipelineToSearch = props.pipeline;
-      valuesToSearch = props.values;
-    }
-    this.state = {
-      autocompletePipeline,
-      autocompleteValues,
-      pipelineToSearch,
-      valuesToSearch
-    };
-  }
-
   handleUserForceSearch = query => {
-    const { pubSuggestionChosen } = this.props;
-    const { valuesToSearch, pipelineToSearch } = this.state;
-    if (query) {
-      pubSuggestionChosen(query);
-    }
-    return { values: valuesToSearch, pipeline: pipelineToSearch };
+    const { pipeline, values } = this.props;
+    return { values, pipeline };
   };
 
   render() {
-    const { autocompletePipeline, autocompleteValues } = this.state;
-    const { config, values, pipeline } = this.props;
-    const { autoFocus, placeholder, mode, maxSuggestions } = config.searchInput;
+    const {
+      config,
+      pipeline,
+      values,
+      instantPipeline,
+      instantValues
+    } = this.props;
+    const {
+      searchInputPlaceholder,
+      searchInputAutoFocus,
+      maxSuggestions
+    } = config;
 
-    if (mode === instant) {
+    // if there's no instant pipeline use non instant input component
+    if (!instantPipeline) {
       return (
-        <AutocompleteInput
-          autoFocus={autoFocus}
-          placeholder={placeholder}
-          pipeline={pipeline}
-          values={values}
-        />
+        <div className="sj-search-holder-outer">
+          <div className="sj-search-holder-inner">
+            <SDKInput
+              autoFocus={searchInputAutoFocus}
+              placeholder={searchInputPlaceholder}
+              values={values}
+              pipeline={pipeline}
+              instant={false}
+              className="sj-search-bar-input-common"
+            />
+          </div>
+        </div>
       );
     }
 
     return (
       <AutocompleteDropdownBase
-        autoFocus={autoFocus}
-        placeholder={placeholder}
-        values={autocompleteValues}
-        pipeline={autocompletePipeline}
+        autoFocus={searchInputAutoFocus}
+        placeholder={searchInputPlaceholder}
+        values={instantValues}
+        pipeline={instantPipeline}
         onForceSearch={this.handleUserForceSearch}
         maxSuggestions={maxSuggestions}
       />

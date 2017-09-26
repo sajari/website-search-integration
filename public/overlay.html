@@ -35,7 +35,7 @@
     var setup = function (u, r, n, t, a, s) { s = []; var e = function () { s.push(arguments) }, i = "ui"; return e.arr = s, u[t] = u[t] || [], u[t][i] = u[t][i] || [], u[t][i].push(e), e };
 
     overlay = setup(window, document, "script", "sajari");
-    overlay("config", {
+    overlay("create-overlay", {
       project: "sajariptyltd",       // Set this to your project.
       collection: "sajari-com", // Set this to your collection.
       values: { resultsPerPage: "10", "q": getUrlParam("q") },

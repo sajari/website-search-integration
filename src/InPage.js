@@ -4,13 +4,22 @@ import Input from "./Input";
 
 class InPage extends React.Component {
   render() {
-    const { pipeline, values, config, pubSuggestionChosen } = this.props;
+    const {
+      pipeline,
+      values,
+      instantPipeline,
+      instantValues,
+      config,
+      pubSuggestionChosen
+    } = this.props;
     return (
       <div className="sj-inpage">
         <div className="sj-logo" />
         <Input
-          values={values}
+          instantPipeline={instantPipeline}
+          instantValues={instantValues}
           pipeline={pipeline}
+          values={values}
           config={config}
           pubSuggestionChosen={pubSuggestionChosen}
         />

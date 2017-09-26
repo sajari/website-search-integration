@@ -8,10 +8,11 @@ import { flush } from "stackqueue";
 import {
   selectionUpdatedEvent,
   Filter,
-  CombineFilters,
-  Values,
-  valuesUpdatedEvent,
   Pipeline,
+  Values,
+  CombineFilters,
+  NoTracking,
+  valuesUpdatedEvent,
   responseUpdatedEvent,
   searchSentEvent,
   pageClosedAnalyticsEvent,
@@ -23,7 +24,7 @@ import loaded from "./loaded";
 import Overlay from "./Overlay";
 import InPage from "./InPage";
 import SearchResponse from "./SearchResponse";
-import ContentBlockResponse from "./ContentBlockResponse";
+// import ContentBlockResponse from "./ContentBlockResponse";
 import Input from "./Input";
 
 import "./styles.css";
@@ -58,179 +59,72 @@ const error = message => {
   }
 };
 
-const checkConfig = (config, checkPipeline = true) => {
-  if (!config.project) {
-    throw new Error("'project' not set in config");
-  }
-  if (!config.collection) {
-    throw new Error("'collection' not set in config");
-  }
-  if (checkPipeline && !config.pipeline) {
-    throw new Error("'pipeline' not set in config");
-  }
-};
+// const initContentBlock = (config, pipeline, tabsFilter) => {
+//   ReactDOM.render(
+//     <ContentBlockResponse
+//       config={config}
+//       tabsFilter={tabsFilter}
+//       pipeline={pipeline}
+//       values={pipeline.getValues()}
+//     />,
+//     config.attachContentBlock
+//   );
+// };
 
-const initOverlay = (
-  config,
-  pipeline,
-  values,
+const connectPubSub = (
   pub,
   sub,
-  tabsFilter,
-  pubSuggestionChosen
-) => {
-  const setOverlayControls = controls => {
-    const show = () => {
-      document.getElementsByTagName("body")[0].style.overflow = "hidden";
-      controls.show();
-    };
-    const hide = () => {
-      document.getElementsByTagName("body")[0].style.overflow = "";
-      values.set({ q: undefined, "q.override": undefined });
-      pipeline.clearResponse(values.get());
-      if (config.tabFilters && config.tabFilters.defaultTab) {
-        disableTabFacetSearch = true;
-        tabsFilter.set(config.tabFilters.defaultTab);
-        disableTabFacetSearch = false;
-      }
-      controls.hide();
-    };
-    sub(integrationEvents.overlayShow, show);
-    sub(integrationEvents.overlayHide, hide);
-    return { show, hide };
-  };
-
-  // Create a container to render the overlay into
-  const overlayContainer = document.createElement("div");
-  overlayContainer.id = "sj-overlay-holder";
-  document.body.appendChild(overlayContainer);
-
-  // Set up global overlay values
-  document.addEventListener("keydown", e => {
-    if (e.keyCode === ESCAPE_KEY_CODE) {
-      pub(integrationEvents.overlayHide);
-    }
-  });
-
-  ReactDOM.render(
-    <Overlay
-      config={config}
-      setOverlayControls={setOverlayControls}
-      tabsFilter={tabsFilter}
-      pipeline={pipeline}
-      values={values}
-      pubSuggestionChosen={pubSuggestionChosen}
-    />,
-    overlayContainer
-  );
-};
-
-const initInPage = (
-  config,
+  eventPrefix,
   pipeline,
   values,
-  tabsFilter,
-  pubSuggestionChosen
+  connectAnalytics
 ) => {
-  ReactDOM.render(
-    <InPage
-      config={config}
-      pipeline={pipeline}
-      values={values}
-      pubSuggestionChosen={pubSuggestionChosen}
-    />,
-    config.attachSearchBox
-  );
-  ReactDOM.render(
-    <SearchResponse
-      config={config}
-      tabsFilter={tabsFilter}
-      pipeline={pipeline}
-      values={values}
-    />,
-    config.attachSearchResponse
-  );
-};
-
-const initContentBlock = (config, pipeline, values, tabsFilter) => {
-  ReactDOM.render(
-    <ContentBlockResponse
-      config={config}
-      tabsFilter={tabsFilter}
-      pipeline={pipeline}
-      values={values}
-    />,
-    config.attachContentBlock
-  );
-};
-
-const initInput = (config, pubSuggestionChosen) => {
-  ReactDOM.render(
-    <Input config={config} pubSuggestionChosen={pubSuggestionChosen} />,
-    config.attachSearchBox
-  );
-};
-
-const initInterface = (config, pub, sub) => {
-  const pubSuggestionChosen = query => {
-    pub(integrationEvents.suggestionChosen, query);
-  };
-  if (config.attachSearchBox && !config.attachSearchResponse) {
-    checkConfig(config, false);
-    initInput(config, pubSuggestionChosen);
-    return;
-  }
-
-  checkConfig(config);
-
-  const pipeline = new Pipeline(
-    config.project,
-    config.collection,
-    config.pipeline,
-    undefined,
-    config.disableGA ? [] : undefined
-  );
-
   pipeline.listen(searchSentEvent, values => {
-    pub(integrationEvents.searchSent, values);
+    pub(`${eventPrefix}.${integrationEvents.searchSent}`, values);
   });
   pipeline.listen(responseUpdatedEvent, response => {
-    pub(integrationEvents.responseUpdated, response);
+    pub(`${eventPrefix}.${integrationEvents.responseUpdated}`, response);
   });
 
-  const values = new Values();
+  values.listen(valuesUpdatedEvent, (changes, set) => {
+    pub(`${eventPrefix}.${integrationEvents.valuesUpdated}`, changes, set);
+  });
+
+  sub(`${eventPrefix}.${integrationEvents.valuesSet}`, (_, newValues) => {
+    values.set(newValues);
+  });
+
+  sub(`${eventPrefix}.${integrationEvents.searchSend}`, () => {
+    pipeline.search(values.get());
+  });
+
+  // Reset page on search values changed
   values.listen(valuesUpdatedEvent, (changes, set) => {
     if (!changes.page && values.get().page !== "1") {
       set({ page: "1" });
     }
   });
 
-  values.listen(valuesUpdatedEvent, (changes, set) => {
-    pub(integrationEvents.valuesUpdated, changes, set);
-  });
-
-  sub(integrationEvents.valuesSet, (_, newValues) => {
-    values.set(newValues);
-  });
-
-  sub(integrationEvents.searchSend, () => {
-    pipeline.search(values.get());
-  });
-
+  if (!connectAnalytics) {
+    return;
+  }
   const analytics = pipeline.getAnalytics();
   analytics.listen(pageClosedAnalyticsEvent, body => {
-    pub(integrationEvents.pageClosed, body);
-    pub(integrationEvents.searchEvent, body);
+    pub(`${eventPrefix}.${integrationEvents.pageClosed}`, body);
+    pub(`${eventPrefix}.${integrationEvents.searchEvent}`, body);
   });
   analytics.listen(bodyResetAnalyticsEvent, body => {
-    pub(integrationEvents.queryReset, body);
-    pub(integrationEvents.searchEvent, body);
+    pub(`${eventPrefix}.${integrationEvents.queryReset}`, body);
+    pub(`${eventPrefix}.${integrationEvents.searchEvent}`, body);
   });
   analytics.listen(resultClickedAnalyticsEvent, body => {
-    pub(integrationEvents.resultClicked, body);
-    pub(integrationEvents.searchEvent, body);
+    pub(`${eventPrefix}.${integrationEvents.resultClicked}`, body);
+    pub(`${eventPrefix}.${integrationEvents.searchEvent}`, body);
   });
+};
 
+const setUpTabsFilters = (config, pipeline, values) => {
+  // Set up tab filters
   let tabsFilter;
   if (config.tabFilters && config.tabFilters.defaultTab) {
     const opts = {};
@@ -276,35 +170,223 @@ const initInterface = (config, pub, sub) => {
   );
   values.set({ filter: () => filter.filter() });
 
+  // Perform a search if the q parameter is set
   const query = Boolean(config.values.q);
   if (query) {
+    values.set({ q: config.values.q });
+    // this might be important ;)
+    // instantPipeline.getValues().set({ q: config.values.q });
     pipeline.search(values.get());
   }
 
-  if (config.overlay) {
-    initOverlay(
-      config,
-      pipeline,
-      values,
-      pub,
-      sub,
-      tabsFilter,
-      pubSuggestionChosen
+  return tabsFilter;
+};
+
+const initInput = (config, pub, sub) => {
+  if (!config.instantPipeline) {
+    throw new Error(
+      "no instantPipeline found, search input interface requires an instantPipeline"
     );
-    if (query) {
-      pub(integrationEvents.overlayShow);
+  }
+
+  if (!config.attachSearchBox) {
+    throw new Error(
+      "no render target found, search input interface requires attachSearchBox to be set"
+    );
+  }
+
+  const dummyPipeline = new Pipeline(config.project, config.collection, "");
+  dummyPipeline.search = values => {
+    pub(`pipeline.${integrationEvents.searchSent}`, values);
+  };
+  const dummyValues = new Values();
+  const instantPipeline = new Pipeline(
+    config.project,
+    config.collection,
+    config.instantPipeline,
+    new NoTracking(),
+    []
+  );
+  const instantValues = new Values();
+
+  connectPubSub(pub, sub, "pipeline", instantPipeline, instantValues, false);
+
+  ReactDOM.render(
+    <Input
+      config={config}
+      instantPipeline={instantPipeline}
+      instantValues={instantValues}
+      pipeline={dummyPipeline}
+      values={dummyValues}
+    />,
+    config.attachSearchBox
+  );
+};
+
+const initInpage = (config, pub, sub) => {
+  if (!config.pipeline && !config.instantPipeline) {
+    throw new Error(
+      "no pipeline found, search input interface requires at least 1 pipeline"
+    );
+  }
+  if (!config.attachSearchBox) {
+    throw new Error(
+      "no render target found, search input interface requires attachSearchBox to be set"
+    );
+  }
+  if (!config.attachSearchResponse) {
+    throw new Error(
+      "no render target found, search input interface requires attachSearchResponse to be set"
+    );
+  }
+
+  const pipeline = config.pipeline
+    ? new Pipeline(
+        config.project,
+        config.collection,
+        config.pipeline,
+        undefined,
+        config.disableGA ? [] : undefined
+      )
+    : null;
+  const values = config.pipeline ? new Values() : null;
+  const instantPipeline = config.instantPipeline
+    ? new Pipeline(
+        config.project,
+        config.collection,
+        config.instantPipeline,
+        pipeline ? new NoTracking() : undefined,
+        config.disableGA || pipeline ? [] : undefined
+      )
+    : null;
+  const instantValues = config.instantPipeline ? new Values() : null;
+
+  if (pipeline) connectPubSub(pub, sub, "pipeline", pipeline, values);
+  if (instantPipeline)
+    connectPubSub(pub, sub, "instantPipeline", instantPipeline, instantValues);
+
+  const tabsFilter = setUpTabsFilters(
+    config,
+    pipeline || instantPipeline,
+    values || instantValues
+  );
+
+  if (values && values.get().q && instantValues) {
+    instantValues.set({ q: values.get().q });
+  }
+
+  ReactDOM.render(
+    <InPage
+      config={config}
+      instantPipeline={instantPipeline}
+      instantValues={instantValues}
+      pipeline={pipeline}
+      values={values}
+    />,
+    config.attachSearchBox
+  );
+  ReactDOM.render(
+    <SearchResponse
+      config={config}
+      tabsFilter={tabsFilter}
+      pipeline={pipeline || instantPipeline}
+      values={values || instantValues}
+    />,
+    config.attachSearchResponse
+  );
+};
+
+const initOverlay = (config, pub, sub) => {
+  const pipeline = config.pipeline
+    ? new Pipeline(
+        config.project,
+        config.collection,
+        config.pipeline,
+        undefined,
+        config.disableGA ? [] : undefined
+      )
+    : null;
+  const values = config.pipeline ? new Values() : null;
+  const instantPipeline = config.instantPipeline
+    ? new Pipeline(
+        config.project,
+        config.collection,
+        config.instantPipeline,
+        pipeline ? new NoTracking() : undefined,
+        config.disableGA || pipeline ? [] : undefined
+      )
+    : null;
+  const instantValues = config.instantPipeline ? new Values() : null;
+
+  if (pipeline) connectPubSub(pub, sub, "pipeline", pipeline, values);
+  if (instantPipeline)
+    connectPubSub(pub, sub, "instantPipeline", instantPipeline, instantValues);
+
+  const tabsFilter = setUpTabsFilters(
+    config,
+    pipeline || instantPipeline,
+    values || instantValues
+  );
+
+  if (values && values.get().q && instantValues) {
+    instantValues.set({ q: values.get().q });
+  }
+
+  const setOverlayControls = controls => {
+    const show = () => {
+      document.getElementsByTagName("body")[0].style.overflow = "hidden";
+      controls.show();
+    };
+    const hide = () => {
+      document.getElementsByTagName("body")[0].style.overflow = "";
+      if (pipeline) {
+        values.set({ q: undefined, "q.override": undefined });
+        pipeline.clearResponse(values.get());
+      }
+      if (instantPipeline) {
+        instantValues.set({ q: undefined, "q.override": undefined });
+        instantPipeline.clearResponse(instantValues.get());
+      }
+      if (config.tabFilters && config.tabFilters.defaultTab) {
+        disableTabFacetSearch = true;
+        tabsFilter.set(config.tabFilters.defaultTab);
+        disableTabFacetSearch = false;
+      }
+      controls.hide();
+    };
+    sub(integrationEvents.overlayShow, show);
+    sub(integrationEvents.overlayHide, hide);
+    return { show, hide };
+  };
+
+  // Create a container to render the overlay into
+  const overlayContainer = document.createElement("div");
+  overlayContainer.id = "sj-overlay-holder";
+  document.body.appendChild(overlayContainer);
+
+  // Set up global overlay values
+  document.addEventListener("keydown", e => {
+    if (e.keyCode === ESCAPE_KEY_CODE) {
+      pub(integrationEvents.overlayHide);
     }
-    return;
+  });
+
+  ReactDOM.render(
+    <Overlay
+      config={config}
+      setOverlayControls={setOverlayControls}
+      tabsFilter={tabsFilter}
+      instantPipeline={instantPipeline}
+      instantValues={instantValues}
+      pipeline={pipeline}
+      values={values}
+    />,
+    overlayContainer
+  );
+
+  if ((values || instantValues).get().q) {
+    pub(integrationEvents.overlayShow);
   }
-  if (config.attachSearchBox && config.attachSearchResponse) {
-    initInPage(config, pipeline, values, tabsFilter, pubSuggestionChosen);
-    return;
-  }
-  if (config.attachContentBlock) {
-    initContentBlock(config, pipeline, values, tabsFilter);
-    return;
-  }
-  error("no render mode found, need to specify an attachment style");
 };
 
 const initialise = () => {
@@ -326,18 +408,47 @@ const initialise = () => {
     };
 
     let configured = false;
-    const config = config => {
-      if (configured) {
-        throw new Error("website search interface can only be configured once");
+
+    const checkConfig = config => {
+      if (!config.project) {
+        throw new Error("'project' not set in config");
+      }
+      if (!config.collection) {
+        throw new Error("'collection' not set in config");
       }
       if (!config) {
         throw new Error("no config provided");
       }
-      initInterface(config, pub, sub);
+      if (configured) {
+        throw new Error("website search interface can only be configured once");
+      }
+    };
+
+    const createInput = config => {
+      checkConfig(config);
+      initInput(config, pub, sub);
       configured = true;
     };
 
-    const methods = { config, pub, sub };
+    const createInpage = config => {
+      checkConfig(config);
+      initInpage(config, pub, sub);
+      configured = true;
+    };
+
+    const createOverlay = config => {
+      checkConfig(config);
+      initOverlay(config, pub, sub);
+      configured = true;
+    };
+
+    const methods = {
+      pub,
+      sub,
+      "create-input": createInput,
+      "create-inpage": createInpage,
+      "create-overlay": createOverlay
+    };
 
     const errors = flush(s, methods);
     if (errors.length > 0) {
