@@ -24,7 +24,6 @@ import loaded from "./loaded";
 import Overlay from "./Overlay";
 import Inline from "./Inline";
 import SearchResponse from "./SearchResponse";
-// import ContentBlockResponse from "./ContentBlockResponse";
 import Input from "./Input";
 
 import "./styles.css";
@@ -58,18 +57,6 @@ const error = message => {
     console.error(message);
   }
 };
-
-// const initContentBlock = (config, pipeline, tabsFilter) => {
-//   ReactDOM.render(
-//     <ContentBlockResponse
-//       config={config}
-//       tabsFilter={tabsFilter}
-//       pipeline={pipeline}
-//       values={pipeline.getValues()}
-//     />,
-//     config.attachContentBlock
-//   );
-// };
 
 const connectPubSub = (
   pub,
