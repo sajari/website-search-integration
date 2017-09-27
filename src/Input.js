@@ -19,11 +19,7 @@ class Input extends React.Component {
       instantPipeline,
       instantValues
     } = this.props;
-    const {
-      searchInputPlaceholder,
-      searchInputAutoFocus,
-      maxSuggestions
-    } = config;
+    const { inputPlaceholder, inputAutoFocus, maxSuggestions } = config;
 
     // if there's no instant pipeline use non instant input component
     if (!instantPipeline) {
@@ -31,8 +27,8 @@ class Input extends React.Component {
         <div className="sj-search-holder-outer">
           <div className="sj-search-holder-inner">
             <SDKInput
-              autoFocus={searchInputAutoFocus}
-              placeholder={searchInputPlaceholder}
+              autoFocus={inputAutoFocus}
+              placeholder={inputPlaceholder}
               values={values}
               pipeline={pipeline}
               instant={false}
@@ -45,8 +41,8 @@ class Input extends React.Component {
 
     return (
       <AutocompleteDropdownBase
-        autoFocus={searchInputAutoFocus}
-        placeholder={searchInputPlaceholder}
+        autoFocus={inputAutoFocus}
+        placeholder={inputPlaceholder}
         values={instantValues}
         pipeline={instantPipeline}
         onForceSearch={this.handleUserForceSearch}

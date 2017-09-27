@@ -2,7 +2,7 @@ import React from "react";
 
 import Input from "./Input";
 
-class InPage extends React.Component {
+class Inline extends React.Component {
   render() {
     const {
       pipeline,
@@ -13,7 +13,7 @@ class InPage extends React.Component {
       pubSuggestionChosen
     } = this.props;
     return (
-      <div className="sj-inpage">
+      <div className="sj-inline">
         <div className="sj-logo" />
         <Input
           instantPipeline={instantPipeline}
@@ -28,4 +28,4 @@ class InPage extends React.Component {
   }
 }
 
-export default InPage;
+export default Inline;

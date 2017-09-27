@@ -19,16 +19,16 @@ const run = () => {
 
 // if the user has supplied an action run it without prompting
 switch (process.argv[2]) {
-  case "inpage":
-    copy("inpage");
+  case "inline":
+    copy("inline");
     run();
     break;
   case "overlay":
     copy("overlay");
     run();
     break;
-  case "input":
-    copy("input");
+  case "searchbox":
+    copy("searchbox");
     run();
     break;
 }
@@ -40,7 +40,7 @@ inquirer
       type: "list",
       name: "choice",
       message: "Which integration would you like to run?",
-      choices: ["inpage", "input", "overlay"]
+      choices: ["inline", "searchbox", "overlay"]
     }
   ])
   .then(answers => {

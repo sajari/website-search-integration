@@ -9,7 +9,7 @@
 
 <body>
 
-  <h2>In Page</h2>
+  <h2>Inline</h2>
   <div id="search-box"></div>
   <div id="search-response"></div>
 
@@ -20,8 +20,8 @@
 
     var setup = function (u, r, n, t, a, s) { s = []; var e = function () { s.push(arguments) }, i = "ui"; return e.arr = s, u[t] = u[t] || [], u[t][i] = u[t][i] || [], u[t][i].push(e), e };
 
-    inPage = setup(window, document, "script", "sajari", "//address.js");
-    inPage("create-inpage", {
+    inline = setup(window, document, "script", "sajari", "//address.js");
+    inline("create-inline", {
       project: "sajariptyltd",       // Set this to your project.
       collection: "sajari-com", // Set this to your collection.
       values: { resultsPerPage: "10", "q": getUrlParam("q") },
@@ -30,7 +30,7 @@
       results: { showImages: false }, // Show images in results.
       pipeline: "website",
       instantPipeline: "autocomplete",
-      searchInputPlaceholder: "Search",
+      inputPlaceholder: "Search",
       maxSuggestions: 5,
       tabFilters: { // Tabs configuration.
         defaultTab: 'All', // Title of the default tab.

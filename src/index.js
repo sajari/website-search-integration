@@ -22,7 +22,7 @@ import {
 
 import loaded from "./loaded";
 import Overlay from "./Overlay";
-import InPage from "./InPage";
+import Inline from "./Inline";
 import SearchResponse from "./SearchResponse";
 // import ContentBlockResponse from "./ContentBlockResponse";
 import Input from "./Input";
@@ -182,16 +182,16 @@ const setUpTabsFilters = (config, pipeline, values) => {
   return tabsFilter;
 };
 
-const initInput = (config, pub, sub) => {
+const initSearchbox = (config, pub, sub) => {
   if (!config.instantPipeline) {
     throw new Error(
-      "no instantPipeline found, search input interface requires an instantPipeline"
+      "no instantPipeline found, searchbox requires an instantPipeline"
     );
   }
 
   if (!config.attachSearchBox) {
     throw new Error(
-      "no render target found, search input interface requires attachSearchBox to be set"
+      "no render target found, searchbox requires attachSearchBox to be set"
     );
   }
 
@@ -229,20 +229,20 @@ const initInput = (config, pub, sub) => {
   );
 };
 
-const initInpage = (config, pub, sub) => {
+const initInline = (config, pub, sub) => {
   if (!config.pipeline && !config.instantPipeline) {
     throw new Error(
-      "no pipeline found, search input interface requires at least 1 pipeline"
+      "no pipeline found, inline interface requires at least 1 pipeline"
     );
   }
   if (!config.attachSearchBox) {
     throw new Error(
-      "no render target found, search input interface requires attachSearchBox to be set"
+      "no render target found, inline interface requires attachSearchBox to be set"
     );
   }
   if (!config.attachSearchResponse) {
     throw new Error(
-      "no render target found, search input interface requires attachSearchResponse to be set"
+      "no render target found, inline interface requires attachSearchResponse to be set"
     );
   }
 
@@ -282,7 +282,7 @@ const initInpage = (config, pub, sub) => {
   }
 
   ReactDOM.render(
-    <InPage
+    <Inline
       config={config}
       instantPipeline={instantPipeline}
       instantValues={instantValues}
@@ -303,6 +303,12 @@ const initInpage = (config, pub, sub) => {
 };
 
 const initOverlay = (config, pub, sub) => {
+  if (!config.pipeline && !config.instantPipeline) {
+    throw new Error(
+      "no pipeline found, overlay interface requires at least 1 pipeline"
+    );
+  }
+
   const pipeline = config.pipeline
     ? new Pipeline(
         config.project,
@@ -430,15 +436,15 @@ const initialise = () => {
       }
     };
 
-    const createInput = config => {
+    const createSearchbox = config => {
       checkConfig(config);
-      initInput(config, pub, sub);
+      initSearchbox(config, pub, sub);
       configured = true;
     };
 
-    const createInpage = config => {
+    const createInline = config => {
       checkConfig(config);
-      initInpage(config, pub, sub);
+      initInline(config, pub, sub);
       configured = true;
     };
 
@@ -451,8 +457,8 @@ const initialise = () => {
     const methods = {
       pub,
       sub,
-      "create-input": createInput,
-      "create-inpage": createInpage,
+      "create-searchbox": createSearchbox,
+      "create-inline": createInline,
       "create-overlay": createOverlay
     };
 
