@@ -30,7 +30,7 @@ class Overlay extends React.Component {
       <OverlayFrame active={Boolean(this.state.active)}>
         <div className="sj-logo" onClick={this.hide} />
         <Input
-          autoFocus
+          autoFocus={config.inputAutoFocus}
           instantPipeline={instantPipeline}
           instantValues={instantValues}
           pipeline={pipeline}
