@@ -202,7 +202,14 @@ const initSearchbox = (config, pub, sub) => {
   );
   const instantValues = new Values();
 
-  connectPubSub(pub, sub, "pipeline", instantPipeline, instantValues, false);
+  connectPubSub(
+    pub,
+    sub,
+    "instantPipeline",
+    instantPipeline,
+    instantValues,
+    false
+  );
 
   ReactDOM.render(
     <Input
