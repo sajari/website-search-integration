@@ -8,7 +8,7 @@ This website search integration is built using the [Sajari React SDK](https://ww
 
 ## Instructions
 
-We're assuming you've setup an account and have a website collection indexing. If not then you need to  [Sign Up](https://www.sajari.com/console/sign-up) and create a website collection to get started.
+This integration requires a website collection. You can [Sign Up](https://www.sajari.com/console/sign-up) and create a website collection to get started.
 
 From the [Install tab](https://www.sajari.com/console/collections/install) in the Console you can generate a search interface which can be copy-pasted into your site.  It's easy to add further customisations using CSS (see [Styling](#styling)), or by changing the JSON config (see [Configuration](#configuration)).
 
@@ -51,31 +51,45 @@ Source: [sajari.css](./sample-styles/sajari.css)
 
 ## Integrations
 
-There are 3 types of integration currently. In-page search, overlay search, and input only.
+There are main 3 types of integration:
 
-### In Page
+* [*inline*](#inline) (search box, results).  Interface is embeeded directly into a page (or pages) on your website, for instance a dedicated search page with a search box + results.
 
-The inpage search integration is for rendering inside a page or pages on your site. The most common use case is having a dedicated "search" page which has search functionality.
+* [*overlay*](#overlay) (full page overlay, search box, results).  Interface appears as an overlay on top of the current page.  Can be used to search without leaving the page.
+
+* [*searchbox*](#searchbox) (search box).  .  Typical usage includes being embedded into headers and menus.
+
+It's possible to use multiple integrations, for instance: have a *searchbox* in the header of your site, which then redirects to an *inline* search results page when triggered.
+
+The easiest way to get one is to generate it from your [Sajari Console](#https://www.sajari.com/console/). The integration will come with helper functions and be pre-filled with your configuration.
+
+### Helper functions
+
+
+
+### Inline
+
+The inline search integration renders a full search interface (input box and results) inside a webpage. A typical example would be a dedicated search results page which is linked to/navigated to by search forms on a website. In the configuration example given below, the search query can be passed to the page using the query param q. Example: ...
 
 ```javascript
-myUI("create-inpage", {
-  project: "<your project>",
-  collection: "<your collection>",
-  values: { resultsPerPage: "10", "q": getUrlParam("q") },
-  attachSearchBox: document.getElementById("search-box"),
-  attachSearchResponse: document.getElementById("search-response"),
-  results: { showImages: false },
-  pipeline: "website",
-  instantPipeline: "autocomplete",
-  searchInputPlaceholder: "Search",
-  maxSuggestions: 5,
-  tabFilters: {},
+myUI("create-inline", {
+  project: "<your project>", // Set this to your project.
+  collection: "<your collection>", // Set this to your collection.
+  values: { resultsPerPage: "10", "q": getUrlParam("q") }, // Default pipeline values
+  attachSearchBox: document.getElementById("search-box"), // DOM element to render search box.
+  attachSearchResponse: document.getElementById("search-response"), // DOM element to render search results.
+  results: { showImages: false }, // Results configuration
+  pipeline: "website", // Set this to your search pipeline
+  instantPipeline: "autocomplete", // Set this to your instant pipeline
+  inputPlaceholder: "Search", // Placeholder text for the input element
+  maxSuggestions: 5, // Maximum number of suggestions in the search box
+  tabFilters: {}, // Tab configuration
 });
 ```
 
 ## Overlay
 
-The overlay search integration is for rendering a search interface on top of the current page.
+The overlay search integration renders a search interface on top of existing pages. Typically this is used on sites that prefer not to navigate users away from their current page to see results.
 
 ```javascript
 myUI("create-overlay", {
@@ -85,23 +99,23 @@ myUI("create-overlay", {
   results: { showImages: false },
   pipeline: "website",
   instantPipeline: "autocomplete",
-  searchInputPlaceholder: "Search",
+  inputPlaceholder: "Search",
   autocompleteMaxSuggestions: 5,
-  searchInputAutoFocus: true,
+  inputAutoFocus: true,
   tabFilters: {},
 });
 ```
 
-### Input Only
+### Searchbox
 
-The input only integration is for embedding into your sites header or menu bar. It performs autocomplete on the users query and can redirect to your search results page once the user confirms their choice.
+The searchbox integration creates an autocomplete-enabled input box typically embedded into site headers and menu bars. It performs autocomplete lookups for each user keypress and can be customised to redirect to a search results page or trigger custom search actions.
 
 ```javascript
-myUI("create-input", {
+myUI("create-searchbox", {
   project: "<your project>",
   collection: "<your collection>",
   instantPipeline: "autocomplete",
-  searchInputPlaceholder: "Search",
+  inputPlaceholder: "Search",
   maxSuggestions: 5,
   attachSearchBox: document.getElementById("autocomplete-input")
 });
@@ -136,20 +150,20 @@ collection: "your-collection",
 
 ### Pipelines
 
-Pipelines determine how your collection is searched. `pipeline` sets the pipeline used to perform searches, by default this is the `website` pipeline. `autocompletePipeline` sets the pipeline used to perform autocomplete, by default this is the `autocomplete` pipeline.
+Pipelines determine how your collection is searched. `pipeline` sets the pipeline used to perform searches, by default this is the `website` pipeline. `instantPipeline` sets the pipeline used to perform autocomplete, by default this is the `autocomplete` pipeline.
 
 ```javascript
 pipeline: "website",
-autocompletePipeline: "autocomplete",
+instantPipeline: "autocomplete",
 ```
 
-If you'd like instant search, set `autocompletePipeline` to a pipeline that does perform searches, typically `website`:
+If you'd like instant search, set `instantPipeline` to a pipeline that does perform searches, typically `website`:
 
 ```javascript
-autocompletePipeline: "website"
+instantPipeline: "website"
 ```
 
-If you'd like nothing to happen until the user presses enter, only set `pipeline`, not `autocompletePipeline`:
+If you'd like nothing to happen until the user presses enter, only set `pipeline`, not `instantPipeline`:
 
 ```javascript
 pipeline: "website"
@@ -163,20 +177,20 @@ Setting `maxSuggestions` will limit how many suggestions are shown in the dropbo
 maxSuggestions: 5
 ```
 
-### Search Input Placeholder
+### Input Placeholder
 
-Setting `searchInputPlaceholder` will set the placeholder text in the search input box.
+Setting `inputPlaceholder` will set the placeholder text in the search input box.
 
 ```javascript
-searchInputPlaceholder: "Search"
+inputPlaceholder: "Search"
 ```
 
 ### Search Input Auto Focus
 
-Setting `searchInputAutoFocus` will set the autoFocus attribute on the search input box.
+Setting `inputAutoFocus` will set the autoFocus attribute on the search input box.
 
 ```javascript
-searchInputAutoFocus: false
+inputAutoFocus: false
 ```
 
 ### Result Config
@@ -210,7 +224,7 @@ You can subscribe to events by calling your interface with the `"sub"` value fol
 myUI("sub", "<pipeline>.<event>", callback);
 ```
 
-For example, if you are using the default in-page interface and want to listen to the `search-sent` event, you'd write:
+For example, if you are using the default inline interface and want to listen to the `search-sent` event, you'd write:
 
 ```javascript
 myUI("sub", "pipeline.search-sent", function(event, values) {
