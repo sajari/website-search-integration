@@ -39,7 +39,6 @@ const integrationEvents = {
   queryReset: "query-reset",
   resultClicked: "result-clicked",
   searchEvent: "search-event",
-  suggestionChosen: "suggestion-chosen",
 
   // Events to both publish and subscribe
   overlayShow: "overlay-show",

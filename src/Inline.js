@@ -9,8 +9,7 @@ class Inline extends React.Component {
       values,
       instantPipeline,
       instantValues,
-      config,
-      pubSuggestionChosen
+      config
     } = this.props;
     return (
       <div className="sj-inline">
@@ -21,7 +20,6 @@ class Inline extends React.Component {
           pipeline={pipeline}
           values={values}
           config={config}
-          pubSuggestionChosen={pubSuggestionChosen}
         />
       </div>
     );
