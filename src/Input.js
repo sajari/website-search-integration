@@ -7,8 +7,11 @@ import {
 
 class Input extends React.Component {
   handleUserForceSearch = query => {
-    const { pipeline, values } = this.props;
-    return { values, pipeline };
+    const { pipeline, values, instantPipeline, instantValues } = this.props;
+    return {
+      values: values || instantValues,
+      pipeline: pipeline || instantPipeline
+    };
   };
 
   render() {
