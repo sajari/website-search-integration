@@ -53,23 +53,23 @@ Source: [sajari.css](./sample-styles/sajari.css)
 
 There are main 3 types of integration:
 
-* [*inline*](#inline) (search box, results).  Interface is embeeded directly into a page (or pages) on your website, for instance a dedicated search page with a search box + results.
+* [*inline*](#inline) (search box, results).  Interface is embedded directly into a page (or pages) on your website, for instance a dedicated search page with a search box + results.
 
 * [*overlay*](#overlay) (full page overlay, search box, results).  Interface appears as an overlay on top of the current page.  Can be used to search without leaving the page.
 
-* [*searchbox*](#searchbox) (search box).  .  Typical usage includes being embedded into headers and menus.
+* [*search box*](#search-box) (search box).  Typical usage includes being embedded into headers and menus.
 
 It's possible to use multiple integrations, for instance: have a *searchbox* in the header of your site, which then redirects to an *inline* search results page when triggered.
 
 The easiest way to get one is to generate it from your [Sajari Console](#https://www.sajari.com/console/). The integration will come with helper functions and be pre-filled with your configuration.
 
-### Helper functions
-
-
+**NOTE: The code examples in this readme assume you've generated an interface from the console as doing so will include extra functions in the JS snippet which are referenced in the following examples.**
 
 ### Inline
 
-The inline search integration renders a full search interface (input box and results) inside a webpage. A typical example would be a dedicated search results page which is linked to/navigated to by search forms on a website. In the configuration example given below, the search query can be passed to the page using the query param q. Example: ...
+The inline search integration renders a full search interface (input box and results) inside a webpage. A typical example would be a dedicated search results page which is linked to/navigated to by search forms on a website. In the configuration example given below, the search query can be passed to the page using the query param q.
+
+![inline interface screenshot](https://user-images.githubusercontent.com/2771466/31525575-f22be452-b00c-11e7-94e0-64a52480aea3.png)
 
 ```javascript
 myUI("create-inline", {
@@ -87,9 +87,11 @@ myUI("create-inline", {
 });
 ```
 
-## Overlay
+### Overlay
 
 The overlay search integration renders a search interface on top of existing pages. Typically this is used on sites that prefer not to navigate users away from their current page to see results.
+
+![overlay interface screenshot](https://user-images.githubusercontent.com/2771466/31525612-3ebe9abc-b00d-11e7-9e2b-1e2f947a717a.png)
 
 ```javascript
 myUI("create-overlay", {
@@ -106,9 +108,11 @@ myUI("create-overlay", {
 });
 ```
 
-### Searchbox
+### Search Box
 
-The searchbox integration creates an autocomplete-enabled input box typically embedded into site headers and menu bars. It performs autocomplete lookups for each user keypress and can be customised to redirect to a search results page or trigger custom search actions.
+![search box interface screenshot](https://user-images.githubusercontent.com/2771466/31525645-86e89392-b00d-11e7-91b2-9ddbeb5136a9.png)
+
+The Search Box integration creates an autocomplete-enabled input box typically embedded into site headers and menu bars. It performs autocomplete lookups for each user keypress and can be customised to redirect to a search results page or trigger custom search actions.
 
 ```javascript
 myUI("create-searchbox", {
@@ -126,9 +130,9 @@ myUI("create-searchbox", {
 The generated search interfaces are configured using a simple JSON object which contains attributes that control:
 
 * [Project/Collection](#projectcollection)
-* [Pipelines](#pipelines)
+* [Pipeline/InlinePipeline](#pipelineinstantpipeline)
 * [Attaching to the DOM](#attaching-to-the-dom)
-* [Maximum Suggestions](#maximum-suggestions)
+* [Max Suggestions](#max-suggestions)
 * [Search Input Placeholder](#search-input-placeholder)
 * [Search Input Auto Focus](#search-input-auto-focus)
 * [Result Config](#result-config)
@@ -139,7 +143,7 @@ The generated search interfaces are configured using a simple JSON object which 
 
 You'll find the configuration object in the snippet generated from the [install page](https://www.sajari.com/console/collections/install).
 
-### Project/Collection
+#### Project/Collection
 
 The `project` and `collection` attributes set which project/collection combo to query.  These can be found in the Console.
 
@@ -148,9 +152,11 @@ project: "your-project",
 collection: "your-collection",
 ```
 
-### Pipelines
+#### Pipeline/InstantPipeline
 
 Pipelines determine how your collection is searched. `pipeline` sets the pipeline used to perform searches, by default this is the `website` pipeline. `instantPipeline` sets the pipeline used to perform autocomplete, by default this is the `autocomplete` pipeline.
+
+All Pipelines mentioned in this readme are query pipelines, ie pipelines used when making a query. They differ from record pipelines which are used when performing operations on a record (adding/mutating etc).
 
 ```javascript
 pipeline: "website",
@@ -169,15 +175,15 @@ If you'd like nothing to happen until the user presses enter, only set `pipeline
 pipeline: "website"
 ```
 
-### Maximum Suggestions
+#### Max Suggestions
 
-Setting `maxSuggestions` will limit how many suggestions are shown in the dropbox box below the search input.
+Setting `maxSuggestions` will limit how many autocomplete suggestions are shown in the dropbox box below the search input.
 
 ```javascript
 maxSuggestions: 5
 ```
 
-### Input Placeholder
+#### Input Placeholder
 
 Setting `inputPlaceholder` will set the placeholder text in the search input box.
 
@@ -185,7 +191,7 @@ Setting `inputPlaceholder` will set the placeholder text in the search input box
 inputPlaceholder: "Search"
 ```
 
-### Search Input Auto Focus
+#### Search Input Auto Focus
 
 Setting `inputAutoFocus` will set the autoFocus attribute on the search input box.
 
@@ -193,7 +199,7 @@ Setting `inputAutoFocus` will set the autoFocus attribute on the search input bo
 inputAutoFocus: false
 ```
 
-### Result Config
+#### Result Config
 
 Result config allows you to modify the result rendering.
 
@@ -205,7 +211,7 @@ results: {
 },
 ```
 
-### Algorithm parameters
+#### Algorithm parameters
 
 The standard website pipeline defines several algorithm parameters. For example, `q` or `resultsPerPage`.
 
