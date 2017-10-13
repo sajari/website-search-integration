@@ -110,9 +110,9 @@ myUI("create-overlay", {
 
 ### Search Box
 
-![search box interface screenshot](https://user-images.githubusercontent.com/2771466/31525645-86e89392-b00d-11e7-91b2-9ddbeb5136a9.png)
-
 The Search Box integration creates an autocomplete-enabled input box typically embedded into site headers and menu bars. It performs autocomplete lookups for each user keypress and can be customised to redirect to a search results page or trigger custom search actions.
+
+![search box interface screenshot](https://user-images.githubusercontent.com/2771466/31525645-86e89392-b00d-11e7-91b2-9ddbeb5136a9.png)
 
 ```javascript
 myUI("create-searchbox", {
