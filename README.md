@@ -51,13 +51,15 @@ Source: [sajari.css](./sample-styles/sajari.css)
 
 ## Integrations
 
-There are main 3 types of integration:
+There are 4 types of integration:
 
 * [*inline*](#inline) (search box, results).  Interface is embedded directly into a page (or pages) on your website, for instance a dedicated search page with a search box + results.
 
 * [*overlay*](#overlay) (full page overlay, search box, results).  Interface appears as an overlay on top of the current page.  Can be used to search without leaving the page.
 
 * [*search box*](#search-box) (search box).  Typical usage includes being embedded into headers and menus.
+
+* [*dynamic content*](#dynamic-content) (results). Typically used to show similar or popular content.
 
 It's possible to use multiple integrations, for instance: have a *searchbox* in the header of your site, which then redirects to an *inline* search results page when triggered.
 
@@ -125,104 +127,64 @@ myUI("create-searchbox", {
 });
 ```
 
+### Dynamic Content
+
+The Dynamic Content integration creates a results block
+
+![dynamic content interface screenshot]()
+
+```javascript
+myUI("create-dynamic-content", {
+  project: "<your project>",
+  collection: "<your collection>",
+  pipeline: "website",
+  attachDynamicContent: document.getElementById("dynamic-content"),
+  values: { "resultsPerPage": "3" },
+  results: { "showImages": false },
+  tracking: false,
+  searchOnLoad: true,
+});
+```
+
 ## Configuration
 
-The generated search interfaces are configured using a simple JSON object which contains attributes that control:
+The generated search interfaces are configured using a JSON object. Generating an interface from the console will prefill the configuration for you.
 
-* [Project/Collection](#projectcollection)
-* [Pipeline/InlinePipeline](#pipelineinstantpipeline)
-* [Attaching to the DOM](#attaching-to-the-dom)
-* [Max Suggestions](#max-suggestions)
-* [Search Input Placeholder](#search-input-placeholder)
-* [Search Input Auto Focus](#search-input-auto-focus)
-* [Result Config](#result-config)
-* [Algorithm parameters](#algorithm-parameters)
-* [Events](#events)
-* [Tab filters](#tab-filters)
-* [Analytics](#analytics)
+**General configuration**
 
-You'll find the configuration object in the snippet generated from the [install page](https://www.sajari.com/console/collections/install).
+| Property | Default | Description |
+| :-- | :-: | :-- |
+| project | `"<your project>"` | Project to search |
+| collection | `"<your collection>"` | Collection to search |
+| pipeline | `"website"` | Pipeline to query when pressing enter or clicking a suggestion |
+| instantPipeline | `"autocomplete"` | Pipeline to query when typing |
+| values | `{ resultsPerPage: "10", "q": getUrlParam("q") }` |  |
+| maxSuggestions | `"5"` | Sets how many autocomplete suggestions are shown in the box below the search input |
+| inputPlaceholder | `"Search"` | Placeholder text in the search input box |
+| inputAutoFocus | `false` | Focus the searc input html element on initialisation |
+| values | *see table below* | Configuration of the pipeline values |
+| results | *see table below* | Configuration for the search results |
 
-#### Project/Collection
+**Values configuration**
 
-The `project` and `collection` attributes set which project/collection combo to query.  These can be found in the Console.
+| Property | Default | Description |
+| :-- | :-: | :-- |
+| q | `getUrlParam("q")` | The initial value of `q` in the pipeline, commonly used as the query text |
+| resultsPerPage | `"10"` | Number of results to show per page |
 
-```javascript
-project: "your-project",
-collection: "your-collection",
-```
+**Results configuration**
 
-#### Pipeline/InstantPipeline
-
-Pipelines determine how your collection is searched. `pipeline` sets the pipeline used to perform searches, by default this is the `website` pipeline. `instantPipeline` sets the pipeline used to perform autocomplete, by default this is the `autocomplete` pipeline.
-
-All Pipelines mentioned in this readme are query pipelines, ie pipelines used when making a query. They differ from record pipelines which are used when performing operations on a record (adding/mutating etc).
-
-```javascript
-pipeline: "website",
-instantPipeline: "autocomplete",
-```
-
-If you'd like instant search, set `instantPipeline` to a pipeline that does perform searches, typically `website`:
-
-```javascript
-instantPipeline: "website"
-```
-
-If you'd like nothing to happen until the user presses enter, only set `pipeline`, not `instantPipeline`:
-
-```javascript
-pipeline: "website"
-```
-
-#### Max Suggestions
-
-Setting `maxSuggestions` will limit how many autocomplete suggestions are shown in the dropbox box below the search input.
-
-```javascript
-maxSuggestions: 5
-```
-
-#### Input Placeholder
-
-Setting `inputPlaceholder` will set the placeholder text in the search input box.
-
-```javascript
-inputPlaceholder: "Search"
-```
-
-#### Search Input Auto Focus
-
-Setting `inputAutoFocus` will set the autoFocus attribute on the search input box.
-
-```javascript
-inputAutoFocus: false
-```
-
-#### Result Config
-
-Result config allows you to modify the result rendering.
-
-Show images next to search results.
-
-```javascript
-results: {
-  showImages: false
-},
-```
-
-#### Algorithm parameters
-
-The standard website pipeline defines several algorithm parameters. For example, `q` or `resultsPerPage`.
-
-```javascript
-values: {
-  q: getUrlParam("q") // The initial search query will be the value of the query param "q".
-  resultsPerPage: "10", // Show 10 results per page.
-},
-```
+| Property | Default | Description |
+| :-- | :-: | :-- |
+| showImages | `false` | Show images next to search results |
 
 ### Events
+
+Interfaces are created using `setup` which is included when generating the interface from the console.
+
+```javascript
+myUI = setup(window, document, "script", "sajari");
+```
 
 You can subscribe to events by calling your interface with the `"sub"` value followed by the pipeline (either `pipeline` or `instantPipeline`) and event name, then a callback. It takes the form
 
