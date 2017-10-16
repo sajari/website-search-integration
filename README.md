@@ -53,19 +53,19 @@ Source: [sajari.css](./sample-styles/sajari.css)
 
 There are 4 types of integration:
 
-* [*inline*](#inline) (search box, results).  Interface is embedded directly into a page (or pages) on your website, for instance a dedicated search page with a search box + results.
+* [*inline*](#inline): search box, results.  Interface is embedded directly into a page (or pages) on your website, for instance a dedicated search page with a search box + results.
 
-* [*overlay*](#overlay) (full page overlay, search box, results).  Interface appears as an overlay on top of the current page.  Can be used to search without leaving the page.
+* [*overlay*](#overlay): full page overlay, search box, results.  Interface appears as an overlay on top of the current page.  Can be used to search without leaving the page.
 
-* [*search box*](#search-box) (search box).  Typical usage includes being embedded into headers and menus.
+* [*search box*](#search-box): search box.  Typical usage includes being embedded into headers and menus.
 
-* [*dynamic content*](#dynamic-content) (results). Typically used to show similar or popular content.
+* [*dynamic content*](#dynamic-content): results. Typically used to show similar or popular content.
 
-It's possible to use multiple integrations, for instance: have a *searchbox* in the header of your site, which then redirects to an *inline* search results page when triggered.
+The easiest way to get one is to generate it from your [Sajari Console](https://www.sajari.com/console/). The integration will come with helper functions and be pre-filled with your configuration.
 
-The easiest way to get one is to generate it from your [Sajari Console](#https://www.sajari.com/console/). The integration will come with helper functions and be pre-filled with your configuration.
+It's possible to use [multiple integrations](#multiple-integrations) on the same site/page. For instance: have a search box in the header of your site, which then redirects to an inline search results page when triggered.
 
-**NOTE: The code examples in this readme assume you've generated an interface from the console as doing so will include extra functions in the JS snippet which are referenced in the following examples.**
+**NOTE: The code examples in this README assume integrations have been generated from the [Console](https://www.sajari.com/console/collections/install). Generated interfaces include a handful of [helper functions](#helper-functions) which are referenced in the following examples.**
 
 ### Inline
 
@@ -146,6 +146,28 @@ myUI("create-dynamic-content", {
 });
 ```
 
+### Helper Functions
+
+The generated interface code comes with two helper functions.
+
+- `getUrlParam` extracts a value from a url parameter.
+- `setup` creates an object that controls an instance of the integration.
+
+### Multiple Integrations
+
+The website search integrations were built so that it's easy to have more than 1 type of integration on a page.
+
+To have multiple integrations on one page, call the setup function and assign it to another variable.
+From there you can use your second variable to create a different integration type, or even another of the same with different config.
+
+```javascript
+myUI = setup(...);
+secondUI = setup(...);
+
+myUI("create-search-box", ...);
+secondUI("create-inline", ...);
+```
+
 ## Configuration
 
 The generated search interfaces are configured using a JSON object. Generating an interface from the console will prefill the configuration for you.
@@ -158,7 +180,6 @@ The generated search interfaces are configured using a JSON object. Generating a
 | collection | `"<your collection>"` | Collection to search |
 | pipeline | `"website"` | Pipeline to query when pressing enter or clicking a suggestion |
 | instantPipeline | `"autocomplete"` | Pipeline to query when typing |
-| values | `{ resultsPerPage: "10", "q": getUrlParam("q") }` |  |
 | maxSuggestions | `"5"` | Sets how many autocomplete suggestions are shown in the box below the search input |
 | inputPlaceholder | `"Search"` | Placeholder text in the search input box |
 | inputAutoFocus | `false` | Focus the searc input html element on initialisation |
@@ -200,8 +221,6 @@ myUI("sub", "pipeline.search-sent", function(event, values) {
 });
 ```
 
-Here is a table of events you can subscribe to.
-
 | Event | Data | Description |
 | :-- | :-: | :-- |
 | `"search-sent"` | value dictionary | Search request has been sent |
@@ -228,7 +247,7 @@ You can also publish events which the search interface will pick up.
 A search has sent and we are now waiting for results. The values used in the search are given to the subscribed function.
 
 ```javascript
-myUI("sub", "pipeline.search-sent", function(eventName, values) {
+myUI("sub", "<pipeline>.search-sent", function(eventName, values) {
   console.log("Search sent with ", values);
 });
 ```
@@ -238,7 +257,7 @@ myUI("sub", "pipeline.search-sent", function(eventName, values) {
 Values in the interface have been updated. A function is given as the 3rd argument that can be used to merge new values into the value dictionary, it behaves like `pub("values-set", {})` except that it doesn't trigger an event.
 
 ```javascript
-myUI("sub", "pipeline.values-updated", function(eventName, values, set) {
+myUI("sub", "<pipeline>.values-updated", function(eventName, values, set) {
   console.log("New values are", values);
 });
 ```
@@ -250,7 +269,7 @@ The search response has been updated. Caused by a network response being receive
 You can see more info about the `response` object [here](https://github.com/sajari/sajari-sdk-react#listening-for-responses).
 
 ```javascript
-myUI("sub", "pipeline.response-updated", function(eventName, response) {
+myUI("sub", "<pipeline>.response-updated", function(eventName, response) {
   if (response.isEmpty()) {
     return;
   }
@@ -267,7 +286,7 @@ myUI("sub", "pipeline.response-updated", function(eventName, response) {
 A search event signals the end of a search session. A common use case of subscribing to them is for reporting.
 
 ```javascript
-myUI("sub", "pipeline.search-event", function (eventName, query) {
+myUI("sub", "<pipeline>.search-event", function (eventName, query) {
   console.log("Search session finished, last query", query);
 });
 ```
@@ -278,9 +297,9 @@ If you'd like more granular events you can also subscribe to these events.
 function searchFinished(eventName, query) {
   console.log("Search session finished, last query", query);
 }
-myUI("sub", "pipeline.page-closed", searchFinished);
-myUI("sub", "pipeline.query-reset", searchFinished);
-myUI("sub", "pipeline.result-clicked", searchFinished);
+myUI("sub", "<pipeline>.page-closed", searchFinished);
+myUI("sub", "<pipeline>.query-reset", searchFinished);
+myUI("sub", "<pipeline>.result-clicked", searchFinished);
 ```
 
 #### Overlay Show/Hide
@@ -310,7 +329,7 @@ myUI("sub", "overlay-hide", function(eventName) {
 Merge new values into the values dictionary. Setting a value to undefined will remove it from the values dictionary.
 
 ```javascript
-myUI("pub", "pipeline.values-set", { q: "<search query>" });
+myUI("pub", "<pipeline>.values-set", { q: "<search query>" });
 ```
 
 #### Search
@@ -318,7 +337,7 @@ myUI("pub", "pipeline.values-set", { q: "<search query>" });
 Search will perform a search request using the values in the value map.
 
 ```javascript
-myUI("pub", "pipeline.search-send");
+myUI("pub", "<pipeline>.search-send");
 ```
 
 ### Tab filters
