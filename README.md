@@ -117,13 +117,13 @@ The Search Box integration creates an autocomplete-enabled input box typically e
 ![search box interface screenshot](https://user-images.githubusercontent.com/2771466/31525645-86e89392-b00d-11e7-91b2-9ddbeb5136a9.png)
 
 ```javascript
-myUI("create-searchbox", {
+myUI("create-search-box", {
   project: "<your project>",
   collection: "<your collection>",
   instantPipeline: "autocomplete",
   inputPlaceholder: "Search",
   maxSuggestions: 5,
-  attachSearchBox: document.getElementById("autocomplete-input")
+  attachSearchBox: document.getElementById("search-box")
 });
 ```
 

@@ -493,7 +493,7 @@ const initialise = () => {
     const methods = {
       pub,
       sub,
-      "create-searchbox": createSearchbox,
+      "create-search-box": createSearchbox,
       "create-inline": createInline,
       "create-overlay": createOverlay,
       "create-dynamic-content": createDynamicContent
