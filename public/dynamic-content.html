@@ -9,8 +9,8 @@
 
 <body>
 
-  <h2>Content Block</h2>
-  <div id="content-block"></div>
+  <h2>Dynamic Content</h2>
+  <div id="dynamic-content"></div>
 
 
   <!-- This script sets up the config for the search interface -->
@@ -19,12 +19,12 @@
 
     var setup = function (u, r, n, t, a, s) { s = []; var e = function () { s.push(arguments) }, i = "ui"; return e.arr = s, u[t] = u[t] || [], u[t][i] = u[t][i] || [], u[t][i].push(e), e };
 
-    contentBlock = setup(window, document, "script", "sajari", "//address.js");
-    contentBlock("create-content-block", {
+    dynamicContent = setup(window, document, "script", "sajari", "//address.js");
+    dynamicContent("create-dynamic-content", {
       project: "sajariptyltd",       // Set this to your project.
       collection: "sajari-com", // Set this to your collection.
       values: { resultsPerPage: "3", "q": getUrlParam("q") },
-      attachContentBlock: document.getElementById("content-block"),
+      attachDynamicContent: document.getElementById("dynamic-content"),
       results: { showImages: false }, // Show images in results.
       pipeline: "raw",
       tracking: false,

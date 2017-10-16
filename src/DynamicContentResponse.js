@@ -2,7 +2,7 @@ import React from "react";
 
 import { Results, Result, ImageResult } from "sajari-react/ui/results";
 
-const ContentBlockResponse = props => {
+const DynamicContentResponse = props => {
   const { config, pipeline } = props;
   const resultsConfig = config.results || {};
   const resultRenderer = resultsConfig.showImages ? ImageResult : Result;
@@ -13,4 +13,4 @@ const ContentBlockResponse = props => {
   );
 };
 
-export default ContentBlockResponse;
+export default DynamicContentResponse;

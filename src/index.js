@@ -25,7 +25,7 @@ import Overlay from "./Overlay";
 import Inline from "./Inline";
 import SearchResponse from "./SearchResponse";
 import Input from "./Input";
-import ContentBlockResponse from "./ContentBlockResponse";
+import DynamicContentResponse from "./DynamicContentResponse";
 
 import "./styles.css";
 
@@ -223,10 +223,10 @@ const initSearchbox = (config, pub, sub) => {
   );
 };
 
-const initContentBlock = (config, pub, sub) => {
+const initDynamicContent = (config, pub, sub) => {
   if (!config.pipeline) {
     throw new Error(
-      "no pipeline found, content-block interface requires a pipeline"
+      "no pipeline found, dynamic-content interface requires a pipeline"
     );
   }
 
@@ -250,12 +250,12 @@ const initContentBlock = (config, pub, sub) => {
   }
 
   ReactDOM.render(
-    <ContentBlockResponse
+    <DynamicContentResponse
       config={config}
       pipeline={pipeline}
       values={values}
     />,
-    config.attachContentBlock
+    config.attachDynamicContent
   );
 };
 
@@ -484,9 +484,9 @@ const initialise = () => {
       configured = true;
     };
 
-    const createContentBlock = config => {
+    const createDynamicContent = config => {
       checkConfig(config);
-      initContentBlock(config, pub, sub);
+      initDynamicContent(config, pub, sub);
       configured = true;
     };
 
@@ -496,7 +496,7 @@ const initialise = () => {
       "create-searchbox": createSearchbox,
       "create-inline": createInline,
       "create-overlay": createOverlay,
-      "create-content-block": createContentBlock
+      "create-dynamic-content": createDynamicContent
     };
 
     const errors = flush(s, methods);

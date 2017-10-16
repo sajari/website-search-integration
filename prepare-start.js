@@ -14,7 +14,7 @@ const copyAndRun = source => {
   process.exit(0);
 };
 
-const choices = ["inline", "searchbox", "overlay", "content-block"];
+const choices = ["inline", "searchbox", "overlay", "dynamic-content"];
 const choice = process.argv[2];
 
 // if the user has supplied an action run it without prompting
