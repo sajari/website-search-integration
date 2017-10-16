@@ -1,28 +1,11 @@
 import React from "react";
 
-import { Results, Result, TokenLink } from "sajari-react/ui/results";
+import { Results, Result, ImageResult } from "sajari-react/ui/results";
 import { responseUpdatedEvent } from "sajari-react/controllers";
-
-class ContentBlockResult extends React.Component {
-  render() {
-    const { values, token } = this.props;
-    return (
-      <div className="sj-content-block-result">
-        <TokenLink token={token} url={values.url}>
-          <img className="sj-image" src={values.image} alt={values.title} />
-          <p className="sj-image-text">
-            {values.title}
-          </p>
-        </TokenLink>
-      </div>
-    );
-  }
-}
 
 class ContentBlockResponse extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = { response: props.pipeline.getResponse() };
   }
 
@@ -45,22 +28,27 @@ class ContentBlockResponse extends React.Component {
     const { config, pipeline, values } = this.props;
     const { response } = this.state;
 
+    if (response.isError()) {
+      return (
+        <div className="sj-result-error">
+          An error occurred while searching.
+        </div>
+      );
+    }
+
     if (response.isEmpty()) {
       return null;
     }
 
     const resultsConfig = config.results || {};
-    const resultRenderer = resultsConfig.showImages
-      ? ContentBlockResult
-      : Result;
+    const resultRenderer = resultsConfig.showImages ? ImageResult : Result;
     return (
-      <div className="sj-pipeline-response">
+      <div className="sj-pipeline-response sj-content-block-response">
         <Results
           ResultRenderer={resultRenderer}
           values={values}
           pipeline={pipeline}
         />
-        <div style={{ clear: "both" }} />
       </div>
     );
   }

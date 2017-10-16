@@ -25,6 +25,7 @@ import Overlay from "./Overlay";
 import Inline from "./Inline";
 import SearchResponse from "./SearchResponse";
 import Input from "./Input";
+import ContentBlockResponse from "./ContentBlockResponse";
 
 import "./styles.css";
 
@@ -63,7 +64,7 @@ const connectPubSub = (
   eventPrefix,
   pipeline,
   values,
-  connectAnalytics
+  connectAnalytics = true
 ) => {
   pipeline.listen(searchSentEvent, values => {
     pub(`${eventPrefix}.${integrationEvents.searchSent}`, values);
@@ -219,6 +220,42 @@ const initSearchbox = (config, pub, sub) => {
       values={dummyValues}
     />,
     config.attachSearchBox
+  );
+};
+
+const initContentBlock = (config, pub, sub) => {
+  if (!config.pipeline) {
+    throw new Error(
+      "no pipeline found, content-block interface requires a pipeline"
+    );
+  }
+
+  const [tracking, adapters] = config.tracking
+    ? [undefined, config.disableGA ? [] : undefined]
+    : [new NoTracking(), []];
+
+  const pipeline = new Pipeline(
+    config.project,
+    config.collection,
+    config.pipeline,
+    tracking,
+    adapters
+  );
+  const values = new Values();
+  connectPubSub(pub, sub, "pipeline", pipeline, values);
+  values.set(config.values);
+
+  if (config.searchOnLoad) {
+    pipeline.search(values.get());
+  }
+
+  ReactDOM.render(
+    <ContentBlockResponse
+      config={config}
+      pipeline={pipeline}
+      values={values}
+    />,
+    config.attachContentBlock
   );
 };
 
@@ -447,12 +484,19 @@ const initialise = () => {
       configured = true;
     };
 
+    const createContentBlock = config => {
+      checkConfig(config);
+      initContentBlock(config, pub, sub);
+      configured = true;
+    };
+
     const methods = {
       pub,
       sub,
       "create-searchbox": createSearchbox,
       "create-inline": createInline,
-      "create-overlay": createOverlay
+      "create-overlay": createOverlay,
+      "create-content-block": createContentBlock
     };
 
     const errors = flush(s, methods);
