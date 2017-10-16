@@ -7,7 +7,7 @@ const DynamicContentResponse = props => {
   const resultsConfig = config.results || {};
   const resultRenderer = resultsConfig.showImages ? ImageResult : Result;
   return (
-    <div className="sj-pipeline-response sj-content-block-response">
+    <div className="sj-pipeline-response sj-dynamic-content-response">
       <Results ResultRenderer={resultRenderer} pipeline={pipeline} />
     </div>
   );
