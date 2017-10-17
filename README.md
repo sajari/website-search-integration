@@ -127,7 +127,7 @@ myUI("create-search-box", {
 
 ### Dynamic Content
 
-The Dynamic Content integration creates a results block
+The Dynamic Content integration creates a results block using search results from a pipeline. It can typically be used to show similar or popular pages.
 
 ![dynamic content interface screenshot]()
 
