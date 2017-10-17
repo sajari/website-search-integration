@@ -16,9 +16,9 @@ From the [Install tab](https://www.sajari.com/console/collections/install) in th
 
 ## Styling
 
-The generated interface can be easily styled to fit your website's look and feel, it's also designed to be responsive by default.
+The generated interface is designed to be responsive by default, and can be easily styled to fit your website's look and feel.
 
-Here are a few CSS examples which can be used to override the default layout.
+Here are a few CSS examples showing how to override the default layout.
 
 ### Brand colors
 
@@ -59,13 +59,11 @@ There are 4 types of integration:
 
 * [*search box*](#search-box): search box.  Typical usage includes being embedded into headers and menus.
 
-* [*dynamic content*](#dynamic-content): results. Typically used to show similar or popular content.
-
-The easiest way to get one is to generate it from your [Sajari Console](https://www.sajari.com/console/). The integration will come with helper functions and be pre-filled with your configuration.
+* [*dynamic content*](#dynamic-content): results. Typically used to put pre-baked searches into pages, to show similar or popular content, or article listings by tag/category etc for landing pages.
 
 It's possible to use [multiple integrations](#multiple-integrations) on the same site/page. For instance: have a search box in the header of your site, which then redirects to an inline search results page when triggered.
 
-**NOTE: The code examples in this README assume integrations have been generated from the [Console](https://www.sajari.com/console/collections/install). Generated interfaces include a handful of [helper functions](#helper-functions) which are referenced in the following examples.**
+**NOTE: The code examples in this README assume integrations have been generated from the [Console](https://www.sajari.com/console/collections/install). Generated interfaces come with a handful of [helper functions](#helper-functions) which are referenced in the following examples.**
 
 ### Inline
 
@@ -148,17 +146,14 @@ myUI("create-dynamic-content", {
 
 ### Helper Functions
 
-The generated interface code comes with two helper functions.
+The generated interface code comes with two helper functions:
 
-- `getUrlParam` extracts a value from a url parameter.
+- `getUrlParam(x)` extracts a value from a url parameter `x`.
 - `setup` creates an object that controls an instance of the integration.
 
 ### Multiple Integrations
 
-The website search integrations were built so that it's easy to have more than 1 type of integration on a page.
-
-To have multiple integrations on one page, call the setup function and assign it to another variable.
-From there you can use your second variable to create a different integration type, or even another of the same with different config.
+Every integration is bound to its own variable (using the `setup` function), so it's easy to have multiple integrations running on the same page.  You an also have them interact with each other by subscribing and publishing events between them.
 
 ```javascript
 myUI = setup(...);
@@ -170,7 +165,7 @@ secondUI("create-inline", ...);
 
 ## Configuration
 
-The generated search interfaces are configured using a JSON object. Generating an interface from the console will prefill the configuration for you.
+The generated search interfaces are configured using a JSON object. Generating an interface from the console will prefill the configuration for you, setting default values where necessary.
 
 **General configuration**
 
