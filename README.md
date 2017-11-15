@@ -304,7 +304,11 @@ tabFilters: {
 }
 ```
 
-#### Constructing Filters
+For more information on building filter expressions, see [filters](#filters).
+
+## Filters
+
+Filters are used to limit the pages that are returned in a search.
 
 Our crawler extracts common fields when it parses web pages (such as the first and second directories of URLs), which make filtering much easier.  It's well worth taking a look at all the extracted fields before you start building filters, as most use cases are quick and easy to get running.
 
@@ -313,6 +317,7 @@ Here is a list of the most commonly used fields.
 * `title` The page title.
 * `description` The page description.
 * `image` The URL of an image which corresponds to the page.
+* `lang` The language of the page, extracted from the `<html>` element (if present).
 
 Fields that are based on the URL of the page (ideal for filtering on subsections of a site) are given below.  Examples here assume that the page URL is `https://www.sajari.com/blog/year-in-review`:
 
@@ -322,7 +327,7 @@ Fields that are based on the URL of the page (ideal for filtering on subsections
 * `domain` The domain of the page URL: `www.sajari.com`
 
 
-#### Using Operators
+### Using Operators
 
 When querying a field, there are a few operators that can be used. Note, all values must be enclosed in single quotation marks, i.e. "field *boost* must be greater than 10" is written as `boost>'10'`.
 
@@ -338,3 +343,17 @@ When querying a field, there are a few operators that can be used. Note, all val
 | Ends With (`$`) | Field ends with a *string* | `dir1$'og'` |
 | Contains (`~`) | Field contains a *string* | `dir1~'blog'` |
 | Does Not Contain (`!~`) | Field does not contain a *string* | `dir1!~'blog'` |
+
+### Combining expressions
+
+It's also possible to build more complex filters by combining field filter expressions with `AND`/`OR` operators, and brackets.
+
+| Operator | Description | Example |
+| --- | --- | --- |
+| `AND` | Both expressions must match | `dir1='blog' AND domain='www.sajari.com'` |
+| `OR` | One expression must match | `dir1='blog' OR domain='blog.sajari.com'` |
+
+For example, to match pages with language set to `en` on `www.sajari.com` or any page within the `en.sajari.com` domain:
+
+    (domain='www.sajari.com' AND lang='en') OR domain='en.sajari.com'
+
