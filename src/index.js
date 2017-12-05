@@ -493,11 +493,17 @@ const initialise = () => {
     const methods = {
       pub,
       sub,
-      "create-search-box": createSearchbox,
-      "create-inline": createInline,
-      "create-overlay": createOverlay,
-      "create-dynamic-content": createDynamicContent
+      "search-box": createSearchbox,
+      inline: createInline,
+      overlay: createOverlay,
+      "dynamic-content": createDynamicContent
     };
+
+    for (let i = 0; i < s.arr.length; i++) {
+      if (typeof s.arr[i][0] !== "string") {
+        s.arr[i] = [s.arr[i][0].mode, s.arr[i][0]];
+      }
+    }
 
     const errors = flush(s, methods);
     if (errors.length > 0) {

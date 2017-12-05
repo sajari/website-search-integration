@@ -19,7 +19,8 @@
     var setup = function (u, r, n, t, a, s) { s = []; var e = function () { s.push(arguments) }, i = "ui"; return e.arr = s, u[t] = u[t] || [], u[t][i] = u[t][i] || [], u[t][i].push(e), e };
 
     searchbox = setup(window, document, "script", "sajari");
-    searchbox("create-search-box", {
+    searchbox({
+      mode: "search-box",
       project: "sajariptyltd", // Set this to your project.
       collection: "sajari-com", // Set this to your collection.
       instantPipeline: "autocomplete",
