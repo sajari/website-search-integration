@@ -11,7 +11,7 @@
     "pubsub-js": "^1.5.7",
     "react": "15.6.1",
     "react-dom": "15.6.1",
-    "sajari-react": "1.4.0",
+    "sajari-react": "1.5.0",
     "stackqueue": "1.0.0"
   },
   "scripts": {
