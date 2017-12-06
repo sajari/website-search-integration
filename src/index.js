@@ -500,7 +500,10 @@ const initialise = () => {
     };
 
     for (let i = 0; i < s.arr.length; i++) {
-      if (typeof s.arr[i][0] !== "string") {
+      if (typeof s.arr[i][0] === "object") {
+        if (!s.arr[i][0].mode) {
+          throw new Error("mode not found in config object");
+        }
         s.arr[i] = [s.arr[i][0].mode, s.arr[i][0]];
       }
     }
