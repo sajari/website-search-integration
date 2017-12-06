@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Sajari: Search Box Website Search Example UI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+  <h2>Search Box</h2>
+  <div id="search-box"></div>
+
+  <!-- This script sets up the config for the search interface -->
+  <script>
+    var getUrlParam = function (e) { var t = new RegExp("[?&]" + e.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)"), a = t.exec(window.location.href); return a && a[2] ? decodeURIComponent(a[2].replace(/\+/g, " ")) : "" };
+
+    var setup = function (u, r, n, t, a, s) { s = []; var e = function () { s.push(arguments) }, i = "ui"; return e.arr = s, u[t] = u[t] || [], u[t][i] = u[t][i] || [], u[t][i].push(e), e };
+
+    searchbox = setup(window, document, "script", "sajari");
+    searchbox({
+      mode: "search-box",
+      project: "sajariptyltd", // Set this to your project.
+      collection: "sajari-com", // Set this to your collection.
+      instantPipeline: "autocomplete",
+      inputPlaceholder: "Search",
+      maxSuggestions: 5,
+      attachSearchBox: document.getElementById("search-box")
+    });
+    searchbox("sub", "pipeline.search-sent", function (event, query) {
+      if (query["q.override"]) {
+        console.log("Redirecting to ?q=" + query.q);
+        window.location = "?q=" + query.q;
+      }
+    });
+  </script>
+
+  <style>
+    /**
+      * Page styling
+      */
+
+    html {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+      background-color: #f7f7f7
+    }
+
+    body {
+      margin: 20px;
+      line-height: 24px
+    }
+
+    code,
+    pre {
+      font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      background-color: #eee;
+      border: 1px solid #999;
+      padding: 2px;
+      border-radius: 4px;
+      font-size: 14px
+    }
+
+    pre {
+      padding: 10px
+    }
+
+    input,
+    button {
+      font-size: 16px;
+    }
+
+    div#search-box,
+    div#search-response,
+    div#content-block-response {
+      border: 2px dashed #ddd;
+      padding: 20px;
+      border-radius: 4px;
+      background-color: #fff;
+      margin: 10px;
+    }
+
+    ul li {
+      padding: 10px
+    }
+  </style>
+</body>
+
+</html>

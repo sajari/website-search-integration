@@ -8,21 +8,38 @@ input {
 .sj-overlay-search {
   padding-left: 0;
   padding-right: 0;
-}
-
-.sj-search-input-holder-outer {
   background-image: linear-gradient(#202d5f, #614381);
-  height: 66px;
-  padding: 14px 0px 10px 126px;
+  background-size: 100% 120px;
 }
 
-.sj-logo {
-  background-image: url(/img/logo-flat.svg);
+.sj-pipeline-response {
+  background-color: #fff;
+}
+
+.sj-search-holder-outer {
+  height: 66px;
+  padding: 14px 0px 10px 0px;
+}
+
+.sj-overlay .sj-search-holder-outer {
+  margin-right: 64px;
+  margin-left: 126px;
+}
+
+.sj-overlay .sj-tabs-container,
+.sj-overlay .sj-result-summary,
+.sj-overlay .sj-result-list,
+.sj-overlay .sj-result-error {
+  padding-left: 126px;
+}
+
+.sj-overlay .sj-logo {
+  background-image: url(https://www.sajari.com/img/logo-flat.svg);
   background-repeat: no-repeat;
+  float: left;
   width: 60px;
   height: 55px;
-  background-size: 54px;
-  float: left;
+  background-size: 50px;
   margin-top: 9px;
   margin-left: 35px;
   position: absolute;
@@ -44,17 +61,6 @@ input {
 
 .sj-tab {
   font-size: 14px;
-}
-
-.sj-tabs-container,
-.sj-result-summary,
-.sj-result-list,
-.sj-result-error {
-  padding-left: 126px;
-}
-
-.sj-result-list {
-  max-width: 700px;
 }
 
 .sj-result-summary-text {
@@ -82,30 +88,29 @@ input {
 }
 
 @media (max-width: 845px) {
-  .sj-overlay-close {
-    right: 3%;
+  .sj-overlay .sj-pipeline-response {
+    padding: 0px 10px;
   }
 
-  .sj-search-input-holder-outer {
+  .sj-overlay .sj-search-holder-outer {
     padding: 69px 0 10px;
     height: 120px;
   }
 
-  .sj-logo {
-    margin-left: calc(50vw - 34px);
+  .sj-overlay .sj-search-holder-outer {
+    margin-left: 10px;
+    margin-right: 10px;
   }
 
-  .sj-overlay .sj-search-bar-input-common,
-  .sj-search-bar-input-common {
-    width: calc(95vw - 18px);
-    margin-left: 2.5vw;
+  .sj-overlay .sj-logo {
+    margin-left: calc(50% - 30px);
+    float: none;
   }
 
-  .sj-tabs-container,
-  .sj-result-summary,
-  .sj-result-list,
-  .sj-result-error {
-    padding-left: 2.5vw;
-    padding-right: 2.5vw;
+  .sj-overlay .sj-tabs-container,
+  .sj-overlay .sj-result-summary,
+  .sj-overlay .sj-result-list,
+  .sj-overlay .sj-result-error {
+    padding-left: 0px;
   }
 }
