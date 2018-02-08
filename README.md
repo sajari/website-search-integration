@@ -166,7 +166,7 @@ myUI({
 The Dynamic Content integration creates a results block using search results
 from a pipeline. It can typically be used to show similar or popular pages.
 
-![dynamic content interface screenshot]()
+![dynamic content interface screenshot](https://user-images.githubusercontent.com/2771466/36003587-dc94f326-0d82-11e8-894e-b19663ade59d.png)
 
 ```javascript
 myUI({
