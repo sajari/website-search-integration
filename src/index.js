@@ -28,6 +28,7 @@ import Input from "./Input";
 import DynamicContentResponse from "./DynamicContentResponse";
 
 import "./styles.css";
+import { updateQueryStringParam } from "./utils";
 
 const ESCAPE_KEY_CODE = 27;
 
@@ -311,6 +312,10 @@ const initInline = (config, pub, sub) => {
     instantValues.set({ q: values.get().q });
   }
 
+  pipeline.listen(searchSentEvent, values => {
+    updateQueryStringParam("q", values.q);
+  });
+
   ReactDOM.render(
     <Inline
       config={config}
@@ -411,6 +416,10 @@ const initOverlay = (config, pub, sub) => {
     if (e.keyCode === ESCAPE_KEY_CODE) {
       pub(integrationEvents.overlayHide);
     }
+  });
+
+  pipeline.listen(searchSentEvent, values => {
+    updateQueryStringParam("q", values.q);
   });
 
   ReactDOM.render(
