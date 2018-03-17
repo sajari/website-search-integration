@@ -1,0 +1,11 @@
+{
+  "presets": [
+    ["@babel/preset-env", {
+      "targets": {
+        "browser": "ie > 9"
+      }
+    }],
+    "@babel/preset-react",
+    "@babel/preset-stage-3"
+  ]
+}
