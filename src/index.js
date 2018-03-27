@@ -313,7 +313,7 @@ const initInline = (config, pub, sub) => {
   }
 
   pipeline.listen(searchSentEvent, values => {
-    updateQueryStringParam(config.queryParam || "q", values.q);
+    updateQueryStringParam(config.urlQueryParam || "q", values.q);
   });
 
   ReactDOM.render(
@@ -419,7 +419,7 @@ const initOverlay = (config, pub, sub) => {
   });
 
   pipeline.listen(searchSentEvent, values => {
-    updateQueryStringParam(config.queryParam || "q", values.q);
+    updateQueryStringParam(config.urlQueryParam || "q", values.q);
   });
 
   ReactDOM.render(
