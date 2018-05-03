@@ -6,7 +6,7 @@ const updateQueryStringParam = (key, value) => {
     window.location.pathname
   ].join("");
   const urlQueryString = document.location.search;
-  const newParam = key + "=" + value;
+  const newParam = key + "=" + encodeURIComponent(value);
 
   let params = "?" + newParam;
 
