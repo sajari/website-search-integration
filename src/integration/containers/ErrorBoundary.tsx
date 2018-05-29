@@ -2,11 +2,11 @@ import * as React from "react";
 
 import { error as logError } from "../../utils";
 
-export interface IErrorBoundryState {
+export interface IErrorBoundaryState {
   hasError: boolean;
 }
 
-export class ErrorBoundry extends React.Component<{}, IErrorBoundryState> {
+export class ErrorBoundary extends React.Component<{}, IErrorBoundaryState> {
   state = { hasError: false };
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {

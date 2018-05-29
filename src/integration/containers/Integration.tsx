@@ -2,7 +2,7 @@ import * as React from "react";
 
 // @ts-ignore: module missing defintions file
 import { Provider, Pipeline, Values } from "sajari-react";
-import { ErrorBoundry } from "./ErrorBoundry";
+import { ErrorBoundary } from "./ErrorBoundary";
 
 export interface IIntergrationProps {
   search?: {
@@ -21,11 +21,11 @@ export class Integration extends React.Component<IIntergrationProps> {
   render() {
     const { search, instant, children } = this.props;
     return (
-      <ErrorBoundry>
+      <ErrorBoundary>
         <Provider search={search} instant={instant}>
           {children}
         </Provider>
-      </ErrorBoundry>
+      </ErrorBoundary>
     );
   }
 }
