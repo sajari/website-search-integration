@@ -1,12 +1,20 @@
+import idx from "idx";
+
 // @ts-ignore: module missing deifintions file
 import { Pipeline, Values, EVENT_SEARCH_SENT } from "sajari-react";
 
 import { IIntegrationConfig } from "../../../config";
 import { PubFn, SubFn } from "../../../lib/pubsub";
-import { INTEGRATION_EVENT_SEARCH_SENT } from "../../../events";
+import {
+  INTEGRATION_EVENT_SEARCH_SENT,
+  INTEGRATION_EVENT_OVERLAY_HIDE,
+  INTEGRATION_EVENT_OVERLAY_SHOW
+} from "../../../events";
 import { updateQueryStringParam } from "./utils";
 
 import { connectPubSub } from "./connectPubSub";
+
+const ESCAPE_KEY_CODE = 27;
 
 export const connector = (
   pubsub: { publish: PubFn; subscribe: SubFn },
@@ -87,6 +95,13 @@ export const connector = (
       ) {
         instant.values.set({ q: search.values.get().q });
       }
+
+    case "overlay":
+      window.document.addEventListener("keydown", (event: KeyboardEvent) => {
+        if (event.keyCode === ESCAPE_KEY_CODE) {
+          publish(INTEGRATION_EVENT_OVERLAY_HIDE);
+        }
+      });
 
       break;
 

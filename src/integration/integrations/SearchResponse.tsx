@@ -1,6 +1,7 @@
 import * as React from "react";
 // @ts-ignore: module missing defintion file
 import idx from "idx";
+import { cx, css } from "emotion";
 
 import {
   Filter,
@@ -40,10 +41,18 @@ export class SearchResponse extends React.Component<ISearchResponseProps> {
 
     return (
       <Response>
-        <div className="sj-pipeline-response">
+        <div
+          className={cx(
+            "sj-pipeline-response",
+            css({ display: "flex", flexDirection: "column", height: "100%" })
+          )}
+        >
           {tabs}
           <Summary />
-          <Results showImages={showImages} />
+          <Results
+            showImages={showImages}
+            styles={{ container: { overflow: "scroll" } }}
+          />
           <Paginator />
         </div>
       </Response>

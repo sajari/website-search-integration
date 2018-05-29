@@ -5,15 +5,22 @@ import * as ReactDOM from "react-dom";
 import { Filter } from "sajari-react";
 
 import { IIntegrationConfig } from "../../config";
+import { PubFn, SubFn } from "../../lib/pubsub";
 import { Input } from "../integrations/Input";
 import { Inline } from "../integrations/Inline";
 import { SearchResponse } from "../integrations/SearchResponse";
 import { DynamicContentResponse } from "../integrations/DynamicContentResponse";
+import { Overlay, setOverlayControls } from "../integrations/Overlay";
 
 type ComponentFn = () => React.ReactPortal;
 
 export const createComponents = (
   config: IIntegrationConfig,
+  pubsub: { publish: PubFn; subscribe: SubFn },
+  pipelines: {
+    search?: { pipeline: any; values: any };
+    instant?: { pipeline: any; values: any };
+  },
   tabsFilter?: Filter
 ) => {
   let components: ComponentFn[] = [];
@@ -51,7 +58,27 @@ export const createComponents = (
       break;
 
     case "overlay":
-      throw new Error("overlay not set");
+      const overlayContainer = document.createElement("div");
+      overlayContainer.id = "sj-overlay-holder";
+      window.document.body.appendChild(overlayContainer);
+
+      const controls = setOverlayControls(
+        config,
+        tabsFilter,
+        pubsub,
+        pipelines
+      );
+
+      components.push(() =>
+        ReactDOM.createPortal(
+          <Overlay
+            config={config}
+            tabsFilter={tabsFilter}
+            setOverlayControls={controls}
+          />,
+          overlayContainer
+        )
+      );
 
     default:
       break;

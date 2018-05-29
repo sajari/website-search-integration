@@ -35,7 +35,12 @@ export const initialize = (
     idx(search, _ => _.values) || idx(instant, _ => _.values)
   );
 
-  const Components = createComponents(config, tabsFilter);
+  const Components = createComponents(
+    config,
+    { publish, subscribe },
+    { search, instant },
+    tabsFilter
+  );
   // @ts-ignore
   Components.displayName = "Components";
 

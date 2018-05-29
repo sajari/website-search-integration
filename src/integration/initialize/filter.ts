@@ -9,7 +9,8 @@ import {
 } from "sajari-react";
 import { IIntegrationConfig } from "../../config";
 
-let disableTabFacetSearch = false;
+// @ts-ignore
+window.SJ_TAB_FACET_SEARCH_DISABLED = false;
 
 export const setUpTabsFilters = (
   config: IIntegrationConfig,
@@ -32,7 +33,8 @@ export const setUpTabsFilters = (
     tabsFilter = new Filter(opts, [config.tabFilters.defaultTab]);
     tabsFilter.listen(EVENT_SELECTION_UPDATED, () => {
       // Perform a search when the tabs change
-      if (!disableTabFacetSearch) {
+      // @ts-ignore
+      if (!window.SJ_TAB_FACET_SEARCH_DISABLED) {
         values._emitUpdated();
         pipeline.search(values.get());
       }
@@ -45,9 +47,11 @@ export const setUpTabsFilters = (
         tabsFilter.get() !==
           (config.tabFilters as { [k: string]: any }).defaultTab
       ) {
-        disableTabFacetSearch = true;
+        // @ts-ignore
+        window.SJ_TAB_FACET_SEARCH_DISABLED = true;
         tabsFilter.set((config.tabFilters as { [k: string]: any }).defaultTab);
-        disableTabFacetSearch = false;
+        // @ts-ignore
+        window.SJ_TAB_FACET_SEARCH_DISABLED = false;
       }
     });
   }

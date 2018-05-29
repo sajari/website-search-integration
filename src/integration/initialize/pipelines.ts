@@ -84,8 +84,10 @@ export const initializePipelines = (config: IInitializePipelinesConfig) => {
     const { name, tracking, analytics } = search;
 
     searchPipeline = new Pipeline(
-      project,
-      collection,
+      {
+        project,
+        collection
+      },
       name,
       tracking,
       analytics
@@ -97,8 +99,10 @@ export const initializePipelines = (config: IInitializePipelinesConfig) => {
     const { name, tracking, analytics } = instant;
 
     instantPipeline = new Pipeline(
-      project,
-      collection,
+      {
+        project,
+        collection
+      },
       name,
       tracking,
       analytics
