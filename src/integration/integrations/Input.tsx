@@ -5,51 +5,27 @@ import {
   // @ts-ignore: module missing defintion file
 } from "sajari-react";
 
-export interface IInputProps {
+export interface InputProps {
   config: { [k: string]: any };
+  autoComplete: boolean;
 }
 
-export class Input extends React.Component<IInputProps> {
-  render() {
-    const { config } = this.props;
-    const { inputPlaceholder, inputAutoFocus } = config;
+export class Input extends React.Component<InputProps> {
+  public render() {
+    const { config, autoComplete } = this.props;
+    const { mode, inputPlaceholder, inputAutoFocus } = config;
+
+    const removeMarginBottom = mode === "search-box" || mode === "inline";
 
     return (
       <SDKInput
-        autocomplete="dropdown"
+        autocomplete={autoComplete ? "dropdown" : false}
         autoFocus={inputAutoFocus}
         placeholder={inputPlaceholder}
-        styles={{ container: { marginBottom: 0 } }}
+        styles={
+          removeMarginBottom ? { container: { marginBottom: 0 } } : undefined
+        }
       />
     );
-
-    // // if there's no instant pipeline use non instant input component
-    // if (!instantPipeline) {
-    //   return (
-    //     <div className="sj-search-holder-outer">
-    //       <div className="sj-search-holder-inner">
-    //         <SDKInput
-    //           autoFocus={inputAutoFocus}
-    //           placeholder={inputPlaceholder}
-    //           values={values}
-    //           pipeline={pipeline}
-    //           instant={false}
-    //           className="sj-search-bar-input-common"
-    //         />
-    //       </div>
-    //     </div>
-    //   );
-    // }
-
-    // return (
-    //   <AutocompleteDropdownBase
-    //     autoFocus={inputAutoFocus}
-    //     placeholder={inputPlaceholder}
-    //     values={instantValues}
-    //     pipeline={instantPipeline}
-    //     onForceSearch={this.handleUserForceSearch}
-    //     maxSuggestions={maxSuggestions}
-    //   />
-    // );
   }
 }

@@ -12,10 +12,14 @@ export const loaded = (window: Window, fn: CallbackFn) => {
   const removeListener = modern ? "removeEventListener" : "detachEvent";
   const pre = modern ? "" : "on";
 
-  const init = function(event: Event) {
-    if (event.type == "readystatechange" && document.readyState != "complete")
+  const init = (event: Event) => {
+    if (
+      event.type === "readystatechange" &&
+      document.readyState !== "complete"
+    ) {
       return;
-    ((event.type == "load" ? window : document) as { [k: string]: any })[
+    }
+    ((event.type === "load" ? window : document) as { [k: string]: any })[
       removeListener
     ](pre + event.type, init, false);
 
@@ -25,7 +29,7 @@ export const loaded = (window: Window, fn: CallbackFn) => {
     }
   };
 
-  const poll = function() {
+  const poll = () => {
     try {
       // @ts-ignore
       root.doScroll("left");
@@ -36,15 +40,19 @@ export const loaded = (window: Window, fn: CallbackFn) => {
     init(new Event("poll"));
   };
 
-  if (document.readyState == "complete") {
+  if (document.readyState === "complete") {
     fn(window, "lazy");
   } else {
     // @ts-ignore
     if (!modern && root.doScroll) {
       try {
         top = !window.frameElement;
+        // tslint:disable-next-line
       } catch (e) {}
-      if (top) poll();
+
+      if (top) {
+        poll();
+      }
     }
     (document as { [k: string]: any })[addListener](
       pre + "DOMContentLoaded",

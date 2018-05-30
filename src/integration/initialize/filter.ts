@@ -1,19 +1,19 @@
 import {
-  Pipeline,
-  Values,
-  Filter,
   CombineFilters,
   EVENT_SELECTION_UPDATED,
-  EVENT_VALUES_UPDATED
+  EVENT_VALUES_UPDATED,
+  Filter,
+  Pipeline,
+  Values
   // @ts-ignore: module missing defintions file
 } from "sajari-react";
-import { IIntegrationConfig } from "../../config";
+import { IntegrationConfig } from "../../config";
 
 // @ts-ignore
 window.SJ_TAB_FACET_SEARCH_DISABLED = false;
 
 export const setUpTabsFilters = (
-  config: IIntegrationConfig,
+  config: IntegrationConfig,
   pipeline: Pipeline,
   values: Values
 ) => {
@@ -23,7 +23,7 @@ export const setUpTabsFilters = (
     return undefined;
   }
 
-  let tabsFilter: Filter | undefined = undefined;
+  let tabsFilter: Filter | undefined;
 
   if (config.tabFilters && config.tabFilters.defaultTab) {
     const opts: { [k: string]: Filter } = {};

@@ -1,32 +1,33 @@
 import {
-  Pipeline,
-  Values,
-  NoTracking,
   ClickTracking,
-  GoogleAnalytics
+  GoogleAnalytics,
+  NoTracking,
+  Pipeline,
+  Values
   // @ts-ignore: module missing defintions file
 } from "sajari-react";
 
-import { IIntegrationConfig } from "../../config";
+import { pipeline } from "stream";
+import { IntegrationConfig } from "../../config";
 
-export interface IPipelineConfig {
+export interface PipelineConfig {
   name: string;
   tracking: NoTracking | ClickTracking | undefined;
   analytics: GoogleAnalytics | any[] | undefined;
 }
 
-export interface IInitializePipelinesConfig {
+export interface InitializePipelinesConfig {
   project: string;
   collection: string;
-  search?: IPipelineConfig;
-  instant?: IPipelineConfig;
+  search?: PipelineConfig;
+  instant?: PipelineConfig;
 }
 
-export const createPipelineConfigs = (config: IIntegrationConfig) => {
+export const createPipelineConfigs = (config: IntegrationConfig) => {
   const { mode } = config;
 
-  let search: IPipelineConfig | undefined = undefined;
-  let instant: IPipelineConfig | undefined = undefined;
+  let search: PipelineConfig | undefined;
+  let instant: PipelineConfig | undefined;
 
   switch (mode) {
     case "search-box":
@@ -34,13 +35,13 @@ export const createPipelineConfigs = (config: IIntegrationConfig) => {
         name: "",
         tracking: new NoTracking(),
         analytics: []
-      };
+      } as PipelineConfig;
 
       instant = {
         name: config.instantPipeline as string,
         tracking: new NoTracking(),
         analytics: []
-      };
+      } as PipelineConfig;
       break;
 
     case "dynamic-content":
@@ -49,19 +50,19 @@ export const createPipelineConfigs = (config: IIntegrationConfig) => {
     case "inline":
     case "overlay":
       search = config.pipeline
-        ? {
+        ? ({
             name: config.pipeline as string,
             tracking: undefined,
             analytics: config.disableGA ? [] : undefined
-          }
+          } as PipelineConfig)
         : undefined;
 
       instant = config.instantPipeline
-        ? {
+        ? ({
             name: config.instantPipeline as string,
             tracking: search ? new NoTracking() : undefined,
             analytics: config.disableGA || search ? [] : undefined
-          }
+          } as PipelineConfig)
         : undefined;
       break;
 
@@ -72,7 +73,7 @@ export const createPipelineConfigs = (config: IIntegrationConfig) => {
   return { search, instant };
 };
 
-export const initializePipelines = (config: IInitializePipelinesConfig) => {
+export const initializePipelines = (config: InitializePipelinesConfig) => {
   const { project, collection, search, instant } = config;
 
   let searchPipeline = null;
@@ -85,8 +86,8 @@ export const initializePipelines = (config: IInitializePipelinesConfig) => {
 
     searchPipeline = new Pipeline(
       {
-        project,
-        collection
+        collection,
+        project
       },
       name,
       tracking,
@@ -100,8 +101,8 @@ export const initializePipelines = (config: IInitializePipelinesConfig) => {
 
     instantPipeline = new Pipeline(
       {
-        project,
-        collection
+        collection,
+        project
       },
       name,
       tracking,
@@ -125,5 +126,8 @@ export const initializePipelines = (config: IInitializePipelinesConfig) => {
             values: instantValues as Values
           }
         : undefined
+  } as {
+    search?: { pipeline: Pipeline; values: Values };
+    instant?: { pipeline: Pipeline; values: Values };
   };
 };

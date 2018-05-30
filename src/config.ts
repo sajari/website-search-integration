@@ -1,4 +1,4 @@
-export interface IIntegrationConfig {
+export interface IntegrationConfig {
   mode: string;
   project: string;
   collection: string;
@@ -29,22 +29,20 @@ export interface IIntegrationConfig {
 
   tabFilters?: {
     defaultTab: string;
-    tabs: { title: string; filter: string }[];
+    tabs: Array<{ title: string; filter: string }>;
   };
 }
 
 export const defaultConfig = {
-  pipeline: "website",
+  inputAutoFocus: false,
+  inputPlaceholder: "Search",
   instantPipeline: "autocomplete",
   maxSuggestions: 5,
-  inputPlaceholder: "Search",
-  inputAutoFocus: false,
-
-  values: {
-    resultsPerPage: 10
-  },
-
+  pipeline: "website",
   results: {
     showImages: false
+  },
+  values: {
+    resultsPerPage: 10
   }
 };

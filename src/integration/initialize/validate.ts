@@ -1,6 +1,6 @@
-import { IIntegrationConfig } from "../../config";
+import { IntegrationConfig } from "../../config";
 
-export const validateConfig = (config: IIntegrationConfig) => {
+export const validateConfig = (config: IntegrationConfig) => {
   if (!config) {
     throw new Error("no config provided");
   }

@@ -1,10 +1,10 @@
 // @ts-ignore: module missing defintions file
 import { flush } from "stackqueue";
 
-import loaded from "./lib/loaded";
-import { pub, sub, PubFn, SubFn } from "./lib/pubsub";
 import { initialize } from "./integration";
-import { mount, error } from "./utils";
+import loaded from "./lib/loaded";
+import { pub, PubFn, sub, SubFn } from "./lib/pubsub";
+import { error, mount } from "./utils";
 
 export const setup = (
   window: Window,
@@ -33,9 +33,9 @@ const create = (window: Window, type?: string) => {
   }
 
   // @ts-ignore: in our case sajari is a member of window
-  window.sajari.ui.forEach((s, i) => {
-    const publish = pub(i);
-    const subscribe = sub(i);
+  window.sajari.ui.forEach((stack, index) => {
+    const publish = pub(index);
+    const subscribe = sub(index);
 
     let configured = false;
     const isConfigured = () => configured;
@@ -50,24 +50,24 @@ const create = (window: Window, type?: string) => {
     );
 
     const methods = {
-      pub: publish,
-      sub: subscribe,
-      "search-box": integration,
+      "dynamic-content": integration,
       inline: integration,
       overlay: integration,
-      "dynamic-content": integration
+      pub: publish,
+      "search-box": integration,
+      sub: subscribe
     };
 
-    for (let i = 0; i < s.arr.length; i++) {
-      if (typeof s.arr[i][0] === "object") {
-        if (!s.arr[i][0].mode) {
+    for (let i = 0; i < stack.arr.length; i++) {
+      if (typeof stack.arr[i][0] === "object") {
+        if (!stack.arr[i][0].mode) {
           throw new Error("mode not found in config object");
         }
-        s.arr[i] = [s.arr[i][0].mode, s.arr[i][0]];
+        stack.arr[i] = [stack.arr[i][0].mode, stack.arr[i][0]];
       }
     }
 
-    const errors: any[] = flush(s, methods);
+    const errors: any[] = flush(stack, methods);
     if (errors.length > 0) {
       errors.forEach(error);
     }

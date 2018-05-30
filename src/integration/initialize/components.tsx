@@ -4,18 +4,18 @@ import * as ReactDOM from "react-dom";
 // @ts-ignore: module missing definintions file
 import { Filter } from "sajari-react";
 
-import { IIntegrationConfig } from "../../config";
+import { IntegrationConfig } from "../../config";
 import { PubFn, SubFn } from "../../lib/pubsub";
-import { Input } from "../integrations/Input";
-import { Inline } from "../integrations/Inline";
-import { SearchResponse } from "../integrations/SearchResponse";
 import { DynamicContentResponse } from "../integrations/DynamicContentResponse";
+import { Inline } from "../integrations/Inline";
+import { Input } from "../integrations/Input";
 import { Overlay, setOverlayControls } from "../integrations/Overlay";
+import { SearchResponse } from "../integrations/SearchResponse";
 
 type ComponentFn = () => React.ReactPortal;
 
 export const createComponents = (
-  config: IIntegrationConfig,
+  config: IntegrationConfig,
   pubsub: { publish: PubFn; subscribe: SubFn },
   pipelines: {
     search?: { pipeline: any; values: any };
@@ -23,13 +23,17 @@ export const createComponents = (
   },
   tabsFilter?: Filter
 ) => {
-  let components: ComponentFn[] = [];
+  const components: ComponentFn[] = [];
 
   const { mode } = config;
   switch (mode) {
     case "search-box":
+      const { instant } = pipelines;
       components.push(() =>
-        ReactDOM.createPortal(<Input config={config} />, config.attachSearchBox)
+        ReactDOM.createPortal(
+          <Input config={config} autoComplete={instant !== undefined} />,
+          config.attachSearchBox
+        )
       );
       break;
 

@@ -1,15 +1,15 @@
 import idx from "idx";
 
 // @ts-ignore: module missing deifintions file
-import { Pipeline, Values, EVENT_SEARCH_SENT } from "sajari-react";
+import { EVENT_SEARCH_SENT, Pipeline, Values } from "sajari-react";
 
-import { IIntegrationConfig } from "../../../config";
-import { PubFn, SubFn } from "../../../lib/pubsub";
+import { IntegrationConfig } from "../../../config";
 import {
-  INTEGRATION_EVENT_SEARCH_SENT,
   INTEGRATION_EVENT_OVERLAY_HIDE,
-  INTEGRATION_EVENT_OVERLAY_SHOW
+  INTEGRATION_EVENT_OVERLAY_SHOW,
+  INTEGRATION_EVENT_SEARCH_SENT
 } from "../../../events";
+import { PubFn, SubFn } from "../../../lib/pubsub";
 import { updateQueryStringParam } from "./utils";
 
 import { connectPubSub } from "./connectPubSub";
@@ -22,7 +22,7 @@ export const connector = (
     search?: { pipeline: Pipeline; values: Values };
     instant?: { pipeline: Pipeline; values: Values };
   },
-  config: IIntegrationConfig
+  config: IntegrationConfig
 ) => {
   const { mode } = config;
   const { publish, subscribe } = pubsub;
@@ -78,7 +78,7 @@ export const connector = (
         );
       }
 
-      if (instant)
+      if (instant) {
         connectPubSub(
           publish,
           subscribe,
@@ -86,6 +86,7 @@ export const connector = (
           instant.pipeline,
           instant.values
         );
+      }
 
       if (
         search &&

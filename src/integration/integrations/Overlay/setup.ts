@@ -2,17 +2,19 @@ import idx from "idx";
 // @ts-ignore: module missing defintion file
 import { Filter } from "sajari-react";
 
-import { PubFn, SubFn } from "../../../lib/pubsub";
+import { IntegrationConfig } from "../../../config";
 import {
-  INTEGRATION_EVENT_OVERLAY_SHOW,
-  INTEGRATION_EVENT_OVERLAY_HIDE
+  INTEGRATION_EVENT_OVERLAY_HIDE,
+  INTEGRATION_EVENT_OVERLAY_SHOW
 } from "../../../events";
-import { IIntegrationConfig } from "../../../config";
+import { PubFn, SubFn } from "../../../lib/pubsub";
 
-export type Controls = { [k: string]: () => void };
+export interface Controls {
+  [k: string]: () => void;
+}
 
 export const setOverlayControls = (
-  config: IIntegrationConfig,
+  config: IntegrationConfig,
   tabsFilter: Filter,
   pubsub: { publish: PubFn; subscribe: SubFn },
   pipelines: {

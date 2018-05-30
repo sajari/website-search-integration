@@ -1,36 +1,36 @@
-import * as React from "react";
+import { css, cx } from "emotion";
 // @ts-ignore: module missing defintion file
 import idx from "idx";
-import { cx, css } from "emotion";
+import * as React from "react";
 
 import {
+  EVENT_RESPONSE_UPDATED,
   Filter,
-  Response,
-  Summary,
-  Results,
   Paginator,
-  Tabs,
-  EVENT_RESPONSE_UPDATED
+  Response,
+  Results,
+  Summary,
+  Tabs
   // @ts-ignore: module missing defintion file
 } from "sajari-react";
 
-import { IIntegrationConfig } from "../../config";
+import { IntegrationConfig } from "../../config";
 
-export interface ISearchResponseProps {
-  config: IIntegrationConfig;
+export interface SearchResponseProps {
+  config: IntegrationConfig;
   tabsFilter: Filter;
 }
 
-export class SearchResponse extends React.Component<ISearchResponseProps> {
-  render() {
+export class SearchResponse extends React.Component<SearchResponseProps> {
+  public render() {
     const { config, tabsFilter } = this.props;
 
     let tabs = null;
     if (config.tabFilters) {
       const tabsFacetMap = config.tabFilters.tabs.map(
         (t: { title: string }) => ({
-          name: t.title,
-          display: t.title
+          display: t.title,
+          name: t.title
         })
       );
       tabs = <Tabs tabs={tabsFacetMap} filter={tabsFilter} />;

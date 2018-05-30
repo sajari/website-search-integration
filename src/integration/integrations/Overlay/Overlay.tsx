@@ -1,38 +1,37 @@
+import { css } from "emotion";
 import * as React from "react";
 // @ts-ignore: module missing defintion file
-import { Overlay as OverlayContainer, Filter } from "sajari-react";
-import { css } from "emotion";
+import { Filter, Overlay as OverlayContainer } from "sajari-react";
 
-import { IIntegrationConfig } from "../../../config";
+import { IntegrationConfig } from "../../../config";
 
 import { Input } from "../Input";
 import { SearchResponse } from "../SearchResponse";
 
-export interface IOverlayProps {
-  config: IIntegrationConfig;
+export interface OverlayProps {
+  config: IntegrationConfig;
   tabsFilter: Filter;
   isActive?: boolean;
 
   setOverlayControls: (obj: { [k: string]: any }) => { [k: string]: any };
 }
 
-export class Overlay extends React.Component<IOverlayProps> {
+export class Overlay extends React.Component<OverlayProps> {
   public state = { active: false };
-  private hide = () => {};
 
-  componentDidMount() {
+  public componentDidMount() {
     const { isActive, setOverlayControls } = this.props;
     this.setState(state => ({ ...state, active: isActive }));
 
     const controls = setOverlayControls({
-      show: () => this.setState({ active: true }),
-      hide: () => this.setState({ active: false })
+      hide: () => this.setState({ active: false }),
+      show: () => this.setState({ active: true })
     });
 
     this.hide = controls.hide;
   }
 
-  render() {
+  public render() {
     const { config, tabsFilter } = this.props;
     const { active } = this.state;
     return (
@@ -40,7 +39,7 @@ export class Overlay extends React.Component<IOverlayProps> {
         <div>
           <div className="sj-logo" onClick={this.hide} />
           <div>
-            <Input config={config} />
+            <Input config={config} autoComplete={true} />
           </div>
           {/* <Close onClick={this.hide} closeOverlay={this.hide} /> */}
         </div>
@@ -50,4 +49,7 @@ export class Overlay extends React.Component<IOverlayProps> {
       </OverlayContainer>
     );
   }
+
+  // tslint:disable-next-line
+  private hide = () => {};
 }

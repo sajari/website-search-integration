@@ -1,20 +1,20 @@
+import idx from "idx";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import idx from "idx";
 
+import { defaultConfig, IntegrationConfig } from "../../config";
 import { PubFn, SubFn } from "../../lib/pubsub";
-import { IIntegrationConfig, defaultConfig } from "../../config";
 
-import { validateConfig } from "./validate";
-import { initializePipelines, createPipelineConfigs } from "./pipelines";
-import { pubsubConnector } from "./pubsub";
-import { setUpTabsFilters } from "./filter";
 import { createComponents } from "./components";
+import { setUpTabsFilters } from "./filter";
+import { createPipelineConfigs, initializePipelines } from "./pipelines";
+import { pubsubConnector } from "./pubsub";
+import { validateConfig } from "./validate";
 
 import { Integration } from "../containers/Integration";
 
 export const initialize = (
-  config: IIntegrationConfig,
+  config: IntegrationConfig,
   publish: PubFn,
   subscribe: SubFn
 ) => {
@@ -52,6 +52,8 @@ export const initialize = (
 
   return () => (
     <Integration
+      mode={config.mode}
+      publish={publish}
       search={search && { ...search, config: providerConfig }}
       instant={instant && { ...instant, config: providerConfig }}
     >

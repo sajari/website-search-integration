@@ -1,17 +1,17 @@
-import * as React from "react";
 import idx from "idx";
+import * as React from "react";
 
 // @ts-ignore: module missing defintions file
 import { Results } from "sajari-react";
 
-import { IIntegrationConfig } from "../../config";
+import { IntegrationConfig } from "../../config";
 
-export interface IDynamicContentResponse {
-  config: IIntegrationConfig;
+export interface DynamicContentResponseProps {
+  config: IntegrationConfig;
 }
 
 export const DynamicContentResponse: React.SFC<
-  IDynamicContentResponse
+  DynamicContentResponseProps
 > = props => {
   const { config } = props;
 
