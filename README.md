@@ -11,6 +11,14 @@ interfaces which can be copy-pasted directly into your website.
 This website search integration is built using the
 [Sajari React SDK](https://www.github.com/sajari/sajari-sdk-react).
 
+## Table of Contents
+
+* [Instructions](#instructions)
+* [Styling](#styling)
+* [Integrations](#integrations)
+* [Configuration](#configuration)
+* [Filters](#filters)
+
 ## Instructions
 
 This integration requires a website collection. You can
