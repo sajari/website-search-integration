@@ -210,6 +210,8 @@ The generated search interfaces are configured using a JSON object. Generating
 an interface from the console will prefill the configuration for you, setting
 default values where necessary.
 
+By default search boxes have instant enabled and use the pipeline specified by `instantPipeline`. To disable instant searching, set the value of `instantPipeline` to `null`.
+
 **General configuration**
 
 | Property         |        Default        | Description                                                                        |
