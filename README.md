@@ -218,7 +218,7 @@ The generated search interfaces are configured using a JSON object. Generating
 an interface from the console will prefill the configuration for you, setting
 default values where necessary.
 
-By default search boxes have instant enabled and use the pipeline specified by `instantPipeline`. To disable instant searching, set the value of `instantPipeline` to `null`.
+By default search boxes have instant enabled and use the pipeline specified by `instantPipeline`. To disable instant searching, set the value of `instantPipeline` to `""`.
 
 **General configuration**
 
@@ -226,8 +226,8 @@ By default search boxes have instant enabled and use the pipeline specified by `
 | :--------------- | :-------------------: | :--------------------------------------------------------------------------------- |
 | project          |  `"<your project>"`   | Project to search                                                                  |
 | collection       | `"<your collection>"` | Collection to search                                                               |
-| pipeline         |      `"website"`      | Pipeline to query when pressing enter or clicking a suggestion                     |
-| instantPipeline  |   `"autocomplete"`    | Pipeline to query when typing                                                      |
+| pipeline         |      `"website"`      | Pipeline to query when pressing enter or clicking an autocompleted suggestion                     |
+| instantPipeline  |   `"autocomplete"`    | Pipeline to query when typing, set to `""` to disable                                                      |
 | maxSuggestions   |         `"5"`         | Sets how many autocomplete suggestions are shown in the box below the search input |
 | inputPlaceholder |      `"Search"`       | Placeholder text in the search input box                                           |
 | inputAutoFocus   |        `false`        | Focus the searc input html element on initialisation                               |
@@ -240,6 +240,7 @@ By default search boxes have instant enabled and use the pipeline specified by `
 | :------------- | :----------------: | :------------------------------------------------------------------------ |
 | q              | `getUrlParam("q")` | The initial value of `q` in the pipeline, commonly used as the query text |
 | resultsPerPage |       `"10"`       | Number of results to show per page                                        |
+| filter         |       `""`         | [Filter expression](#filters) to apply to results                         |
 
 **Results configuration**
 
@@ -423,7 +424,7 @@ For more information on building filter expressions, see [filters](#filters).
 
 ## Filters
 
-Filters are used to limit the pages that are returned in a search.
+Filters are used to limit the pages that are returned in a search.  Filters can be used in [Tabs](#tab-filters) or by setting the `filter` property in the `values` configuration attribute (see [Configuration](#configuration).
 
 Our crawler extracts common fields when it parses web pages (such as the first
 and second directories of URLs), which make filtering much easier. It's well
