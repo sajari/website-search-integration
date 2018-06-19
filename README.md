@@ -424,7 +424,7 @@ For more information on building filter expressions, see [filters](#filters).
 
 ## Filters
 
-Filters are used to limit the pages that are returned in a search.  Filters can be used in [Tabs](#tab-filters) or by setting the `filter` property in the `values` configuration attribute (see [Configuration](#configuration).
+Filters are used to limit the pages that are returned in a search.  Filters can be used in [Tabs](#tab-filters) or by setting the `filter` property in the `values` configuration attribute (see [Configuration](#configuration)).
 
 Our crawler extracts common fields when it parses web pages (such as the first
 and second directories of URLs), which make filtering much easier. It's well
