@@ -1,7 +1,7 @@
 module.exports = {
   plugins: {
     autoprefixer: {
-      browsers: "ie > 9"
+      browsers: [">0.25%", "ie > 9", "not op_mini all"]
     },
     cssnano: {}
   }
