@@ -2,7 +2,11 @@
   "presets": [
     ["@babel/preset-env", {
       "targets": {
-        "browser": "ie > 9"
+        "browsers": [
+          ">0.25%",
+          "ie > 9",
+          "not op_mini all"
+        ]
       }
     }],
     "@babel/preset-react",
