@@ -1,19 +1,7 @@
-<<<<<<< HEAD:src/utils.js
-const updateQueryStringParam = (key, value) => {
-  const baseUrl = [
-    window.location.protocol,
-    "//",
-    window.location.host,
-    window.location.pathname
-  ].join("");
-  const urlQueryString = document.location.search;
-  const newParam = key + "=" + encodeURIComponent(value);
-=======
 export const updateQueryStringParam = (key: string, value: string) => {
   const baseUrl = [window.location.origin, window.location.pathname].join("");
   const urlQueryString = window.location.search;
   const newParam = `${key}=${value}`;
->>>>>>> package: update to typescript, rework internals:src/integration/initialize/pubsub/utils.ts
 
   let params = "?" + newParam;
 
