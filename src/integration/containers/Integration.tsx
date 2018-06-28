@@ -1,8 +1,7 @@
 import idx from "idx";
 import * as React from "react";
 
-// @ts-ignore: module missing defintions file
-import { Pipeline, Provider, Values } from "sajari-react";
+import { Pipeline, Provider, Values } from "@sajari/sdk-react";
 import { INTEGRATION_EVENT_OVERLAY_SHOW } from "../../events";
 import { PubFn } from "../../lib/pubsub";
 import { ErrorBoundary } from "./ErrorBoundary";
@@ -41,7 +40,7 @@ export class Integration extends React.Component<IntergrationProps> {
     const { search, instant, children } = this.props;
     return (
       <ErrorBoundary>
-        <Provider search={search} instant={instant}>
+        <Provider search={search as any} instant={instant as any}>
           {children}
         </Provider>
       </ErrorBoundary>

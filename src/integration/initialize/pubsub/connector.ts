@@ -1,7 +1,7 @@
 import idx from "idx";
 
 // @ts-ignore: module missing deifintions file
-import { EVENT_SEARCH_SENT, Pipeline, Values } from "sajari-react";
+import { EVENT_SEARCH_SENT, Pipeline, Values } from "@sajari/sdk-react";
 
 import { IntegrationConfig } from "../../../config";
 import {

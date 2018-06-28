@@ -1,7 +1,6 @@
 import { css } from "emotion";
 import * as React from "react";
-// @ts-ignore: module missing defintion file
-import { Filter, Overlay as OverlayContainer } from "sajari-react";
+import { Filter, Overlay as OverlayContainer } from "@sajari/sdk-react";
 
 import { IntegrationConfig } from "../../../config";
 
@@ -10,7 +9,7 @@ import { SearchResponse } from "../SearchResponse";
 
 export interface OverlayProps {
   config: IntegrationConfig;
-  tabsFilter: Filter;
+  tabsFilter?: Filter;
   isActive?: boolean;
 
   setOverlayControls: (obj: { [k: string]: any }) => { [k: string]: any };

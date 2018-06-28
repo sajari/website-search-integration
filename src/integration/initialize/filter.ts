@@ -5,8 +5,7 @@ import {
   Filter,
   Pipeline,
   Values
-  // @ts-ignore: module missing defintions file
-} from "sajari-react";
+} from "@sajari/sdk-react";
 import { IntegrationConfig } from "../../config";
 
 // @ts-ignore
@@ -26,7 +25,7 @@ export const setUpTabsFilters = (
   let tabsFilter: Filter | undefined;
 
   if (config.tabFilters && config.tabFilters.defaultTab) {
-    const opts: { [k: string]: Filter } = {};
+    const opts: { [k: string]: string } = {};
     config.tabFilters.tabs.forEach(t => {
       opts[t.title] = t.filter;
     });
@@ -35,6 +34,7 @@ export const setUpTabsFilters = (
       // Perform a search when the tabs change
       // @ts-ignore
       if (!window.SJ_TAB_FACET_SEARCH_DISABLED) {
+        // @ts-ignore: internal use
         values._emitUpdated();
         pipeline.search(values.get());
       }
@@ -44,12 +44,16 @@ export const setUpTabsFilters = (
       // If the query is empty, reset the tab back to the default if it's not already
       if (
         !values.get().q &&
+        tabsFilter !== undefined &&
         tabsFilter.get() !==
           (config.tabFilters as { [k: string]: any }).defaultTab
       ) {
         // @ts-ignore
         window.SJ_TAB_FACET_SEARCH_DISABLED = true;
-        tabsFilter.set((config.tabFilters as { [k: string]: any }).defaultTab);
+        tabsFilter.set(
+          (config.tabFilters as { [k: string]: any }).defaultTab,
+          true
+        );
         // @ts-ignore
         window.SJ_TAB_FACET_SEARCH_DISABLED = false;
       }
@@ -60,24 +64,24 @@ export const setUpTabsFilters = (
   if ((config.values as { [k: string]: string | number }).filter) {
     initialFilter = new Filter(
       {
-        initialFilter: (config.values as { [k: string]: string | number })
-          .filter
+        initialFilter: (config.values as { [k: string]: string }).filter
       },
       "initialFilter"
     );
-    delete (config.values as { [k: string]: string | number }).filter;
+    delete (config.values as { [k: string]: string }).filter;
   }
-  values.set(config.values);
+  // @ts-ignore: fixed in next rc
+  values.set(config.values || {});
 
-  const filter = new CombineFilters(
-    [tabsFilter, initialFilter].filter(Boolean)
-  );
+  const filter = CombineFilters([tabsFilter, initialFilter].filter(
+    x => !!x
+  ) as Filter[]);
   values.set({ filter: () => filter.filter() });
 
   // Perform a search if the q parameter is set
-  const query = Boolean((config.values as { [k: string]: string | number }).q);
+  const query = Boolean((config.values as { [k: string]: string }).q);
   if (query) {
-    values.set({ q: (config.values as { [k: string]: string | number }).q });
+    values.set({ q: (config.values as { [k: string]: string }).q });
     // this might be important ;)
     // instantPipeline.getValues().set({ q: config.values.q });
     pipeline.search(values.get());

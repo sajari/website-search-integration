@@ -4,10 +4,8 @@ import {
   NoTracking,
   Pipeline,
   Values
-  // @ts-ignore: module missing defintions file
-} from "sajari-react";
+} from "@sajari/sdk-react";
 
-import { pipeline } from "stream";
 import { IntegrationConfig } from "../../config";
 
 export interface PipelineConfig {
@@ -91,6 +89,7 @@ export const initializePipelines = (config: InitializePipelinesConfig) => {
       },
       name,
       tracking,
+      // @ts-ignore: not actually sure why this doesn't like this type def
       analytics
     );
     searchValues = new Values();
@@ -106,6 +105,7 @@ export const initializePipelines = (config: InitializePipelinesConfig) => {
       },
       name,
       tracking,
+      // @ts-ignore: not actually sure why this doesn't like this type def
       analytics
     );
     instantValues = new Values();

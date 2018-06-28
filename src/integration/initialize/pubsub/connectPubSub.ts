@@ -9,8 +9,7 @@ import {
   EVENT_VALUES_UPDATED,
   Pipeline,
   Values
-  // @ts-ignore: module missing defintions file
-} from "sajari-react";
+} from "@sajari/sdk-react";
 
 import { PubFn, SubFn } from "../../../lib/pubsub";
 
@@ -47,7 +46,7 @@ export const connectPubSub = (
     EVENT_VALUES_UPDATED,
     (
       changes: { [k: string]: any },
-      set: (vals: { [k: string]: string | undefined }) => void
+      set: (vals: { [k: string]: string }) => void
     ) => {
       pub(`${eventPrefix}.${INTEGRATION_EVENT_VALUES_UPDATED}`, changes, set);
     }
@@ -69,7 +68,7 @@ export const connectPubSub = (
     EVENT_VALUES_UPDATED,
     (
       changes: { [k: string]: any },
-      set: (vals: { [k: string]: string | undefined }) => void
+      set: (vals: { [k: string]: string }) => void
     ) => {
       // @ts-ignore: idx
       if (!idx(changes, _ => _.page) && values.get().page !== "1") {
@@ -80,14 +79,17 @@ export const connectPubSub = (
 
   if (connectAnalytics) {
     const analytics = pipeline.getAnalytics();
+    // @ts-ignore: fixed in next rc
     analytics.listen(EVENT_ANALYTICS_PAGE_CLOSED, (body: any) => {
       pub(`${eventPrefix}.${INTEGRATION_EVENT_PAGE_CLOSED}`, body);
       pub(`${eventPrefix}.${INTEGRATION_EVENT_SEARCH}`, body);
     });
+    // @ts-ignore: fixed in next rc
     analytics.listen(EVENT_ANALYTICS_BODY_RESET, (body: any) => {
       pub(`${eventPrefix}.${INTEGRATION_EVENT_QUERY_RESET}`, body);
       pub(`${eventPrefix}.${INTEGRATION_EVENT_SEARCH}`, body);
     });
+    // @ts-ignore: fixed in next rc
     analytics.listen(EVENT_ANALYTICS_RESULT_CLICKED, (body: any) => {
       pub(`${eventPrefix}.${INTEGRATION_EVENT_RESULT_CLICKED}`, body);
       pub(`${eventPrefix}.${INTEGRATION_EVENT_SEARCH}`, body);

@@ -11,14 +11,13 @@ import {
   Results,
   Summary,
   Tabs
-  // @ts-ignore: module missing defintion file
-} from "sajari-react";
+} from "@sajari/sdk-react";
 
 import { IntegrationConfig } from "../../config";
 
 export interface SearchResponseProps {
   config: IntegrationConfig;
-  tabsFilter: Filter;
+  tabsFilter?: Filter;
 }
 
 export class SearchResponse extends React.Component<SearchResponseProps> {
@@ -26,7 +25,7 @@ export class SearchResponse extends React.Component<SearchResponseProps> {
     const { config, tabsFilter } = this.props;
 
     let tabs = null;
-    if (config.tabFilters) {
+    if (config.tabFilters && tabsFilter) {
       const tabsFacetMap = config.tabFilters.tabs.map(
         (t: { title: string }) => ({
           display: t.title,
@@ -37,7 +36,9 @@ export class SearchResponse extends React.Component<SearchResponseProps> {
     }
 
     // @ts-ignore: idx
-    const showImages = idx(config, _ => _.results.showImages);
+    const showImages = idx(config, _ => _.results.showImages) as
+      | boolean
+      | undefined;
 
     return (
       <Response>

@@ -1,8 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-// @ts-ignore: module missing definintions file
-import { Filter } from "sajari-react";
+import { Filter } from "@sajari/sdk-react";
 
 import { IntegrationConfig } from "../../config";
 import { PubFn, SubFn } from "../../lib/pubsub";
@@ -68,9 +67,9 @@ export const createComponents = (
 
       const controls = setOverlayControls(
         config,
-        tabsFilter,
         pubsub,
-        pipelines
+        pipelines,
+        tabsFilter
       );
 
       components.push(() =>

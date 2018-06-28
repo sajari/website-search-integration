@@ -1,6 +1,5 @@
 import idx from "idx";
-// @ts-ignore: module missing defintion file
-import { Filter } from "sajari-react";
+import { Filter } from "@sajari/sdk-react";
 
 import { IntegrationConfig } from "../../../config";
 import {
@@ -15,12 +14,12 @@ export interface Controls {
 
 export const setOverlayControls = (
   config: IntegrationConfig,
-  tabsFilter: Filter,
   pubsub: { publish: PubFn; subscribe: SubFn },
   pipelines: {
     search?: { pipeline: any; values: any };
     instant?: { pipeline: any; values: any };
-  }
+  },
+  tabsFilter?: Filter
 ) => (controls: Controls) => {
   const show = () => {
     window.document.body.style.overflow = "hidden";
@@ -48,10 +47,10 @@ export const setOverlayControls = (
       instantValues.set({ q: undefined, "q.override": undefined });
       instantPipeline.clearResponse(instantValues.get());
     }
-    if (config.tabFilters && config.tabFilters.defaultTab) {
+    if (config.tabFilters && tabsFilter && config.tabFilters.defaultTab) {
       // @ts-ignore
       window.SJ_TAB_FACET_SEARCH_DISABLED = true;
-      tabsFilter.set(config.tabFilters.defaultTab);
+      tabsFilter.set(config.tabFilters.defaultTab, true);
       // @ts-ignore
       window.SJ_TAB_FACET_SEARCH_DISABLED = false;
     }

@@ -2,7 +2,7 @@ import idx from "idx";
 import * as React from "react";
 
 // @ts-ignore: module missing defintions file
-import { Results } from "sajari-react";
+import { Results } from "@sajari/sdk-react";
 
 import { IntegrationConfig } from "../../config";
 
@@ -16,7 +16,9 @@ export const DynamicContentResponse: React.SFC<
   const { config } = props;
 
   // @ts-ignore: idx
-  const showImages = idx(config, _ => _.results.showImages);
+  const showImages = idx(config, _ => _.results.showImages) as
+    | boolean
+    | undefined;
 
   return (
     <div className="sj-pipeline-response sj-dynamic-content-response">
