@@ -1,7 +1,5 @@
 import idx from "idx";
 import * as React from "react";
-
-// @ts-ignore: module missing defintions file
 import { Results } from "@sajari/sdk-react";
 
 import { IntegrationConfig } from "../../config";

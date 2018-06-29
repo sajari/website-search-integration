@@ -79,17 +79,14 @@ export const connectPubSub = (
 
   if (connectAnalytics) {
     const analytics = pipeline.getAnalytics();
-    // @ts-ignore: fixed in next rc
     analytics.listen(EVENT_ANALYTICS_PAGE_CLOSED, (body: any) => {
       pub(`${eventPrefix}.${INTEGRATION_EVENT_PAGE_CLOSED}`, body);
       pub(`${eventPrefix}.${INTEGRATION_EVENT_SEARCH}`, body);
     });
-    // @ts-ignore: fixed in next rc
     analytics.listen(EVENT_ANALYTICS_BODY_RESET, (body: any) => {
       pub(`${eventPrefix}.${INTEGRATION_EVENT_QUERY_RESET}`, body);
       pub(`${eventPrefix}.${INTEGRATION_EVENT_SEARCH}`, body);
     });
-    // @ts-ignore: fixed in next rc
     analytics.listen(EVENT_ANALYTICS_RESULT_CLICKED, (body: any) => {
       pub(`${eventPrefix}.${INTEGRATION_EVENT_RESULT_CLICKED}`, body);
       pub(`${eventPrefix}.${INTEGRATION_EVENT_SEARCH}`, body);

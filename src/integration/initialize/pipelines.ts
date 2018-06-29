@@ -43,6 +43,13 @@ export const createPipelineConfigs = (config: IntegrationConfig) => {
       break;
 
     case "dynamic-content":
+      search = config.pipeline
+        ? ({
+            name: config.pipeline as string,
+            tracking: undefined,
+            analytics: config.disableGA ? [] : undefined
+          } as PipelineConfig)
+        : undefined;
       break;
 
     case "inline":

@@ -9,6 +9,7 @@ export interface IntegrationConfig {
   inputAutoFocus?: boolean;
 
   urlQueryParam?: string;
+  searchOnLoad?: boolean;
 
   attachSearchBox: Element;
   attachSearchResponse: Element;

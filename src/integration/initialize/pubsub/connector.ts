@@ -1,6 +1,4 @@
 import idx from "idx";
-
-// @ts-ignore: module missing deifintions file
 import { EVENT_SEARCH_SENT, Pipeline, Values } from "@sajari/sdk-react";
 
 import { IntegrationConfig } from "../../../config";
@@ -45,18 +43,20 @@ export const connector = (
       break;
 
     case "dynamic-content":
-      // connectPubSub(
-      //   publish,
-      //   subscribe,
-      //   "pipeline",
-      //   (search as { pipeline: Pipeline }).pipeline,
-      //   (search as { values: Values }).values
-      // );
-      // search.values.set(config.values);
+      connectPubSub(
+        publish,
+        subscribe,
+        "pipeline",
+        (search as { pipeline: Pipeline }).pipeline,
+        (search as { values: Values }).values
+      );
+      (search as { values: Values }).values.set(config.values || {});
 
-      // if (config.searchOnLoad) {
-      //   pipeline.search(values.get());
-      // }
+      if (config.searchOnLoad) {
+        (search as { pipeline: Pipeline }).pipeline.search(
+          (search as { values: Values }).values.get()
+        );
+      }
       break;
 
     case "inline":
@@ -103,7 +103,6 @@ export const connector = (
           publish(INTEGRATION_EVENT_OVERLAY_HIDE);
         }
       });
-
       break;
 
     default:
