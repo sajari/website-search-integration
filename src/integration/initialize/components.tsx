@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { Filter } from "@sajari/sdk-react";
+import { Filter, Pipeline, Values } from "@sajari/sdk-react";
 
 import { IntegrationConfig } from "../../config";
 import { PubFn, SubFn } from "../../lib/pubsub";
@@ -13,13 +13,15 @@ import { SearchResponse } from "../integrations/SearchResponse";
 
 type ComponentFn = () => React.ReactPortal;
 
+export type Pipelines = {
+  search?: { pipeline: Pipeline; values: Values };
+  instant?: { pipeline: Pipeline; values: Values };
+};
+
 export const createComponents = (
   config: IntegrationConfig,
   pubsub: { publish: PubFn; subscribe: SubFn },
-  pipelines: {
-    search?: { pipeline: any; values: any };
-    instant?: { pipeline: any; values: any };
-  },
+  pipelines: Pipelines,
   tabsFilter?: Filter
 ) => {
   const components: ComponentFn[] = [];

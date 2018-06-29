@@ -27,13 +27,15 @@ export const initialize = (
     instant: pipelineConfigs.instant
   });
   pubsubConnector({ publish, subscribe }, { search, instant }, config);
-  const tabsFilter = setUpTabsFilters(
-    config,
+
+  const pipeline =
     // @ts-ignore: idx
-    idx(search, _ => _.pipeline) || idx(instant, _ => _.pipeline),
-    // @ts-ignore: idx
-    idx(search, _ => _.values) || idx(instant, _ => _.values)
-  );
+    idx(search, _ => _.pipeline) || idx(instant, _ => _.pipeline);
+  // @ts-ignore: idx
+  const values = idx(search, _ => _.values) || idx(instant, _ => _.values);
+
+  // @ts-ignore: idx
+  const tabsFilter = setUpTabsFilters(config, pipeline, values);
 
   const Components = createComponents(
     config,
@@ -41,7 +43,7 @@ export const initialize = (
     { search, instant },
     tabsFilter
   );
-  // @ts-ignore
+  // @ts-ignore: set display name for component
   Components.displayName = "Components";
 
   const providerConfig = {

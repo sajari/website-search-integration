@@ -1,10 +1,8 @@
 import { css, cx } from "emotion";
-// @ts-ignore: module missing defintion file
 import idx from "idx";
 import * as React from "react";
 
 import {
-  EVENT_RESPONSE_UPDATED,
   Filter,
   Paginator,
   Response,

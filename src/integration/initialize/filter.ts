@@ -7,6 +7,7 @@ import {
   Values
 } from "@sajari/sdk-react";
 import { IntegrationConfig } from "../../config";
+import { ValuesObject } from "@sajari/sdk-react/dist/controllers/values";
 
 // @ts-ignore
 window.SJ_TAB_FACET_SEARCH_DISABLED = false;
@@ -40,7 +41,7 @@ export const setUpTabsFilters = (
       }
     });
 
-    values.listen(EVENT_VALUES_UPDATED, (changes: { [k: string]: string }) => {
+    values.listen(EVENT_VALUES_UPDATED, (changes: ValuesObject) => {
       // If the query is empty, reset the tab back to the default if it's not already
       if (
         !values.get().q &&
@@ -70,22 +71,12 @@ export const setUpTabsFilters = (
     );
     delete (config.values as { [k: string]: string }).filter;
   }
-  // @ts-ignore: fixed in next rc
   values.set(config.values || {});
 
   const filter = CombineFilters([tabsFilter, initialFilter].filter(
     x => !!x
   ) as Filter[]);
   values.set({ filter: () => filter.filter() });
-
-  // Perform a search if the q parameter is set
-  const query = Boolean((config.values as { [k: string]: string }).q);
-  if (query) {
-    values.set({ q: (config.values as { [k: string]: string }).q });
-    // this might be important ;)
-    // instantPipeline.getValues().set({ q: config.values.q });
-    pipeline.search(values.get());
-  }
 
   return tabsFilter;
 };
