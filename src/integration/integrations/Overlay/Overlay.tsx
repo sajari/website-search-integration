@@ -6,6 +6,7 @@ import { IntegrationConfig } from "../../../config";
 
 import { Input } from "../Input";
 import { SearchResponse } from "../SearchResponse";
+import { Close } from "./Close";
 
 export interface OverlayProps {
   config: IntegrationConfig;
@@ -33,14 +34,13 @@ export class Overlay extends React.Component<OverlayProps> {
   public render() {
     const { config, tabsFilter } = this.props;
     const { active } = this.state;
+
     return (
       <OverlayContainer isActive={active} onOuterClick={this.hide}>
-        <div>
+        <div className={header}>
           <div className="sj-logo" onClick={this.hide} />
-          <div>
-            <Input config={config} autoComplete={true} />
-          </div>
-          {/* <Close onClick={this.hide} closeOverlay={this.hide} /> */}
+          <Input config={config} autoComplete={true} />
+          <Close onClick={this.hide} />
         </div>
         <div className={css({ height: "calc(100% - 40px)" })}>
           <SearchResponse config={config} tabsFilter={tabsFilter} />
@@ -52,3 +52,7 @@ export class Overlay extends React.Component<OverlayProps> {
   // tslint:disable-next-line
   private hide = () => {};
 }
+
+const header = css({
+  display: "flex"
+});
