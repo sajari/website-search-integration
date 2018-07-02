@@ -17,8 +17,5 @@ module.exports = merge(config, {
     new HtmlWebpackPlugin({
       template: resolve(__dirname, `../public/${argv.integration}.html`)
     })
-  ],
-  serve: {
-    content: resolve(__dirname, "../dist")
-  }
+  ]
 });
