@@ -32,6 +32,22 @@ export interface IntegrationConfig {
     defaultTab: string;
     tabs: Array<{ title: string; filter: string }>;
   };
+
+  forceLang?: string;
+  localization?: {
+    [lang: string]: {
+      summary?: {
+        page?: string;
+        resultsFor?: string;
+        searchInstead?: string;
+      };
+      errors?: {
+        authorization?: string;
+        connection?: string;
+        parseResponse?: string;
+      };
+    };
+  };
 }
 
 export const defaultConfig = {

@@ -34,7 +34,7 @@
     "yargs": "^11.0.0"
   },
   "dependencies": {
-    "@sajari/sdk-react": "^2.0.0-rc.1",
+    "@sajari/sdk-react": "^2.0.0-rc.3",
     "cuid": "^2.1.1",
     "emotion": "^9.1.3",
     "pubsub-js": "^1.6.0",

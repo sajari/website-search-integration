@@ -10,6 +10,7 @@ import { setUpTabsFilters } from "./filter";
 import { createPipelineConfigs, initializePipelines } from "./pipelines";
 import { pubsubConnector } from "./pubsub";
 import { validateConfig } from "./validate";
+import { localization } from "./i18n";
 
 import { Integration } from "../containers/Integration";
 
@@ -19,6 +20,7 @@ export const initialize = (
   subscribe: SubFn
 ) => {
   validateConfig(config);
+  localization(config);
   const pipelineConfigs = createPipelineConfigs(config);
   const { search, instant } = initializePipelines({
     project: config.project,
