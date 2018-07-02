@@ -1,12 +1,7 @@
-const updateQueryStringParam = (key, value) => {
-  const baseUrl = [
-    window.location.protocol,
-    "//",
-    window.location.host,
-    window.location.pathname
-  ].join("");
-  const urlQueryString = document.location.search;
-  const newParam = key + "=" + encodeURIComponent(value);
+export const updateQueryStringParam = (key: string, value: string) => {
+  const baseUrl = [window.location.origin, window.location.pathname].join("");
+  const urlQueryString = window.location.search;
+  const newParam = `${key}=${value}`;
 
   let params = "?" + newParam;
 
@@ -33,5 +28,3 @@ const updateQueryStringParam = (key, value) => {
 
   window.history.replaceState({}, "", baseUrl + params);
 };
-
-export { updateQueryStringParam };
