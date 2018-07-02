@@ -1,5 +1,5 @@
-import idx from "idx";
 import { Filter } from "@sajari/sdk-react";
+import idx from "idx";
 
 import { IntegrationConfig } from "../../../config";
 import {

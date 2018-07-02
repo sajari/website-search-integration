@@ -1,6 +1,6 @@
+import { Results } from "@sajari/sdk-react";
 import idx from "idx";
 import * as React from "react";
-import { Results } from "@sajari/sdk-react";
 
 import { IntegrationConfig } from "../../config";
 

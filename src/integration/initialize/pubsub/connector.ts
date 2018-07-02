@@ -1,5 +1,5 @@
-import idx from "idx";
 import { EVENT_SEARCH_SENT, Pipeline, Values } from "@sajari/sdk-react";
+import idx from "idx";
 
 import { IntegrationConfig } from "../../../config";
 import {

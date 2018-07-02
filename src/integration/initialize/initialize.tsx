@@ -7,10 +7,10 @@ import { PubFn, SubFn } from "../../lib/pubsub";
 
 import { createComponents } from "./components";
 import { setUpTabsFilters } from "./filter";
+import { localization } from "./i18n";
 import { createPipelineConfigs, initializePipelines } from "./pipelines";
 import { pubsubConnector } from "./pubsub";
 import { validateConfig } from "./validate";
-import { localization } from "./i18n";
 
 import { Integration } from "../containers/Integration";
 

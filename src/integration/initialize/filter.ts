@@ -6,8 +6,8 @@ import {
   Pipeline,
   Values
 } from "@sajari/sdk-react";
-import { IntegrationConfig } from "../../config";
 import { ValuesObject } from "@sajari/sdk-react/dist/controllers/values";
+import { IntegrationConfig } from "../../config";
 
 // @ts-ignore
 window.SJ_TAB_FACET_SEARCH_DISABLED = false;

@@ -1,5 +1,5 @@
-import * as React from "react";
 import { css, cx } from "emotion";
+import * as React from "react";
 
 export interface CloseProps {
   onClick: (event: React.MouseEvent<HTMLDivElement>) => void;
@@ -15,15 +15,16 @@ export const Close: React.SFC<CloseProps> = ({ onClick }) => {
 };
 
 const container = css({
-  marginLeft: 16,
-  zIndex: 1,
-  color: "#aaa",
-  textAlign: "center",
-  cursor: "pointer",
-
   "&:hover": {
     color: "#000"
-  }
+  },
+
+  color: "#aaa",
+  cursor: "pointer",
+
+  marginLeft: 16,
+  textAlign: "center",
+  zIndex: 1
 });
 
 const close = css({

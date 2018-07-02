@@ -16,20 +16,20 @@ export const localization = (config: IntegrationConfig): void => {
       const summary = idx(lang, _ => _.summary);
       const errors = idx(lang, _ => _.errors);
 
-      let items = [];
+      const items = [];
       if (summary !== undefined) {
         items.push({
+          items: summary,
           lang: item,
-          namespace: "summary",
-          items: summary
+          namespace: "summary"
         });
       }
 
       if (errors !== undefined) {
         items.push({
+          items: errors,
           lang: item,
-          namespace: "errors",
-          items: errors
+          namespace: "errors"
         });
       }
 

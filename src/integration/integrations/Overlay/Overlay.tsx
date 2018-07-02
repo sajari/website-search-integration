@@ -1,6 +1,6 @@
+import { Filter, Overlay as OverlayContainer } from "@sajari/sdk-react";
 import { css } from "emotion";
 import * as React from "react";
-import { Filter, Overlay as OverlayContainer } from "@sajari/sdk-react";
 
 import { IntegrationConfig } from "../../../config";
 

@@ -13,10 +13,10 @@ import { SearchResponse } from "../integrations/SearchResponse";
 
 type ComponentFn = () => React.ReactPortal;
 
-export type Pipelines = {
+export interface Pipelines {
   search?: { pipeline: Pipeline; values: Values };
   instant?: { pipeline: Pipeline; values: Values };
-};
+}
 
 export const createComponents = (
   config: IntegrationConfig,

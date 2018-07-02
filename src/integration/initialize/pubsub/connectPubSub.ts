@@ -1,4 +1,3 @@
-import idx from "idx";
 import {
   EVENT_ANALYTICS_BODY_RESET,
   EVENT_ANALYTICS_PAGE_CLOSED,
@@ -10,6 +9,7 @@ import {
   Pipeline,
   Values
 } from "@sajari/sdk-react";
+import idx from "idx";
 
 import { PubFn, SubFn } from "../../../lib/pubsub";
 
