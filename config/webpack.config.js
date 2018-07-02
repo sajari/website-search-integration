@@ -1,6 +1,7 @@
 const { resolve } = require("path");
 
-const VERSION = require("../package.json").version;
+const VERSION = require("../package.json").version.split(".");
+const [VERSION_MAJOR, VERSION_MINOR] = VERSION;
 
 module.exports = {
   target: "web",
@@ -9,7 +10,7 @@ module.exports = {
   },
   output: {
     path: resolve(__dirname, "../dist"),
-    filename: `[name]-${VERSION}.js`
+    filename: `[name]-${VERSION_MAJOR}.${VERSION_MINOR}.js`
   },
   module: {
     rules: [
