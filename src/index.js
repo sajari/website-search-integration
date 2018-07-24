@@ -312,9 +312,14 @@ const initInline = (config, pub, sub) => {
     instantValues.set({ q: values.get().q });
   }
 
-  pipeline.listen(searchSentEvent, values => {
-    updateQueryStringParam(config.urlQueryParam || "q", values.q);
-  });
+  if (
+    config.updateQueryStringParam === true ||
+    config.updateQueryStringParam === undefined
+  ) {
+    pipeline.listen(searchSentEvent, values => {
+      updateQueryStringParam(config.urlQueryParam || "q", values.q);
+    });
+  }
 
   ReactDOM.render(
     <Inline
@@ -418,9 +423,14 @@ const initOverlay = (config, pub, sub) => {
     }
   });
 
-  pipeline.listen(searchSentEvent, values => {
-    updateQueryStringParam(config.urlQueryParam || "q", values.q);
-  });
+  if (
+    config.updateQueryStringParam === true ||
+    config.updateQueryStringParam === undefined
+  ) {
+    pipeline.listen(searchSentEvent, values => {
+      updateQueryStringParam(config.urlQueryParam || "q", values.q);
+    });
+  }
 
   ReactDOM.render(
     <Overlay
