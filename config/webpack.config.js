@@ -1,6 +1,7 @@
 const { resolve } = require("path");
 
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 const VERSION = require("../package.json").version;
 
@@ -43,11 +44,17 @@ module.exports = {
       react: "preact-compat",
       "react-dom": "preact-compat",
       "create-react-class": "preact-compat/lib/create-react-class"
-
-      // So we load the ES6 module versions, without having to rewrite our import
-      // statements.
-      // sajari$: resolve(__dirname, "../node_modules/sajari/dist.es/main.js"),
-      // "sajari-react": resolve(__dirname, "../node_modules/sajari-react/es")
     }
+  },
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          output: {
+            ascii_only: true
+          }
+        }
+      })
+    ]
   }
 };
