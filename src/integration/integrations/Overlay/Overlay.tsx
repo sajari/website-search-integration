@@ -39,7 +39,7 @@ export class Overlay extends React.Component<OverlayProps> {
       <OverlayContainer isActive={active} onOuterClick={this.hide}>
         <div className={header}>
           <div className="sj-logo" onClick={this.hide} />
-          <Input config={config} autoComplete={true} />
+          <Input config={config} />
           <Close onClick={this.hide} />
         </div>
         <div className={css({ height: "calc(100% - 40px)" })}>
