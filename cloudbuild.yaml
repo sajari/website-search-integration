@@ -1,0 +1,14 @@
+steps:
+  - name: "gcr.io/cloud-builders/yarn"
+    args: ["install"]
+  - name: "gcr.io/cloud-builders/yarn"
+    args: ["type-check"]
+  - name: "gcr.io/cloud-builders/yarn"
+    args: ["build"]
+artifacts:
+  objects:
+    location: "gs://${_BUCKET}/website-search-integration/${_BUILD_ID}"
+    paths: ["dist/website-search-1.4.js"]
+substitutions:
+    _BUCKET: "sajaricom-staging-build-artefacts"
+
