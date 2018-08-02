@@ -1,5 +1,7 @@
 const { resolve } = require("path");
 
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+
 const VERSION = require("../package.json").version.split(".");
 const [VERSION_MAJOR, VERSION_MINOR] = VERSION;
 
@@ -23,5 +25,16 @@ module.exports = {
   },
   resolve: {
     extensions: [".js", ".ts", ".tsx"]
+  },
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          output: {
+            ascii_only: true
+          }
+        }
+      })
+    ]
   }
 };

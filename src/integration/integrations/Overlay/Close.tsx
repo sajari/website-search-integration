@@ -8,7 +8,7 @@ export interface CloseProps {
 export const Close: React.SFC<CloseProps> = ({ onClick }) => {
   return (
     <div className={cx("sj-overlay-close", container)} onClick={onClick}>
-      <div className={cx("sj-close", close)}>×</div>
+      <div className={cx("sj-close", close)}>&#10799;</div>
       <div className={cx("sj-esc", esc)}>ESC</div>
     </div>
   );
@@ -29,8 +29,8 @@ const container = css({
 
 const close = css({
   fontSize: 40,
-  lineHeight: "30px",
-  marginTop: -5
+  lineHeight: "40px",
+  marginTop: "-15px"
 });
 
 const esc = css({
