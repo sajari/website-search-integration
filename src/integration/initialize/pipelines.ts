@@ -31,10 +31,10 @@ const trackingFromConfig = (
   config: IntegrationConfig
 ): NoTracking | ClickTracking => {
   switch (config.tracking) {
-    case undefined:
     case "none":
       return new NoTracking();
     case "click":
+    default:
       return new ClickTracking("url", config.urlQueryParam);
   }
 };
