@@ -31,7 +31,8 @@ module.exports = {
       new UglifyJsPlugin({
         uglifyOptions: {
           output: {
-            ascii_only: true
+            ascii_only: true,
+            ecma: 5
           }
         }
       })
