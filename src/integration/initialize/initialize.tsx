@@ -64,6 +64,13 @@ export const initialize = (
     | { [k: string]: any }
     | undefined;
 
+  // trigger the search on load, after all setup as been completed
+  if (config.searchOnLoad && values != null && values.get()["q"]) {
+    if (pipeline != null) {
+      pipeline.search(values.get());
+    }
+  }
+
   return () => (
     <Integration
       mode={config.mode}

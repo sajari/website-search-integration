@@ -74,10 +74,6 @@ export const connector = (
         search.values
       );
       search.values.set(config.values || {});
-
-      if (config.searchOnLoad) {
-        search.pipeline.search(search.values.get());
-      }
       break;
 
     case INTEGRATION_TYPE_INLINE:
