@@ -10,6 +10,7 @@ import { ErrorBoundary } from "./ErrorBoundary";
 export interface IntergrationProps {
   mode: string;
   publish: PubFn;
+  searchOnLoad?: boolean;
   search?: {
     pipeline: Pipeline;
     values: Values;
@@ -39,11 +40,12 @@ export class Integration extends React.Component<IntergrationProps> {
   }
 
   public render() {
-    const { search, instant, theme, children } = this.props;
+    const { search, instant, theme, searchOnLoad, children } = this.props;
     return (
       <ErrorBoundary>
         <Provider
           search={search as any}
+          searchOnLoad={searchOnLoad}
           instant={instant as any}
           theme={theme || {}}
         >
