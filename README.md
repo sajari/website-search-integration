@@ -224,16 +224,19 @@ By default search boxes have instant enabled and use the pipeline specified by `
 
 | Property         |        Default        | Description                                                                        |
 | :--------------- | :-------------------: | :--------------------------------------------------------------------------------- |
-| project          |  `"<your project>"`   | Project to search                                                                  |
+| project          | `"<your project>"`    | Project to search                                                                  |
 | collection       | `"<your collection>"` | Collection to search                                                               |
-| pipeline         |      `"website"`      | Pipeline to query when pressing enter or clicking an autocompleted suggestion      |
-| instantPipeline  |   `"autocomplete"`    | Pipeline to query when typing, set to `""` to disable                              |
-| maxSuggestions   |         `"5"`         | Sets how many autocomplete suggestions are shown in the box below the search input |
-| inputPlaceholder |      `"Search"`       | Placeholder text in the search input box                                           |
-| inputAutoFocus   |        `false`        | Focus the searc input html element on initialisation                               |
-| values           |   _see table below_   | Configuration of the pipeline values                                               |
-| results          |   _see table below_   | Configuration for the search results                                               |
-| updateQueryStringParam | `true` | Sets whether to update the query param in the url |
+| pipeline         | `"website"`           | Pipeline to query when pressing enter or clicking an autocompleted suggestion      |
+| instantPipeline  | `"autocomplete"`      | Pipeline to query when typing, set to `""` to disable                              |
+| maxSuggestions   | `"5"`                 | Sets how many autocomplete suggestions are shown in the box below the search input |
+| inputMode        | `suggestions`         | Sets the mode of the input component, set to "typeahead" to enable instant-search with typeahead completion. |
+| inputPlaceholder | `"Search"`            | Placeholder text in the search input box                                           |
+| inputAutoFocus   | `false`               | Focus the searc input html element on initialisation                               |
+| values           | _see table below_     | Configuration of the pipeline values                                               |
+| results          | _see table below_     | Configuration for the search results                                               |
+| updateQueryStringParam | `true`          | Sets whether to update the query param in the url                                  |
+| searchOnLoad     | `false`               | Enable a search to be triggered on page load                                       |
+| disableGA        | `false`               | Disable the Google Analytics events integration                                    |
 
 **Values configuration**
 
