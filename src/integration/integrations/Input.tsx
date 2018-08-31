@@ -1,11 +1,9 @@
 import idx from "idx";
 import * as React from "react";
+import isPlainObject from "is-plain-object";
+import merge from "deepmerge";
 
 import { Input as SDKInput } from "@sajari/sdk-react";
-import {
-  INTEGRATION_TYPE_INLINE,
-  INTEGRATION_TYPE_SEARCH_BOX
-} from "../constants";
 
 export interface InputProps {
   config: { [k: string]: any };
@@ -15,22 +13,20 @@ export interface InputProps {
 export class Input extends React.Component<InputProps> {
   public render() {
     const { config, defaultValue } = this.props;
-    const { mode, inputPlaceholder, inputAutoFocus, inputMode } = config;
-
-    const removeMarginBottom =
-      mode === INTEGRATION_TYPE_SEARCH_BOX || mode === INTEGRATION_TYPE_INLINE;
+    const { inputPlaceholder, inputAutoFocus, inputMode } = config;
 
     // @ts-ignore: idx
     const inputStyles = idx(config, _ => _.styling.components.input) as
       | { [k: string]: any }
       | undefined;
 
-    const styles =
-      inputStyles === undefined
-        ? removeMarginBottom
-          ? { container: { marginBottom: 0 } }
-          : undefined
-        : inputStyles;
+    const styles = merge(
+      { container: { marginBottom: 0 } },
+      inputStyles || {},
+      {
+        isMergeableObject: isPlainObject
+      }
+    );
 
     const iMode = {
       inputMode: undefined,

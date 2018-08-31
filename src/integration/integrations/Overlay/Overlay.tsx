@@ -54,5 +54,6 @@ export class Overlay extends React.Component<OverlayProps> {
 }
 
 const header = css({
-  display: "flex"
+  display: "flex",
+  marginBottom: "1rem"
 });
