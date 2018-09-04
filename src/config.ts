@@ -59,10 +59,6 @@ export interface IntegrationConfig {
     theme?: {
       layout?: {
         type?: "list" | "grid";
-        custom?: {
-          container?: React.CSSProperties;
-          item?: React.CSSProperties;
-        };
       };
       colors?: {
         brand?: {
@@ -127,10 +123,5 @@ export const defaultConfig = {
   },
   values: {
     resultsPerPage: 10
-  },
-  styling: {
-    components: {
-      results: { container: { overflow: "scroll" } }
-    }
   }
 };
