@@ -1,6 +1,8 @@
 import { css, cx } from "emotion";
 import idx from "idx";
 import * as React from "react";
+import isPlainObject from "is-plain-object";
+import merge from "deepmerge";
 
 import {
   Filter,
@@ -32,17 +34,13 @@ export class SearchResponse extends React.Component<SearchResponseProps> {
       | { [k: string]: any }
       | undefined;
 
-    if (resultsStyles === undefined) {
-      resultsStyles = { container: { overflow: "scroll" } };
-    } else {
-      resultsStyles = {
-        ...resultsStyles,
-        container: {
-          ...resultsStyles.container,
-          overflow: "scroll"
-        }
-      };
-    }
+    resultsStyles = merge(
+      { container: { overflow: "auto" } },
+      resultsStyles || {},
+      {
+        isMergeableObject: isPlainObject
+      }
+    );
 
     // @ts-ignore: idx
     const summaryStyles = idx(config, _ => _.styling.components.summary) as

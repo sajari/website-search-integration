@@ -20,7 +20,7 @@ export const initialize = (
   publish: PubFn,
   subscribe: SubFn
 ) => {
-  // merge the defaultConfig with the provided config
+  // @ts-ignore: merge the defaultConfig with the provided config
   config = merge(defaultConfig, config, {
     isMergeableObject: isPlainObject
   });
@@ -54,9 +54,7 @@ export const initialize = (
   Components.displayName = "Components";
 
   const providerConfig = {
-    maxSuggestions: String(
-      config.maxSuggestions || defaultConfig.maxSuggestions
-    )
+    maxSuggestions: String(config.maxSuggestions)
   };
 
   // @ts-ignore: idx

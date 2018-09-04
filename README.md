@@ -27,8 +27,8 @@ collection to get started.
 
 From the [Install tab](https://www.sajari.com/console/collections/install) in
 the Console you can generate a search interface which can be copy-pasted into
-your site. It's easy to add further customisations using CSS (see
-[Styling](#styling)), or by changing the JSON config (see
+your site. It's easy to add further customizations using styling object (see
+[Styling](#styling)), or by changing the JSON configuration (see
 [Configuration](#configuration)).
 
 ![Search interface with tabs](https://cloud.githubusercontent.com/assets/2822/25603841/e50022d4-2f42-11e7-9ac0-3968714b9e1d.png)
@@ -36,37 +36,130 @@ your site. It's easy to add further customisations using CSS (see
 ## Styling
 
 The generated interface is designed to be responsive by default, and can be
-easily styled to fit your website's look and feel.
+easily styled to fit your websites look and feel.
 
-Here are a few CSS examples showing how to override the default layout.
+Styling is a part of the configuration object. The styling object is derived from
+the [styling interface](https://sajari-sdk-react.netlify.com/styling)
+that is a part of the [Sajari React SDK](https://sajari-sdk-react.netlify.com/).
 
-### Brand colors
+This new styling object, provides an easy way of customizing the entire look of
+your search interface, by providing a high level theme object, and also allowing
+customizations right down to the component level.
 
-* Override the link/tab colours and font.
+All styling customizations live under the `styling` member of the configuration object:
+```js
+{
+  // ...other config
+  styling: {}
+}
+```
 
-Source: [orange.css](./sample-styles/orange.css)
+Current ways of change the styling of your search integration:
+1. [Theming](#theming)
+1. [Component Styling](#component-styling)
 
-![Orange](./sample-styles/orange.png)
+### Theming
 
-### Brand image and colors, hiding elements
+Current theming options:
+1. Primary Color
+1. Results Layout
 
-* Override the link/tab colours and font.
-* Set a brand image.
-* Hide URL links in results.
+A **Primary Color** can be set by adding the following to your configuration object:
+```js
+{
+  styling: {
+    theme: {
+      colors: {
+        brand: {
+          primary: "#3b5998"
+        }
+      }
+    }
+  }
+}
+```
 
-Source: [light.css](./sample-styles/light.css)
+The **Results Layout** can be changed by using a preset `type` like so:
+```js
+{
+  styling: {
+    theme: {
+      layout: {
+        type: "list" // options list or grid, defaults to list.
+      }
+    }
+  }
+}
+```
 
-![Light](./sample-styles/light.png)
+### Component styling
 
-### Responsive layout with brand image.
+The styling object also allows for the customization of the individual components
+that make up your search interface.
 
-* Override the link/tab colours and font.
-* Set a brand image.
-* Custom responsive layout for small screens.
+To style individual components add the following to your styling object:
+```js
+styling: {
+  components: {
+    // input: {}
+    // results: {}
+    // summary: {}
+    // tabs: {}
+    // paginator: {}
+  }
+}
+```
 
-Source: [sajari.css](./sample-styles/sajari.css)
+The following components can be styled in this way:
+1. [`input`](https://sajari-sdk-react.netlify.com/components/input#styles)
+1. [`results`](https://sajari-sdk-react.netlify.com/components/results#styles)
+1. [`summary`](https://sajari-sdk-react.netlify.com/components/summary#styles)
+1. [`tabs`](https://sajari-sdk-react.netlify.com/components/tabs#styles)
+1. [`paginator`](https://sajari-sdk-react.netlify.com/components/paginator#styles)
 
-![Sajari](./sample-styles/sajari.png)
+For more details on what can be passed to the objects, please refer to the
+[styling section](https://sajari-sdk-react.netlify.com/styling) of
+the [React SDK](https://sajari-sdk-react.netlify.com/).
+
+## Examples
+
+Setting a primary brand color:
+
+![orange](./sample-styles/orange.png)
+```js
+styling: {
+  theme: {
+    colors: {
+      brand: {
+        primary: "#ed6e24"
+      }
+    }
+  }
+}
+```
+
+Customizing the input styles:
+
+![gray input](./sample-styles/gray-input.png)
+```js
+styling: {
+  components: {
+    input: {
+      input: {
+        container: {
+          backgroundColor: '#999',
+          color: '#fff',
+          border: '1px solid #999',
+          boxShadow: 'none',
+        },
+        button: {
+          color: '#eee',
+        }
+      }
+    }
+  }
+}
+```
 
 ## Integrations
 
@@ -103,7 +196,7 @@ The inline search integration renders a full search interface (input box and
 results) inside a webpage. A typical example would be a dedicated search results
 page which is linked to/navigated to by search forms on a website. In the
 configuration example given below, the search query can be passed to the page
-using the query param q.
+using the query parameter `q`.
 
 ![inline interface screenshot](https://user-images.githubusercontent.com/2771466/31525575-f22be452-b00c-11e7-94e0-64a52480aea3.png)
 
@@ -152,7 +245,7 @@ myUI({
 
 The Search Box integration creates an autocomplete-enabled input box typically
 embedded into site headers and menu bars. It performs autocomplete lookups for
-each user keypress and can be customised to redirect to a search results page or
+each user keypress and can be customized to redirect to a search results page or
 trigger custom search actions.
 
 ![search box interface screenshot](https://user-images.githubusercontent.com/2771466/31525645-86e89392-b00d-11e7-91b2-9ddbeb5136a9.png)
@@ -185,7 +278,6 @@ myUI({
   attachDynamicContent: document.getElementById("dynamic-content"),
   values: { resultsPerPage: "3" },
   results: { showImages: false },
-  tracking: false,
   searchOnLoad: true
 });
 ```
@@ -228,15 +320,17 @@ By default search boxes have instant enabled and use the pipeline specified by `
 | collection       | `"<your collection>"` | Collection to search                                                               |
 | pipeline         | `"website"`           | Pipeline to query when pressing enter or clicking an autocompleted suggestion      |
 | instantPipeline  | `"autocomplete"`      | Pipeline to query when typing, set to `""` to disable                              |
+| tracking         | `click`               | Sets the tracking mode, set to `"none"` to disable.                                |
 | maxSuggestions   | `"5"`                 | Sets how many autocomplete suggestions are shown in the box below the search input |
 | inputMode        | `suggestions`         | Sets the mode of the input component, set to "typeahead" to enable instant-search with typeahead completion. |
 | inputPlaceholder | `"Search"`            | Placeholder text in the search input box                                           |
-| inputAutoFocus   | `false`               | Focus the searc input html element on initialisation                               |
+| inputAutoFocus   | `false`               | Focus the search input html element on initialization                              |
 | values           | _see table below_     | Configuration of the pipeline values                                               |
 | results          | _see table below_     | Configuration for the search results                                               |
 | updateQueryStringParam | `true`          | Sets whether to update the query param in the url                                  |
 | searchOnLoad     | `false`               | Enable a search to be triggered on page load                                       |
 | disableGA        | `false`               | Disable the Google Analytics events integration                                    |
+| styling          | [_see above_](#styling) | Styling configuration                                                            | 
 
 **Values configuration**
 
@@ -266,7 +360,11 @@ followed by the pipeline (either `pipeline` or `instantPipeline`) and event
 name, then a callback. It takes the form
 
 ```javascript
-myUI("sub", "<pipeline>.<event>", callback);
+// To listen to an event on the main pipeline
+myUI("sub", "pipeline.<event>", callback);
+
+// To listen to an event on the instant pipeline
+myUI("sub", "instantPipeline.<event>", callback);
 ```
 
 For example, if you are using the default inline interface and want to listen to
@@ -484,4 +582,6 @@ expressions with `AND`/`OR` operators, and brackets.
 For example, to match pages with language set to `en` on `www.sajari.com` or any
 page within the `en.sajari.com` domain:
 
-    (domain='www.sajari.com' AND lang='en') OR domain='en.sajari.com'
+```
+(domain='www.sajari.com' AND lang='en') OR domain='en.sajari.com'
+````
