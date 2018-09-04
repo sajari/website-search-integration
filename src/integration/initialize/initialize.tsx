@@ -65,8 +65,9 @@ export const initialize = (
     | undefined;
 
   // trigger the search on load, after all setup as been completed
-  if (config.searchOnLoad && values != null && values.get()["q"]) {
-    if (pipeline != null) {
+  let vals = values != null ? values.get() : ({} as { [k: string]: string });
+  if ((vals["q"] !== "" && vals["q"] != null) || config.searchOnLoad) {
+    if (pipeline != null && values != null) {
       pipeline.search(values.get());
     }
   }
