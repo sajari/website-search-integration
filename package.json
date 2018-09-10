@@ -33,6 +33,7 @@
   "dependencies": {
     "@sajari/sdk-react": "^2.3.3",
     "cuid": "^2.1.1",
+    "cypress": "^3.1.0",
     "deepmerge": "^2.1.1",
     "emotion": "^9.2.6",
     "is-plain-object": "^2.0.4",
@@ -47,6 +48,7 @@
     "analyze": "webpack --config config/webpack.analyze.js --mode production",
     "start": "webpack-serve --config ./config/webpack.dev.js",
     "lint": "tslint -p tsconfig.json -c tslint.json --fix \"src/**/*.{ts,tsx}\"",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "cypress:open": "cypress open"
   }
 }

@@ -7,6 +7,8 @@ steps:
     args: ["build"]
 artifacts:
   objects:
+    # _BUILD_ID is a substitution that does not have a default value
+    # it is set by the submit-build.bash script, in the projects root.
     location: "gs://${_BUCKET}/website-search-integration/${_BUILD_ID}"
     paths: ["dist/website-search-1.4.js"]
 substitutions:
