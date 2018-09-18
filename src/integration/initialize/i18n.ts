@@ -10,7 +10,7 @@ export const localization = (config: IntegrationConfig): void => {
     return;
   }
 
-  const resources = Object.keys(locales)
+  Object.keys(locales)
     .map(item => {
       const lang = locales[item];
       const summary = idx(lang, _ => _.summary);
@@ -35,11 +35,10 @@ export const localization = (config: IntegrationConfig): void => {
 
       return items;
     })
-    .reduce((a, b) => a.concat(b), []);
-
-  resources.forEach(resource => {
-    i18n.addResourceBundle(resource.lang, resource.namespace, resource.items);
-  });
+    .reduce((a, b) => a.concat(b), [])
+    .forEach(resource => {
+      i18n.addResourceBundle(resource.lang, resource.namespace, resource.items);
+    });
 
   if (forceLang !== undefined && forceLang !== null) {
     i18n.changeLanguage(forceLang, (err: Error) => err && error(err));

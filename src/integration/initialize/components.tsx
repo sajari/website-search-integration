@@ -32,6 +32,12 @@ export const createComponents = (
   tabsFilter?: Filter
 ) => {
   const components: ComponentFn[] = [];
+  let query =
+    pipelines.search &&
+    pipelines.search.values.get()[config.urlQueryParam || "q"];
+  if (query === "") {
+    query = undefined;
+  }
 
   const { mode } = config;
   switch (mode) {
@@ -53,7 +59,7 @@ export const createComponents = (
     case INTEGRATION_TYPE_INLINE:
       components.push(() =>
         ReactDOM.createPortal(
-          <Inline config={config} />,
+          <Inline config={config} defaultValue={query} />,
           config.attachSearchBox
         )
       );
@@ -83,6 +89,7 @@ export const createComponents = (
             config={config}
             tabsFilter={tabsFilter}
             setOverlayControls={controls}
+            defaultValue={query}
           />,
           overlayContainer
         )

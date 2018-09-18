@@ -12,6 +12,7 @@ export interface OverlayProps {
   config: IntegrationConfig;
   tabsFilter?: Filter;
   isActive?: boolean;
+  defaultValue?: string;
 
   setOverlayControls: (obj: { [k: string]: any }) => { [k: string]: any };
 }
@@ -39,7 +40,7 @@ export class Overlay extends React.Component<OverlayProps> {
       <OverlayContainer isActive={active} onOuterClick={this.hide}>
         <div className={header}>
           <div className="sj-logo" onClick={this.hide} />
-          <Input config={config} />
+          <Input config={config} defaultValue={this.props.defaultValue} />
           <Close onClick={this.hide} />
         </div>
         <div className={css({ height: "calc(100% - 40px)" })}>

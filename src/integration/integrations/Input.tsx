@@ -21,7 +21,9 @@ export class Input extends React.Component<InputProps> {
       | undefined;
 
     const styles = merge(
-      { container: { marginBottom: 0 } },
+      {
+        container: { marginBottom: 0, flexGrow: 1 }
+      },
       inputStyles || {},
       {
         isMergeableObject: isPlainObject
@@ -29,12 +31,12 @@ export class Input extends React.Component<InputProps> {
     );
 
     const iMode = {
-      inputMode: undefined,
-      dropdownMode: undefined,
+      inputMode: "standard",
+      dropdownMode: "none",
       instantSearch: false
     } as {
-      inputMode?: "standard" | "typeahead";
-      dropdownMode?: "none" | "suggestions" | "custom";
+      inputMode: "standard" | "typeahead";
+      dropdownMode: "none" | "suggestions" | "results";
       instantSearch: boolean;
     };
 

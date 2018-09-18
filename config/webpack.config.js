@@ -19,7 +19,10 @@ module.exports = {
       {
         test: [/\.js$/, /\.tsx?/],
         exclude: [/node_modules/],
-        use: "babel-loader"
+        loader: "babel-loader",
+        options: {
+          configFile: resolve(__dirname, "../.babelrc")
+        }
       }
     ]
   },
@@ -29,11 +32,21 @@ module.exports = {
   optimization: {
     minimizer: [
       new UglifyJsPlugin({
-        uglifyOptions: {
-          output: {
-            ascii_only: true,
-            ecma: 5
+        minify(file, sourceMap) {
+          let options = {
+            output: {
+              ascii_only: true,
+              ecma: 5
+            }
+          };
+
+          if (sourceMap) {
+            options.sourceMap = {
+              content: sourceMap
+            };
           }
+
+          return require("terser").minify(file, options);
         }
       })
     ]
