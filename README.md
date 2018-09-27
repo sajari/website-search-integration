@@ -148,16 +148,14 @@ Customizing the input styles:
 styling: {
   components: {
     input: {
-      input: {
-        container: {
-          backgroundColor: '#999',
-          color: '#fff',
-          border: '1px solid #999',
-          boxShadow: 'none',
-        },
-        button: {
-          color: '#eee',
-        }
+      container: {
+        backgroundColor: '#999',
+        color: '#fff',
+        border: '1px solid #999',
+        boxShadow: 'none',
+      },
+      button: {
+        color: '#eee',
       }
     }
   }
@@ -193,6 +191,19 @@ Generated interfaces come with a handful of
 [helper functions](#helper-functions) which are referenced in the following
 examples.**
 
+### Setup
+Before configuring any of the interfaces below make sure this code snippet is in the 
+`<head />` of your HTML document. This creates the `sajari` global window variable that is
+necessary to render your search interface.
+```html
+<script>
+  (function() {
+      function setup(c,a,f){function g(){var a=[],b=function(){a.push(arguments)};b.arr=a;c.sajari=c.sajari||{};c.sajari.ui=c.sajari.ui||[];c.sajari.ui.push(b);return b}var d=a.createElement("link");d.href=f;d.as="script";d.rel="preload";d.crossorigin=!0;var e=a.createElement("script");e.async=!0;e.src=f;a.head.appendChild(d);a.head.appendChild(e);a=g();a.init=function(a){var b=g();b(a);return b};return a};
+      window.sajari = setup(window, document, "//cdn.sajari.net/js/integrations/website-search-2.0.js");
+  }());
+</script>
+```
+
 ### Inline
 
 The inline search integration renders a full search interface (input box and
@@ -204,19 +215,17 @@ using the query parameter `q`.
 ![inline interface screenshot](https://user-images.githubusercontent.com/2771466/31525575-f22be452-b00c-11e7-94e0-64a52480aea3.png)
 
 ```javascript
-myUI({
+var myUI = sajari.init({
   mode: "inline", // Set the integration mode
   project: "<your project>", // Set this to your project.
   collection: "<your collection>", // Set this to your collection.
   values: { resultsPerPage: "10", q: getUrlParam("q") }, // Default pipeline values
-  attachSearchBox: document.getElementById("search-box"), // DOM element to render search box.
-  attachSearchResponse: document.getElementById("search-response"), // DOM element to render search results.
-  results: { showImages: false }, // Results configuration
-  pipeline: "website", // Set this to your search pipeline
-  instantPipeline: "autocomplete", // Set this to your instant pipeline
-  inputPlaceholder: "Search", // Placeholder text for the input element
-  maxSuggestions: 5, // Maximum number of suggestions in the search box
-  tabFilters: {} // Tab configuration
+  render: {
+    targets: {
+      searchBox: document.querySelector("#search-box"), // DOM element to render search box.
+      searchResponse: document.querySelector("#search-response") // DOM element to render search results.
+    }
+  }
 });
 ```
 
@@ -229,18 +238,17 @@ from their current page to see results.
 ![overlay interface screenshot](https://user-images.githubusercontent.com/2771466/31525612-3ebe9abc-b00d-11e7-9e2b-1e2f947a717a.png)
 
 ```javascript
-myUI({
+var myUI = sajari.init({
   mode: "overlay", // Set the integration mode
-  project: "<your project>",
-  collection: "<your collection>",
-  values: { resultsPerPage: "10", q: getUrlParam("q") },
-  results: { showImages: false },
-  pipeline: "website",
-  instantPipeline: "autocomplete",
-  inputPlaceholder: "Search",
-  autocompleteMaxSuggestions: 5,
-  inputAutoFocus: true,
-  tabFilters: {}
+  project: "<your project>", // Set this to your project.
+  collection: "<your collection>", // Set this to your collection.
+  values: { resultsPerPage: "10", q: getUrlParam("q") }, // Default pipeline values
+  results: { showImages: false }, // Results configuration
+  integration: {
+    input: {
+      autoFocus: true
+    }
+  }
 });
 ```
 
@@ -254,14 +262,15 @@ trigger custom search actions.
 ![search box interface screenshot](https://user-images.githubusercontent.com/2771466/31525645-86e89392-b00d-11e7-91b2-9ddbeb5136a9.png)
 
 ```javascript
-myUI({
+var myUI = sajari.init({
   mode: "search-box", // Set the integration mode
-  project: "<your project>",
-  collection: "<your collection>",
-  instantPipeline: "autocomplete",
-  inputPlaceholder: "Search",
-  maxSuggestions: 5,
-  attachSearchBox: document.getElementById("search-box")
+  project: "<your project>", // Set this to your project.
+  collection: "<your collection>", // Set this to your collection.
+  render: {
+    targets: {
+      searchBox: document.querySelector("#search-box"), // DOM element to render search box.
+    }
+  }
 });
 ```
 
@@ -273,24 +282,26 @@ from a pipeline. It can typically be used to show similar or popular pages.
 ![dynamic content interface screenshot](https://user-images.githubusercontent.com/2771466/36003587-dc94f326-0d82-11e8-894e-b19663ade59d.png)
 
 ```javascript
-myUI({
+var myUI = sajari.init({
   mode: "dynamic-content", // Set the integration mode
-  project: "<your project>",
-  collection: "<your collection>",
-  pipeline: "website",
-  attachDynamicContent: document.getElementById("dynamic-content"),
-  values: { resultsPerPage: "3" },
-  results: { showImages: false },
-  searchOnLoad: true
+  project: "<your project>", // Set this to your project.
+  collection: "<your collection>", // Set this to your collection.
+  values: { resultsPerPage: "3" }, // Default pipeline values
+  integration: {
+    searchOnLoad: true
+  },
+  render: {
+    targets: {
+      dynamicContent: document.querySelector("#dynamic-content")
+    }
+  }
 });
 ```
 
 ### Helper Functions
 
-The generated interface code comes with two helper functions:
-
+The generated interface code comes with one helper function:
 * `getUrlParam(x)` extracts a value from a url parameter `x`.
-* `setup` creates an object that controls an instance of the integration.
 
 ### Multiple Integrations
 
@@ -300,63 +311,125 @@ have them interact with each other by subscribing and publishing events between
 them.
 
 ```javascript
-myUI = setup(...);
-secondUI = setup(...);
-
-myUI(...);
-secondUI(...);
+var myUI = sajari.init({ /* config object */ });
+var secondUI = sajari.init({ /* config object */ });
 ```
 
 ## Configuration
 
 The generated search interfaces are configured using a JSON object. Generating
-an interface from the console will prefill the configuration for you, setting
+an interface from the console will pre-fill the configuration for you, setting
 default values where necessary.
 
-By default search boxes have instant enabled and use the pipeline specified by `instantPipeline`. To disable instant searching, set the value of `instantPipeline` to `""`.
+```js
+{
+  mode: "<integration mode>", // The integration mode you want to use. Can be "search-box", "inline", "overlay", or "dynamic-content"
+  project: "<your project>", // Project to search
+  collection: "<your collection>", // Collection to search
 
-**General configuration**
+  // Pipeline configurations
+  // The search pipeline is used when pressing enter or clicking on an autcomplete
+  // suggestion.
+  search: {
+    pipeline: "website",
+    config: {
+      pageParam: "page",
+      resultsPerPageParam: "resultsPerPage",
+      maxSuggestions: 5,
+      qSuggestionsParam: "q.suggestions",
+      qOverrideParam: "q.override",
+      qParam: "q"
+    }
+  },
+  // The instant pipeline is used when typing and is typically set to "autocomplete"
+  instant: {
+    pipeline: "autocomplete",
+    config: {
+      pageParam: "page",
+      resultsPerPageParam: "resultsPerPage",
+      maxSuggestions: 5,
+      qSuggestionsParam: "q.suggestions",
+      qOverrideParam: "q.override",
+      qParam: "q"
+    }
+  },
 
-| Property         |        Default        | Description                                                                        |
-| :--------------- | :-------------------: | :--------------------------------------------------------------------------------- |
-| project          | `"<your project>"`    | Project to search                                                                  |
-| collection       | `"<your collection>"` | Collection to search                                                               |
-| pipeline         | `"website"`           | Pipeline to query when pressing enter or clicking an autocompleted suggestion      |
-| instantPipeline  | `"autocomplete"`      | Pipeline to query when typing, set to `""` to disable                              |
-| tracking         | `click`               | Sets the tracking mode, set to `"none"` to disable.                                |
-| maxSuggestions   | `"5"`                 | Sets how many autocomplete suggestions are shown in the box below the search input |
-| inputMode        | `suggestions`         | Sets the mode of the input component, set to "typeahead" to enable instant-search with typeahead completion. |
-| inputPlaceholder | `"Search"`            | Placeholder text in the search input box                                           |
-| inputAutoFocus   | `false`               | Focus the search input html element on initialization                              |
-| inputSearchButtonText | `undefined`      | Sets the text inside of the search button in the input component                   |
-| values           | _see table below_     | Configuration of the pipeline values                                               |
-| results          | _see table below_     | Configuration for the search results                                               |
-| updateQueryStringParam | `true`          | Sets whether to update the query param in the url                                  |
-| searchOnLoad     | `false`               | Enable a search to be triggered on page load                                       |
-| disableGA        | `false`               | Disable the Google Analytics events integration                                    |
-| styling          | [_see above_](#styling) | Styling configuration                                                            | 
+  // Configuration of the pipeline values
+  values: {
+    q: getUrlParam("q"), // The initial value of `q` in the pipeline, commonly used as the query text
+    resultsPerPage: 10, // Number of results to show per page
+    filter: "" // [Filter expression](#filters) to apply to results
+  },
 
-**Values configuration**
+  // Configuration for the search results
+  results: {
+    showImages: true, // Show images next to search results
+    showPublishedDate: true, // Show the published date of the result if present
+    publishedDateField: "published_time" // The schema field to pull the published date from
+  },
 
-| Property       |      Default       | Description                                                               |
-| :------------- | :----------------: | :------------------------------------------------------------------------ |
-| q              | `getUrlParam("q")` | The initial value of `q` in the pipeline, commonly used as the query text |
-| resultsPerPage |       `"10"`       | Number of results to show per page                                        |
-| filter         |       `""`         | [Filter expression](#filters) to apply to results                         |
+  // Integration configuration
+  integration: {
+    searchOnLoad: false, // Enable a search to be triggered on page load
+    updateURLQueryParam: true, // Sets whether to update the query param in the url
+    urlQueryParam: "q", // Sets the query parameter to be used in the url
+    enableGAEvents: true, // Enable the Google Analytics events integration
+    tracking: "click", // Sets the tracking mode, set to `"none"` to disable.
+    input: {
+      mode: "suggestions", // Sets the mode of the input component, set to "typeahead" to enable instant-search with typeahead completion.
+      autoFocus: false, // Focus the search input html element on initialization
+      placeHolder: "Search", // Placeholder text in the search input box
+      buttonText: "" // Sets the text inside of the search button in the input component
+    },
+    tabFilters: {}
+  },
 
-**Results configuration**
-
-| Property   | Default | Description                        |
-| :--------- | :-----: | :--------------------------------- |
-| showImages | `false` | Show images next to search results |
+  // Render configuration
+  render: {
+    // Theme confiuration
+    theme: {
+      color: "#333" // Sets the primary color, used by many components to quickly make the interface more inline with your brand.
+    },
+    // Render targets for integration components
+    targets: {
+      searchBox: document.querySelector("#search-box"), // DOM element to render the search box.
+      searchResponse: document.querySelector("#search-response"), // DOM element to render the search results.
+      dynamicContent: document.querySelector("#dynamic-content") // DOM element to render the dynamic-content block.
+    },
+    // Component specific rendering configuration
+    components: {
+      // Result component configuration
+      result: {
+        title: {
+          field: "title", // Sets the schema field to pull the title value from
+          class: "" // Sets a css to add to the result title
+        },
+        description: {
+          field: "description", // Sets the schema field to pull the description value from
+          class: "" // Sets a css to add to the result description
+        },
+        url: {
+          field: "url", // Sets the schema field to pull the url value from
+          class: "" // Sets a css to add to the result url
+        },
+        image: {
+          field: "image", // Sets the schema field to pull the image value from
+          class: "", // Sets a css to add to the result image
+          fallback: "" // Sets the fallback img to render if there is none present in the result values
+        }
+      }
+    }
+  }
+};
+```
 
 ### Events
 
-Interfaces are created using `setup` which is included when generating the
+Interfaces are created using `window.sajari.init` which is included when generating the
 interface from the console.
 
 ```javascript
-myUI = setup(window, document, "script", "sajari");
+var myUI = sajari.init({ /* config object */ });
 ```
 
 You can subscribe to events by calling your interface with the `"sub"` value

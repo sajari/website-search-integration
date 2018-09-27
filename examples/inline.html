@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Sajari: Inline Website Search Example UI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (function() {
+        function setup(c,a,f){function g(){var a=[],b=function(){a.push(arguments)};b.arr=a;c.sajari=c.sajari||{};c.sajari.ui=c.sajari.ui||[];c.sajari.ui.push(b);return b}var d=a.createElement("link");d.href=f;d.as="script";d.rel="preload";d.crossorigin=!0;var e=a.createElement("script");e.async=!0;e.src=f;a.head.appendChild(d);a.head.appendChild(e);a=g();a.init=function(a){var b=g();b(a);return b};return a};
+        window.sajari = setup(window, document, "/website-search-dev.js");
+    }());
+  </script>
+</head>
+
+<body>
+
+  <h2>Inline</h2>
+  <div id="search-box"></div>
+  <div id="search-response"></div>
+
+
+  <!-- This script sets up the config for the search interface -->
+  <script>
+    var getUrlParam = function(e){var t = new RegExp("[?&]" + e.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)"),a = t.exec(window.location.href);return a && a[2] ? decodeURIComponent(a[2].replace(/\+/g, " ")) : ""};
+
+    var inline = sajari.init({
+      mode: "inline",
+      project: "1534384424562720477",
+      collection: "triblive-com", 
+      search: { pipeline: "website" },
+      values: { resultsPerPage: 10, "q": getUrlParam("q"), fields: "title,description,image,url,author,published_time" },
+      results: { showImages: true, showPublishedDate: true },
+      integration: {
+        tabFilters: {
+          defaultTab: "All",
+          tabs: [{title: "All", filter: ""}, { title: 'Blog', filter: "dir1='blog'" }, { title: 'Other', filter: "dir1!='blog'" }]
+        }
+      },
+      render: {
+        targets: {
+          searchBox: document.querySelector("#search-box"),
+          searchResponse: document.querySelector("#search-response")
+        },
+        components: {
+          result: {
+            image: {
+              fallback: "https://placekitten.com/g/100/100"
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+  <style>
+    /**
+      * Page styling
+      */
+
+    html {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+      background-color: #f7f7f7
+    }
+
+    body {
+      margin: 20px;
+      line-height: 24px
+    }
+
+    code,
+    pre {
+      font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      background-color: #eee;
+      border: 1px solid #999;
+      padding: 2px;
+      border-radius: 4px;
+      font-size: 14px
+    }
+
+    pre {
+      padding: 10px
+    }
+
+    input,
+    button {
+      font-size: 16px;
+    }
+
+    div#search-box,
+    div#search-response,
+    div#content-block-response {
+      border: 2px dashed #ddd;
+      padding: 20px;
+      border-radius: 4px;
+      background-color: #fff;
+      margin: 10px;
+    }
+  </style>
+</body>
+
+</html>

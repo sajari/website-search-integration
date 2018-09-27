@@ -1,6 +1,7 @@
 const { resolve } = require("path");
 
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const SizePlugin = require("size-plugin");
 
 const VERSION = require("../package.json").version.split(".");
 const [VERSION_MAJOR, VERSION_MINOR] = VERSION;
@@ -18,7 +19,6 @@ module.exports = {
     rules: [
       {
         test: [/\.js$/, /\.tsx?/],
-        // exclude: [/node_modules/],
         loader: "babel-loader",
         options: {
           configFile: resolve(__dirname, "../.babelrc")
@@ -27,13 +27,20 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: [".js", ".ts", ".tsx"]
+    extensions: [".js", ".ts", ".tsx"],
+    alias: {
+      dlv$: resolve("node_modules", "dlv/dist/dlv.es.js")
+    }
   },
+  plugins: [new SizePlugin()],
   optimization: {
     minimizer: [
       new UglifyJsPlugin({
         minify(file, sourceMap) {
           let options = {
+            parse: {
+              ecma: 8
+            },
             output: {
               ascii_only: true,
               ecma: 5
