@@ -32,7 +32,7 @@
     "yargs": "^12.0.1"
   },
   "dependencies": {
-    "@sajari/sdk-react": "^2.5.0",
+    "@sajari/sdk-react": "^2.5.2",
     "cuid": "^2.1.1",
     "deepmerge": "^2.1.1",
     "emotion": "^9.2.6",
