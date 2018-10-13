@@ -18,7 +18,7 @@ module.exports = {
     rules: [
       {
         test: [/\.js$/, /\.tsx?/],
-        exclude: [/node_modules/],
+        // exclude: [/node_modules/],
         loader: "babel-loader",
         options: {
           configFile: resolve(__dirname, "../.babelrc")
