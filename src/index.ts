@@ -1,3 +1,5 @@
+import "@babel/polyfill";
+
 // @ts-ignore: module missing defintions file
 import { flush } from "stackqueue";
 
