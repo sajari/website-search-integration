@@ -43,7 +43,7 @@ export class Overlay extends React.Component<OverlayProps> {
           <Input config={config} defaultValue={this.props.defaultValue} />
           <Close onClick={this.hide} />
         </div>
-        <div className={css({ height: "calc(100% - 40px)" })}>
+        <div className={css({ height: "calc(100% - 44px)" })}>
           <SearchResponse config={config} tabsFilter={tabsFilter} />
         </div>
       </OverlayContainer>

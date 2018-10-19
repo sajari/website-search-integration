@@ -8,10 +8,12 @@ export interface IntegrationConfig {
   collection: string;
   pipeline?: string;
   instantPipeline?: string;
-  inputMode?: InputMode; // if set to "typehead", the instantSearch prop is added to the input
   maxSuggestions?: number;
+
+  inputMode?: InputMode; // if set to "typehead", the instantSearch prop is added to the input
   inputPlaceholder?: string;
   inputAutoFocus?: boolean;
+  inputSearchButtonText?: string;
 
   urlQueryParam?: string;
   searchOnLoad?: boolean;

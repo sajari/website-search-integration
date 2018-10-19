@@ -755,12 +755,13 @@
   resolved "https://registry.yarnpkg.com/@sajari/sdk-js/-/sdk-js-1.0.3.tgz#ef399a8a5ae6a88de7276763126cd6285c79d749"
   integrity sha512-x0FP6+khZWPhJ6V7xUBC0aslEYFzSlht7LsWrlIARgVEi7DK1Y9i3bBA3NdwzwaBt1A9j5rsoTBejj0IcThL1w==
 
-"@sajari/sdk-react@^2.5.2":
-  version "2.5.2"
-  resolved "https://registry.yarnpkg.com/@sajari/sdk-react/-/sdk-react-2.5.2.tgz#e767f0ebd68f08640a2926f5052ed9b5ed70cad5"
-  integrity sha512-vS0Qo5i4VdPV8436fsbtejsU7JZTWEwzbrz6AFudAkhup9ZPzQbZ+g92yZhWP2ZHLH7Q/a+ZKNYVA8HiKgr+ag==
+"@sajari/sdk-react@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@sajari/sdk-react/-/sdk-react-2.6.0.tgz#1b076da954a839542c0d580a71175ee130681313"
+  integrity sha512-cFopbjuB4SOhlOTo6U9skfN3gy+CzSUcoxmNdMqO5Qjqgl2gyZ15EunpPpVHE7zStu5nqDAIEF3pPNRrgOju8w==
   dependencies:
     "@sajari/sdk-js" "^1.0.3"
+    chroma-js "^1.4.0"
     downshift "^2.2.2"
     emotion "^9.2.8"
     emotion-theming "^9.2.6"
@@ -768,6 +769,7 @@
     i18next "^11.9.0"
     i18next-browser-languagedetector "^2.2.3"
     js-cookie "^2.2.0"
+    react-aria-live "^2.0.2"
     react-emotion "^9.2.8"
     react-input-autosize "^2.2.1"
     react-select "^2.0.0"
@@ -1772,6 +1774,11 @@ chownr@^1.0.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.1.tgz#54726b8b8fff4df053c42187e801fb4412df1494"
   integrity sha512-j38EvO5+LHX84jlo6h4UzmOwi0UgW61WRyPtJz4qaadK5eY3BTS5TY/S1Stc3Uk2lIM6TPevAlULiEJwie860g==
+
+chroma-js@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/chroma-js/-/chroma-js-1.4.0.tgz#695c52e7c97617e5f687db31913503d410481ae4"
+  integrity sha512-5vBYGJkhSnK2SRZ0XkxwTL+TSRyP7PHIxjeg+1uce5qpNDRLLwAXcF12kIztas/BYakWPQhchzV4TKkiwKNd8Q==
 
 chrome-trace-event@^1.0.0:
   version "1.0.0"
@@ -4921,6 +4928,13 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-aria-live@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-aria-live/-/react-aria-live-2.0.2.tgz#9cfc2352544275586f74b66d18c54a8b3b00398a"
+  integrity sha512-a94NMIidZMX+p+s2+UPTcE+fzl+68RYcdjs4GUDOTe7xV9W0w9fw223Me7E7+PSibwBHrlf6LaJLQBgyi+TbyQ==
+  dependencies:
+    uuid "^3.2.1"
+
 react-dom@^16.4.2:
   version "16.5.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.5.2.tgz#b69ee47aa20bab5327b2b9d7c1fe2a30f2cfa9d7"
@@ -6134,7 +6148,7 @@ utils-merge@1.0.1:
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
 
-uuid@^3.1.0, uuid@^3.3.2:
+uuid@^3.1.0, uuid@^3.2.1, uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
   integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==

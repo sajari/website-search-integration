@@ -57,6 +57,7 @@ All styling customizations live under the `styling` member of the configuration 
 Current ways of change the styling of your search integration:
 1. [Theming](#theming)
 1. [Component Styling](#component-styling)
+1. [CSS](#css-styling)
 
 ### Theming
 
@@ -110,7 +111,9 @@ styling: {
 }
 ```
 
-The following components can be styled in this way:
+You can also style the components using regular css. The styling information for
+each component can be found in the links below.
+
 1. [`input`](https://sajari-sdk-react.netlify.com/components/input#styles)
 1. [`results`](https://sajari-sdk-react.netlify.com/components/results#styles)
 1. [`summary`](https://sajari-sdk-react.netlify.com/components/summary#styles)
@@ -325,6 +328,7 @@ By default search boxes have instant enabled and use the pipeline specified by `
 | inputMode        | `suggestions`         | Sets the mode of the input component, set to "typeahead" to enable instant-search with typeahead completion. |
 | inputPlaceholder | `"Search"`            | Placeholder text in the search input box                                           |
 | inputAutoFocus   | `false`               | Focus the search input html element on initialization                              |
+| inputSearchButtonText | `undefined`      | Sets the text inside of the search button in the input component                   |
 | values           | _see table below_     | Configuration of the pipeline values                                               |
 | results          | _see table below_     | Configuration for the search results                                               |
 | updateQueryStringParam | `true`          | Sets whether to update the query param in the url                                  |

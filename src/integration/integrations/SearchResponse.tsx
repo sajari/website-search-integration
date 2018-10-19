@@ -14,6 +14,7 @@ import {
 } from "@sajari/sdk-react";
 
 import { IntegrationConfig } from "../../config";
+import { INTEGRATION_TYPE_OVERLAY } from "../constants";
 
 export interface SearchResponseProps {
   config: IntegrationConfig;
@@ -48,9 +49,22 @@ export class SearchResponse extends React.Component<SearchResponseProps> {
       | undefined;
 
     // @ts-ignore: idx
-    const paginatorStyles = idx(config, _ => _.styling.components.summary) as
+    let paginatorStyles = idx(config, _ => _.styling.components.summary) as
       | { [k: string]: any }
       | undefined;
+
+    paginatorStyles = merge(
+      {
+        container:
+          config.mode === INTEGRATION_TYPE_OVERLAY ? { height: 115 } : {},
+        controls: {
+          boxSizing: "border-box"
+        },
+        number: () => ({ boxSizing: "border-box" })
+      },
+      paginatorStyles || {},
+      { isMergeableObject: isPlainObject }
+    );
 
     // @ts-ignore: idx
     const showImages = idx(config, _ => _.results.showImages) as

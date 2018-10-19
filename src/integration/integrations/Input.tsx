@@ -13,7 +13,12 @@ export interface InputProps {
 export class Input extends React.Component<InputProps> {
   public render() {
     const { config, defaultValue } = this.props;
-    const { inputPlaceholder, inputAutoFocus, inputMode } = config;
+    const {
+      inputPlaceholder,
+      inputAutoFocus,
+      inputMode,
+      inputSearchButtonText
+    } = config;
 
     // @ts-ignore: idx
     const inputStyles = idx(config, _ => _.styling.components.input) as
@@ -56,6 +61,7 @@ export class Input extends React.Component<InputProps> {
         placeholder={inputPlaceholder}
         defaultValue={defaultValue}
         autoFocus={inputAutoFocus}
+        buttonText={inputSearchButtonText}
         styles={styles}
       />
     );
