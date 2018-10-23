@@ -331,6 +331,7 @@ By default search boxes have instant enabled and use the pipeline specified by `
 | inputSearchButtonText | `undefined`      | Sets the text inside of the search button in the input component                   |
 | values           | _see table below_     | Configuration of the pipeline values                                               |
 | results          | _see table below_     | Configuration for the search results                                               |
+| urlQueryParam    | `"q"`                 | Sets the query param to be used in the url                                         |
 | updateQueryStringParam | `true`          | Sets whether to update the query param in the url                                  |
 | searchOnLoad     | `false`               | Enable a search to be triggered on page load                                       |
 | disableGA        | `false`               | Disable the Google Analytics events integration                                    |
