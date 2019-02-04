@@ -9,30 +9,25 @@ import { logError } from "../utils";
 import { createPipelinesAndValues } from "./pipeline";
 import { PubSub } from "./pubsub";
 
-interface Pipelines {
+type PipelineConfig = {
+  qParam: string;
+  qOverrideParam: string;
+  qSuggestionsParam: string;
+  maxSuggestions: number;
+  resultsPerPageParam: string;
+  pageParam: string;
+};
+
+export interface Pipelines {
   search: {
     pipeline: Pipeline;
     values: Values;
-    config: {
-      qParam: string;
-      qOverrideParam: string;
-      qSuggestionsParam: string;
-      maxSuggestions: number;
-      resultsPerPageParam: string;
-      pageParam: string;
-    };
+    config: PipelineConfig;
   };
   instant: {
     pipeline: Pipeline;
     values: Values;
-    config: {
-      qParam: string;
-      qOverrideParam: string;
-      qSuggestionsParam: string;
-      maxSuggestions: number;
-      resultsPerPageParam: string;
-      pageParam: string;
-    };
+    config: PipelineConfig;
   };
 }
 
@@ -76,7 +71,6 @@ export function initialize(methods: {
         (obj, [key, fn]) => {
           obj[key] = function stackMethod(config: any) {
             config = schema.validateSync(config);
-            console.log(config);
             const pipelines = createPipelinesAndValues(config, pubsub);
             fn(config, pubsub, pipelines);
           };

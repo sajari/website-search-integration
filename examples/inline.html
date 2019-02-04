@@ -26,10 +26,10 @@
 
     var inline = sajari.init({
       mode: "inline",
-      project: "1534384424562720477",
-      collection: "triblive-com", 
+      project: "sajariptyltd",
+      collection: "sajari-com", 
       search: { pipeline: "website" },
-      values: { resultsPerPage: 10, "q": getUrlParam("q"), fields: "title,description,image,url,author,published_time" },
+      values: { resultsPerPage: 10, "q": getUrlParam("q"), fields: "", filter: "dir1='blog'" },
       results: { showImages: true, showPublishedDate: true },
       integration: {
         tabFilters: {

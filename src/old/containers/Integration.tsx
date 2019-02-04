@@ -2,8 +2,8 @@ import get from "dlv";
 import * as React from "react";
 
 import { Pipeline, Provider, Values } from "@sajari/sdk-react";
-import { INTEGRATION_TYPE_OVERLAY } from "../constants";
-import { INTEGRATION_EVENT_OVERLAY_SHOW, PubSub } from "../wsi";
+import { INTEGRATION_TYPE_OVERLAY } from "../../constants";
+import { INTEGRATION_EVENT_OVERLAY_SHOW, PubSub } from "../../wsi";
 import { ErrorBoundary } from "./ErrorBoundary";
 
 export interface IntergrationProps {

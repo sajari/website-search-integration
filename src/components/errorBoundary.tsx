@@ -6,7 +6,10 @@ export interface ErrorBoundaryState {
   hasError: boolean;
 }
 
-export class ErrorBoundary extends React.Component<{}, ErrorBoundaryState> {
+export default class ErrorBoundary extends React.PureComponent<
+  {},
+  ErrorBoundaryState
+> {
   public state = { hasError: false };
 
   public componentDidCatch(error: Error, info: React.ErrorInfo) {
@@ -15,13 +18,11 @@ export class ErrorBoundary extends React.Component<{}, ErrorBoundaryState> {
   }
 
   public render() {
-    const { children } = this.props;
     const { hasError } = this.state;
-
     if (hasError) {
       return null;
     }
 
-    return children;
+    return this.props.children;
   }
 }

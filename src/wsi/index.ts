@@ -1,5 +1,5 @@
 export { default as loaded } from "./loaded";
-export { initialize, setup, IntegrationFn } from "./initialize";
+export { initialize, setup, IntegrationFn, Pipelines } from "./initialize";
 export { PubSub } from "./pubsub";
 export {
   INTEGRATION_EVENT_SEARCH_SENT,

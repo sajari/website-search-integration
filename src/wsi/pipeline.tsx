@@ -14,8 +14,8 @@ export function createPipelinesAndValues(
   const collection = get(config, "collection");
   const searchConfig = get(config, "search");
   const instantConfig = get(config, "instant");
-  const tracking = get(config, "integration.tracking");
-  const enableGAEvents = get(config, "integration.enableGAEvents");
+  const tracking = get(config, "integration.tracking", "click");
+  const enableGAEvents = get(config, "integration.enableGAEvents", true);
   const endpoint = get(config, "endpoint", undefined);
 
   const search = {
