@@ -32,9 +32,7 @@ export const createComponents = (
   tabsFilter?: Filter
 ) => {
   const components: ComponentFn[] = [];
-  let query =
-    pipelines.search &&
-    pipelines.search.values.get()[config.urlQueryParam || "q"];
+  let query = pipelines.search && pipelines.search.values.get()["q"];
   if (query === "") {
     query = undefined;
   }
