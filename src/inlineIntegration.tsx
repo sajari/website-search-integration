@@ -3,13 +3,14 @@ import get from "dlv";
 import { PubSub, Pipelines } from "./wsi";
 import { Portal, getRenderTargets } from "./wsi/utils";
 import { connectURLParamUpdate } from "./wsi/connectors";
+import { Config } from "./conf";
 
 import IntegrationContainer from "./components/integrationContainer";
 import Input from "./components/input";
 import SearchResponse from "./components/searchResponse";
 
 export default function inlineIntegration(
-  config: any,
+  config: Config,
   pubsub: PubSub,
   pipelines: Pipelines
 ) {
@@ -43,6 +44,6 @@ export default function inlineIntegration(
   };
 }
 
-function getDefaultQueryValue(config: any) {
+function getDefaultQueryValue(config: Pick<Config, "values">): string {
   return get(config, `values.${get(config, "search.config.qParam", "q")}`, "");
 }

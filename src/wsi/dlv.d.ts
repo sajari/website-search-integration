@@ -1,7 +1,3 @@
 declare module "dlv" {
-  export default function dlv(
-    obj: { [k: string]: any },
-    key: string,
-    def?: any
-  ): any;
+  export default function dlv<T = any>(obj: any, key: string, initial?: any): T;
 }

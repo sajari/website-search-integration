@@ -7,20 +7,24 @@ import {
   EVENT_SELECTION_UPDATED,
   EVENT_SEARCH_SENT
 } from "@sajari/sdk-react";
+import { Config } from "../conf";
 import { updateQueryStringParam } from "./utils";
 
 // connectFilterToValues creates single filter and attaches it to the values object.
 // It will pull the default filter from the config if present.
 export function connectFilterToValues(
-  config: any,
+  config: Pick<Config, "values">,
   pipeline: Pipeline,
   values: Values,
   filters: Filter[] = []
 ) {
-  let defaultFilter = get(config, "values.filter", null);
+  let defaultFilter = get(config.values, "filter", null);
   let filter = undefined;
   if (defaultFilter !== null) {
-    filter = new Filter({ defaultFilter }, ["defaultFilter"]);
+    filter = new Filter(
+      { defaultFilter: (defaultFilter as unknown) as string },
+      ["defaultFilter"]
+    );
     delete config.values.filter;
   }
 

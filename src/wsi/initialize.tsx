@@ -4,10 +4,10 @@ import cuid from "cuid";
 import PubSubJS from "pubsub-js";
 import * as React from "react";
 import { render } from "react-dom";
-import { schema } from "../config";
 import { logError } from "../utils";
 import { createPipelinesAndValues } from "./pipeline";
 import { PubSub } from "./pubsub";
+import { Config, ValidateType, ConfigV } from "../conf";
 
 type PipelineConfig = {
   qParam: string;
@@ -32,16 +32,16 @@ export interface Pipelines {
 }
 
 export type IntegrationFn = (
-  config: any,
+  config: Config,
   pubsub: PubSub,
   pipelines: Pipelines
 ) => React.ComponentType<any>;
 
 export function setup(
   integration: IntegrationFn
-): (config: any, pubsub: PubSub, pipelines: Pipelines) => void {
+): (config: Config, pubsub: PubSub, pipelines: Pipelines) => void {
   return function integrationWrapper(
-    config: any,
+    config: Config,
     pubsub: PubSub,
     pipelines: any
   ) {
@@ -57,7 +57,7 @@ function mount(Component: React.ComponentType<any>) {
 }
 
 export function initialize(methods: {
-  [k: string]: (config: any, pubsub: PubSub, pipelines: Pipelines) => void;
+  [k: string]: (config: Config, pubsub: PubSub, pipelines: Pipelines) => void;
 }): () => void {
   return function create() {
     if (window.sajari == undefined || window.sajari.ui == undefined) {
@@ -69,8 +69,8 @@ export function initialize(methods: {
 
       const m = Object.entries(methods).reduce(
         (obj, [key, fn]) => {
-          obj[key] = function stackMethod(config: any) {
-            config = schema.validateSync(config);
+          obj[key] = function stackMethod(config: Config) {
+            config = ValidateType(ConfigV, config);
             const pipelines = createPipelinesAndValues(config, pubsub);
             fn(config, pubsub, pipelines);
           };

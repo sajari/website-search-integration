@@ -41,7 +41,11 @@ export class PubSub {
     PubSubJS.subscribe(`${this.index}.${event}`, fn);
   }
 
-  public connectToPipelineAndValues(name: string, pipeline: Pipeline, values: Values) {
+  public connectToPipelineAndValues(
+    name: string,
+    pipeline: Pipeline,
+    values: Values
+  ) {
     const pipelineEvents = {
       [EVENT_SEARCH_SENT]: INTEGRATION_EVENT_SEARCH_SENT,
       [EVENT_RESPONSE_UPDATED]: INTEGRATION_EVENT_RESPONSE_UPDATED
@@ -70,7 +74,7 @@ export class PubSub {
         changes: { [k: string]: any },
         set: (vals: { [k: string]: string }) => void
       ) => {
-        if (!get(changes, "page", false) && get(values.get(), "page") !== 1) {
+        if (!get(changes, "page", false) && get(values.get(), "page") !== "1") {
           set({ page: "1" });
         }
       }

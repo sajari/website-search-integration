@@ -2,9 +2,10 @@ import { ClickTracking, NoTracking, Pipeline, Values } from "@sajari/sdk-react";
 import merge from "deepmerge";
 import get from "dlv";
 import { PubSub } from "./pubsub";
+import { Config } from "../conf";
 
 export function createPipelinesAndValues(
-  config: any,
+  config: Config,
   pubsub: PubSub
 ): {
   search: { pipeline: Pipeline; values: Values; config: any };
