@@ -5,8 +5,10 @@ import merge from "deepmerge";
 
 import { Input as SDKInput } from "@sajari/sdk-react";
 
+import { IntegrationConfig } from "../../config";
+
 export interface InputProps {
-  config: { [k: string]: any };
+  config: IntegrationConfig;
   defaultValue?: string;
 }
 
@@ -17,7 +19,8 @@ export class Input extends React.Component<InputProps> {
       inputPlaceholder,
       inputAutoFocus,
       inputMode,
-      inputSearchButtonText
+      inputSearchButtonText,
+      inputVoiceToText
     } = config;
 
     // @ts-ignore: idx
@@ -62,6 +65,7 @@ export class Input extends React.Component<InputProps> {
         defaultValue={defaultValue}
         autoFocus={inputAutoFocus}
         buttonText={inputSearchButtonText}
+        experimental={{ voiceToText: inputVoiceToText }}
         styles={styles}
       />
     );

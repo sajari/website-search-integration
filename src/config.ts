@@ -14,6 +14,7 @@ export interface IntegrationConfig {
   inputPlaceholder?: string;
   inputAutoFocus?: boolean;
   inputSearchButtonText?: string;
+  inputVoiceToText?: boolean;
 
   urlQueryParam?: string;
   searchOnLoad?: boolean;

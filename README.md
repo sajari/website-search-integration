@@ -329,6 +329,7 @@ By default search boxes have instant enabled and use the pipeline specified by `
 | inputPlaceholder | `"Search"`            | Placeholder text in the search input box                                           |
 | inputAutoFocus   | `false`               | Focus the search input html element on initialization                              |
 | inputSearchButtonText | `undefined`      | Sets the text inside of the search button in the input component                   |
+| inputVoiceToText | `undefined`           | Enables voice search functionality in supported browsers                           |
 | values           | _see table below_     | Configuration of the pipeline values                                               |
 | results          | _see table below_     | Configuration for the search results                                               |
 | urlQueryParam    | `"q"`                 | Sets the query param to be used in the url                                         |
