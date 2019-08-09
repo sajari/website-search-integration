@@ -1,4 +1,5 @@
-import { css, cx } from "emotion";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
 import * as React from "react";
 
 export interface CloseProps {
@@ -7,11 +8,13 @@ export interface CloseProps {
 
 export const Close: React.SFC<CloseProps> = ({ onClick }) => {
   return (
-    <div className={cx("sj-overlay-close", container)} onClick={onClick}>
-      <div className={cx("sj-close")}>
+    <div className={"sj-overlay-close"} css={container} onClick={onClick}>
+      <div className="sj-close">
         <Cross />
       </div>
-      <div className={cx("sj-esc", esc)}>ESC</div>
+      <div className={"sj-esc"} css={esc}>
+        ESC
+      </div>
     </div>
   );
 };

@@ -3,6 +3,7 @@
     ["@babel/preset-env", {
       "modules": false,
       "useBuiltIns": "entry",
+      "corejs": 3,
       "targets": {
         "browsers": [
           ">0.25%",
@@ -12,12 +13,12 @@
       }
     }],
     "@babel/react",
-    "@babel/typescript"
+    "@babel/typescript",
+    "@emotion/babel-preset-css-prop"
   ],
   "plugins": [
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-proposal-object-rest-spread",
-    ["babel-plugin-emotion", { "hoist": true }],
     "babel-plugin-idx"
   ]
 }

@@ -1,4 +1,5 @@
-import { css, cx } from "emotion";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
 import idx from "idx";
 import * as React from "react";
 import isPlainObject from "is-plain-object";
@@ -87,10 +88,8 @@ export class SearchResponse extends React.Component<SearchResponseProps> {
     return (
       <Response>
         <div
-          className={cx(
-            "sj-pipeline-response",
-            css({ display: "flex", flexDirection: "column", height: "100%" })
-          )}
+          className="sj-pipeline-response"
+          css={{ display: "flex", flexDirection: "column", height: "100%" }}
         >
           {tabs}
           <Summary styles={summaryStyles} />
