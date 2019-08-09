@@ -1,4 +1,5 @@
-import "@babel/polyfill";
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 // @ts-ignore: module missing defintions file
 import { flush } from "stackqueue";

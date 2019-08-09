@@ -1,5 +1,6 @@
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
 import { Filter, Overlay as OverlayContainer } from "@sajari/sdk-react";
-import { css } from "emotion";
 import * as React from "react";
 
 import { IntegrationConfig } from "../../../config";
@@ -38,12 +39,12 @@ export class Overlay extends React.Component<OverlayProps> {
 
     return (
       <OverlayContainer isActive={active} onOuterClick={this.hide}>
-        <div className={header}>
+        <div css={header}>
           <div className="sj-logo" onClick={this.hide} />
           <Input config={config} defaultValue={this.props.defaultValue} />
           <Close onClick={this.hide} />
         </div>
-        <div className={css({ height: "calc(100% - 44px)" })}>
+        <div css={{ height: "calc(100% - 44px)" }}>
           <SearchResponse config={config} tabsFilter={tabsFilter} />
         </div>
       </OverlayContainer>
