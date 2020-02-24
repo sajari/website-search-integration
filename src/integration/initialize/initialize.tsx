@@ -30,6 +30,7 @@ export const initialize = (
   const { search, instant } = initializePipelines({
     project: config.project,
     collection: config.collection,
+    endpoint: config.endpoint,
     search: pipelineConfigs.search,
     instant: pipelineConfigs.instant
   });

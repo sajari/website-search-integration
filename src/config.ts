@@ -6,6 +6,7 @@ export interface IntegrationConfig {
   mode: string;
   project: string;
   collection: string;
+  endpoint?: string;
   pipeline?: string;
   instantPipeline?: string;
   maxSuggestions?: number;

@@ -23,6 +23,7 @@ export interface PipelineConfig {
 export interface InitializePipelinesConfig {
   project: string;
   collection: string;
+  endpoint?: string;
   search?: PipelineConfig;
   instant?: PipelineConfig;
 }
@@ -95,7 +96,7 @@ export const createPipelineConfigs = (config: IntegrationConfig) => {
 };
 
 export const initializePipelines = (config: InitializePipelinesConfig) => {
-  const { project, collection, search, instant } = config;
+  const { project, collection, endpoint, search, instant } = config;
 
   let searchPipeline = null;
   let searchValues = null;
@@ -108,7 +109,8 @@ export const initializePipelines = (config: InitializePipelinesConfig) => {
     searchPipeline = new Pipeline(
       {
         project,
-        collection
+        collection,
+        endpoint
       },
       name,
       tracking,
@@ -124,7 +126,8 @@ export const initializePipelines = (config: InitializePipelinesConfig) => {
     instantPipeline = new Pipeline(
       {
         project,
-        collection
+        collection,
+        endpoint
       },
       name,
       tracking,
