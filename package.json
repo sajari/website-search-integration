@@ -33,7 +33,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "@emotion/core": "^10.0.10",
-    "@sajari/sdk-react": "2.8.5",
+    "@sajari/sdk-react": "^2.8.15",
     "core-js": "3",
     "cuid": "^2.1.1",
     "deepmerge": "^2.1.1",
