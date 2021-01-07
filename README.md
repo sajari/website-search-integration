@@ -13,11 +13,11 @@ This website search integration is built using the
 
 ## Table of Contents
 
-* [Instructions](#instructions)
-* [Styling](#styling)
-* [Integrations](#integrations)
-* [Configuration](#configuration)
-* [Filters](#filters)
+- [Instructions](#instructions)
+- [Styling](#styling)
+- [Integrations](#integrations)
+- [Configuration](#configuration)
+- [Filters](#filters)
 
 ## Instructions
 
@@ -47,14 +47,17 @@ your search interface, by providing a high level theme object, and also allowing
 customizations right down to the component level.
 
 All styling customizations live under the `styling` member of the configuration object:
+
 ```js
 {
   // ...other config
-  styling: {}
+  styling: {
+  }
 }
 ```
 
 Current ways of change the styling of your search integration:
+
 1. [Theming](#theming)
 1. [Component Styling](#component-styling)
 1. [CSS](#css-styling)
@@ -62,17 +65,19 @@ Current ways of change the styling of your search integration:
 ### Theming
 
 Current theming options:
+
 1. Primary Color
 1. Results Layout
 
 A **Primary Color** can be set by adding the following to your configuration object:
+
 ```js
 {
   styling: {
     theme: {
       colors: {
         brand: {
-          primary: "#3b5998"
+          primary: "#3b5998";
         }
       }
     }
@@ -81,12 +86,13 @@ A **Primary Color** can be set by adding the following to your configuration obj
 ```
 
 The **Results Layout** can be changed by using a preset `type` like so:
+
 ```js
 {
   styling: {
     theme: {
       layout: {
-        type: "list" // options list or grid, defaults to list.
+        type: "list"; // options list or grid, defaults to list.
       }
     }
   }
@@ -99,6 +105,7 @@ The styling object also allows for the customization of the individual component
 that make up your search interface.
 
 To style individual components add the following to your styling object:
+
 ```js
 styling: {
   components: {
@@ -129,12 +136,13 @@ the [React SDK](https://sajari-sdk-react.netlify.com/).
 Setting a primary brand color:
 
 ![orange](./sample-styles/orange.png)
+
 ```js
 styling: {
   theme: {
     colors: {
       brand: {
-        primary: "#ed6e24"
+        primary: "#ed6e24";
       }
     }
   }
@@ -144,6 +152,7 @@ styling: {
 Customizing the input styles:
 
 ![gray input](./sample-styles/gray-input.png)
+
 ```js
 styling: {
   components: {
@@ -168,18 +177,18 @@ styling: {
 
 There are 4 types of integration:
 
-* [_inline_](#inline): search box, results. Interface is embedded directly into
+- [_inline_](#inline): search box, results. Interface is embedded directly into
   a page (or pages) on your website, for instance a dedicated search page with a
   search box + results.
 
-* [_overlay_](#overlay): full page overlay, search box, results. Interface
+- [_overlay_](#overlay): full page overlay, search box, results. Interface
   appears as an overlay on top of the current page. Can be used to search
   without leaving the page.
 
-* [_search box_](#search-box): search box. Typical usage includes being embedded
+- [_search box_](#search-box): search box. Typical usage includes being embedded
   into headers and menus.
 
-* [_dynamic content_](#dynamic-content): results. Typically used to put
+- [_dynamic content_](#dynamic-content): results. Typically used to put
   pre-baked searches into pages, to show similar or popular content, or article
   listings by tag/category etc for landing pages.
 
@@ -216,7 +225,7 @@ myUI({
   instantPipeline: "autocomplete", // Set this to your instant pipeline
   inputPlaceholder: "Search", // Placeholder text for the input element
   maxSuggestions: 5, // Maximum number of suggestions in the search box
-  tabFilters: {} // Tab configuration
+  tabFilters: {}, // Tab configuration
 });
 ```
 
@@ -240,7 +249,7 @@ myUI({
   inputPlaceholder: "Search",
   autocompleteMaxSuggestions: 5,
   inputAutoFocus: true,
-  tabFilters: {}
+  tabFilters: {},
 });
 ```
 
@@ -261,7 +270,7 @@ myUI({
   instantPipeline: "autocomplete",
   inputPlaceholder: "Search",
   maxSuggestions: 5,
-  attachSearchBox: document.getElementById("search-box")
+  attachSearchBox: document.getElementById("search-box"),
 });
 ```
 
@@ -281,7 +290,7 @@ myUI({
   attachDynamicContent: document.getElementById("dynamic-content"),
   values: { resultsPerPage: "3" },
   results: { showImages: false },
-  searchOnLoad: true
+  searchOnLoad: true,
 });
 ```
 
@@ -289,8 +298,8 @@ myUI({
 
 The generated interface code comes with two helper functions:
 
-* `getUrlParam(x)` extracts a value from a url parameter `x`.
-* `setup` creates an object that controls an instance of the integration.
+- `getUrlParam(x)` extracts a value from a url parameter `x`.
+- `setup` creates an object that controls an instance of the integration.
 
 ### Multiple Integrations
 
@@ -317,26 +326,26 @@ By default search boxes have instant enabled and use the pipeline specified by `
 
 **General configuration**
 
-| Property         |        Default        | Description                                                                        |
-| :--------------- | :-------------------: | :--------------------------------------------------------------------------------- |
-| project          | `"<your project>"`    | Project to search                                                                  |
-| collection       | `"<your collection>"` | Collection to search                                                               |
-| pipeline         | `"website"`           | Pipeline to query when pressing enter or clicking an autocompleted suggestion      |
-| instantPipeline  | `"autocomplete"`      | Pipeline to query when typing, set to `""` to disable                              |
-| tracking         | `click`               | Sets the tracking mode, set to `"none"` to disable.                                |
-| maxSuggestions   | `"5"`                 | Sets how many autocomplete suggestions are shown in the box below the search input |
-| inputMode        | `suggestions`         | Sets the mode of the input component, set to "typeahead" to enable instant-search with typeahead completion. |
-| inputPlaceholder | `"Search"`            | Placeholder text in the search input box                                           |
-| inputAutoFocus   | `false`               | Focus the search input html element on initialization                              |
-| inputSearchButtonText | `undefined`      | Sets the text inside of the search button in the input component                   |
-| inputVoiceToText | `undefined`           | Enables voice search functionality in supported browsers                           |
-| values           | _see table below_     | Configuration of the pipeline values                                               |
-| results          | _see table below_     | Configuration for the search results                                               |
-| urlQueryParam    | `"q"`                 | Sets the query param to be used in the url                                         |
-| updateQueryStringParam | `true`          | Sets whether to update the query param in the url                                  |
-| searchOnLoad     | `false`               | Enable a search to be triggered on page load                                       |
-| disableGA        | `false`               | Disable the Google Analytics events integration                                    |
-| styling          | [_see above_](#styling) | Styling configuration                                                            | 
+| Property               |         Default         | Description                                                                                                  |
+| :--------------------- | :---------------------: | :----------------------------------------------------------------------------------------------------------- |
+| project                |   `"<your project>"`    | Project to search                                                                                            |
+| collection             |  `"<your collection>"`  | Collection to search                                                                                         |
+| pipeline               |       `"website"`       | Pipeline to query when pressing enter or clicking an autocompleted suggestion                                |
+| instantPipeline        |    `"autocomplete"`     | Pipeline to query when typing, set to `""` to disable                                                        |
+| tracking               |         `click`         | Sets the tracking mode, set to `"none"` to disable.                                                          |
+| maxSuggestions         |          `"5"`          | Sets how many autocomplete suggestions are shown in the box below the search input                           |
+| inputMode              |      `suggestions`      | Sets the mode of the input component, set to "typeahead" to enable instant-search with typeahead completion. |
+| inputPlaceholder       |       `"Search"`        | Placeholder text in the search input box                                                                     |
+| inputAutoFocus         |         `false`         | Focus the search input html element on initialization                                                        |
+| inputSearchButtonText  |       `undefined`       | Sets the text inside of the search button in the input component                                             |
+| inputVoiceToText       |       `undefined`       | Enables voice search functionality in supported browsers                                                     |
+| values                 |    _see table below_    | Configuration of the pipeline values                                                                         |
+| results                |    _see table below_    | Configuration for the search results                                                                         |
+| urlQueryParam          |          `"q"`          | Sets the query param to be used in the url                                                                   |
+| updateQueryStringParam |         `true`          | Sets whether to update the query param in the url                                                            |
+| searchOnLoad           |         `false`         | Enable a search to be triggered on page load                                                                 |
+| disableGA              |         `false`         | Disable the Google Analytics events integration                                                              |
+| styling                | [_see above_](#styling) | Styling configuration                                                                                        |
 
 **Values configuration**
 
@@ -344,7 +353,7 @@ By default search boxes have instant enabled and use the pipeline specified by `
 | :------------- | :----------------: | :------------------------------------------------------------------------ |
 | q              | `getUrlParam("q")` | The initial value of `q` in the pipeline, commonly used as the query text |
 | resultsPerPage |       `"10"`       | Number of results to show per page                                        |
-| filter         |       `""`         | [Filter expression](#filters) to apply to results                         |
+| filter         |        `""`        | [Filter expression](#filters) to apply to results                         |
 
 **Results configuration**
 
@@ -377,7 +386,7 @@ For example, if you are using the default inline interface and want to listen to
 the `search-sent` event, you'd write:
 
 ```javascript
-myUI("sub", "pipeline.search-sent", function(event, values) {
+myUI("sub", "pipeline.search-sent", function (event, values) {
   console.log("Search sent with values: ", values);
 });
 ```
@@ -409,7 +418,7 @@ A search has sent and we are now waiting for results. The values used in the
 search are given to the subscribed function.
 
 ```javascript
-myUI("sub", "<pipeline>.search-sent", function(eventName, values) {
+myUI("sub", "<pipeline>.search-sent", function (eventName, values) {
   console.log("Search sent with ", values);
 });
 ```
@@ -421,7 +430,7 @@ argument that can be used to merge new values into the value dictionary, it
 behaves like `pub("values-set", {})` except that it doesn't trigger an event.
 
 ```javascript
-myUI("sub", "<pipeline>.values-updated", function(eventName, values, set) {
+myUI("sub", "<pipeline>.values-updated", function (eventName, values, set) {
   console.log("New values are", values);
 });
 ```
@@ -436,7 +445,7 @@ You can see more info about the `response` object
 [here](https://github.com/sajari/sajari-sdk-react#listening-for-responses).
 
 ```javascript
-myUI("sub", "<pipeline>.response-updated", function(eventName, response) {
+myUI("sub", "<pipeline>.response-updated", function (eventName, response) {
   if (response.isEmpty()) {
     return;
   }
@@ -454,7 +463,7 @@ A search event signals the end of a search session. A common use case of
 subscribing to them is for reporting.
 
 ```javascript
-myUI("sub", "<pipeline>.search-event", function(eventName, query) {
+myUI("sub", "<pipeline>.search-event", function (eventName, query) {
   console.log("Search session finished, last query", query);
 });
 ```
@@ -486,10 +495,10 @@ myUI("pub", "overlay-hide");
 You can also subscribe to these events
 
 ```javascript
-myUI("sub", "overlay-show", function(eventName) {
+myUI("sub", "overlay-show", function (eventName) {
   console.log("The overlay has been shown");
 });
-myUI("sub", "overlay-hide", function(eventName) {
+myUI("sub", "overlay-hide", function (eventName) {
   console.log("The overlay has been hidden");
 });
 ```
@@ -532,7 +541,7 @@ For more information on building filter expressions, see [filters](#filters).
 
 ## Filters
 
-Filters are used to limit the pages that are returned in a search.  Filters can be used in [Tabs](#tab-filters) or by setting the `filter` property in the `values` configuration attribute (see [Configuration](#configuration)).
+Filters are used to limit the pages that are returned in a search. Filters can be used in [Tabs](#tab-filters) or by setting the `filter` property in the `values` configuration attribute (see [Configuration](#configuration)).
 
 Our crawler extracts common fields when it parses web pages (such as the first
 and second directories of URLs), which make filtering much easier. It's well
@@ -541,20 +550,20 @@ filters, as most use cases are quick and easy to get running.
 
 Here is a list of the most commonly used fields.
 
-* `title` The page title.
-* `description` The page description.
-* `image` The URL of an image which corresponds to the page.
-* `lang` The language of the page, extracted from the `<html>` element (if
+- `title` The page title.
+- `description` The page description.
+- `image` The URL of an image which corresponds to the page.
+- `lang` The language of the page, extracted from the `<html>` element (if
   present).
 
 Fields that are based on the URL of the page (ideal for filtering on subsections
 of a site) are given below. Examples here assume that the page URL is
 `https://www.sajari.com/blog/year-in-review`:
 
-* `url` The full page URL: `https://www.sajari.com/blog/year-in-review`
-* `dir1` The first directory of the page URL: `blog`
-* `dir2` The second directory of the page URL: `year-in-review`
-* `domain` The domain of the page URL: `www.sajari.com`
+- `url` The full page URL: `https://www.sajari.com/blog/year-in-review`
+- `dir1` The first directory of the page URL: `blog`
+- `dir2` The second directory of the page URL: `year-in-review`
+- `domain` The domain of the page URL: `www.sajari.com`
 
 ### Using Operators
 
@@ -590,4 +599,4 @@ page within the `en.sajari.com` domain:
 
 ```
 (domain='www.sajari.com' AND lang='en') OR domain='en.sajari.com'
-````
+```
