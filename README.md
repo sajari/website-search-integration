@@ -18,6 +18,7 @@ This website search integration is built using the
 - [Integrations](#integrations)
 - [Configuration](#configuration)
 - [Filters](#filters)
+- [Contributing](#contributing)
 
 ## Instructions
 
@@ -600,3 +601,7 @@ page within the `en.sajari.com` domain:
 ```
 (domain='www.sajari.com' AND lang='en') OR domain='en.sajari.com'
 ```
+
+## Contributing
+
+Contributions are welcome. See the [Contributing](https://github.com/sajari/website-search-integration/blob/master/CONTRIBUTING.md) guide.

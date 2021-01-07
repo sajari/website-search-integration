@@ -51,5 +51,9 @@
     "start": "webpack-serve --config ./config/webpack.dev.js",
     "lint": "tslint -p tsconfig.json -c tslint.json --fix \"src/**/*.{ts,tsx}\"",
     "type-check": "tsc --noEmit"
+  },
+  "volta": {
+    "node": "12.13.0",
+    "yarn": "1.19.1"
   }
 }
