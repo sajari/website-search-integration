@@ -10,7 +10,7 @@ import {
   INTEGRATION_TYPE_DYNAMIC_CONTENT,
   INTEGRATION_TYPE_INLINE,
   INTEGRATION_TYPE_OVERLAY,
-  INTEGRATION_TYPE_SEARCH_BOX
+  INTEGRATION_TYPE_SEARCH_BOX,
 } from "../constants";
 import { DynamicContentResponse } from "../integrations/DynamicContentResponse";
 import { Inline } from "../integrations/Inline";
@@ -70,9 +70,19 @@ export const createComponents = (
       break;
 
     case INTEGRATION_TYPE_OVERLAY:
-      const overlayContainer = document.createElement("div");
-      overlayContainer.id = "sj-overlay-holder";
-      window.document.body.appendChild(overlayContainer);
+      const overlayContainerId = "sj-overlay-holder";
+      // If multiple search inputs which all use overlay are on the screen, this may have already been created.
+      let overlayContainer: Element;
+      const existingContainer = document.querySelector(
+        `#${overlayContainerId}`
+      );
+      if (existingContainer) {
+        overlayContainer = existingContainer;
+      } else {
+        overlayContainer = document.createElement("div");
+        overlayContainer.id = overlayContainerId;
+        window.document.body.appendChild(overlayContainer);
+      }
 
       const controls = setOverlayControls(
         config,
@@ -98,6 +108,8 @@ export const createComponents = (
   }
 
   return () => (
-    <React.Fragment>{components.map(component => component())}</React.Fragment>
+    <React.Fragment>
+      {components.map((component) => component())}
+    </React.Fragment>
   );
 };
